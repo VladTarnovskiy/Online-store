@@ -2,6 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const EsLintPlugin = require('eslint-webpack-plugin');
 
 const devServer = (isDev) => !isDev ? {} : {
   devServer: {
@@ -10,6 +11,8 @@ const devServer = (isDev) => !isDev ? {} : {
     port: 8080,
   },
 };
+
+const esLintPlugin = (isDev) => isDev ? [] : [ new EsLintPlugin({ extensions: ['ts', 'js'] }) ];
 
 module.exports = ({develop}) => ({
   mode: develop ? 'development' : 'production',
@@ -49,6 +52,7 @@ module.exports = ({develop}) => ({
       title: 'Online store',
     }),
     new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
+    ...esLintPlugin(develop),
   ],
   ...devServer(develop),
 });
