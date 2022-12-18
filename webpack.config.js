@@ -1,58 +1,61 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const EsLintPlugin = require('eslint-webpack-plugin');
+const EslintPlugin = require('eslint-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-const devServer = (isDev) => !isDev ? {} : {
-  devServer: {
-    open: true,
-    hot: true,
-    port: 8080,
-  },
+const baseConfig = {
+    devtool: 'eval-source-map',
+    entry: path.resolve(__dirname, './src/index.ts'),
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: './js/[name].js',
+        assetModuleFilename: 'assets/[name][ext]'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
+                type: 'asset/resource',
+            },
+            {
+                test: /\.(woff|woff2|ttf|otf|eot)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/fonts/[name][ext]'
+                }
+            },
+            {
+                test: /\.(scss|css)$/,
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+            },
+            {
+                test: /\.ts/,
+                include: [path.resolve(__dirname, 'src')],
+                use: 'ts-loader',
+            },
+            {
+                test: /\.(html)$/,
+                use: ['html-loader']
+            }
+        ],
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, './src/index.html'),
+            filename: 'index.html',
+        }),
+        new CleanWebpackPlugin(),
+        new EslintPlugin()
+    ],
+    resolve: {
+        extensions: ['.ts', '.js'],
+    }
 };
 
-const esLintPlugin = (isDev) => isDev ? [] : [ new EsLintPlugin({ extensions: ['ts', 'js'] }) ];
+module.exports = ({ mode }) => {
+    const isProductionMode = mode === 'prod';
+    const envConfig = isProductionMode ? require('./webpack.prod.config') : require('./webpack.dev.config');
 
-module.exports = ({develop}) => ({
-  mode: develop ? 'development' : 'production',
-  devtool: develop ? 'inline-source-map' : false,
-  entry: './src/index.ts',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.[contenthash].js',
-    assetModuleFilename: 'assets/[hash][ext]',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/i,
-        use: 'ts-loader',
-      },
-      {
-        test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.(?:ico|gif|png|jpg|jpeg|svg)$/i,
-        type: 'asset/resource',
-      },
-    ],
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
-  },
-  plugins: [
-    new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
-    new HtmlWebpackPlugin({
-      title: 'Online store',
-    }),
-    new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
-    ...esLintPlugin(develop),
-  ],
-  ...devServer(develop),
-});
+    return merge(baseConfig, envConfig);
+};

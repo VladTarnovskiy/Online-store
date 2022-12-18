@@ -1,0 +1,15 @@
+%transition {
+    transition: all .3s ease-out;
+}
+
+%btn-hover {
+    background-color: $orange-color;
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+%wrapper {
+    max-width: 1440px;
+    padding-left: 20px;
+    padding-right: 20px;
+}

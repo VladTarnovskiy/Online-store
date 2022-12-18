@@ -1,0 +1,46 @@
+.footer {
+    height: 100px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    box-sizing: border-box;
+    @extend %wrapper;
+
+    .footer__list {
+        display: flex;
+        justify-content: space-around;
+        list-style-type: none;
+        margin-left: 4px;
+        margin-right: 4px;
+        margin-top: 50px;
+        padding-left: 0px;
+        padding-top: 10px;
+        border-radius: 5px;
+        width: 100%;
+
+        .footer__date {
+            font-size: 1.4rem;
+            font-weight: 200;
+            font-family: $roboto-light-font;
+            color: $black-color;
+            text-align: center;
+            padding-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .footer__rs-logo,
+        .footer__git-logo {
+            width: 110px;
+            height: 40px;
+        }
+
+        .footer__rs-logo:hover,
+        .footer__git-logo:hover {
+            transition: transform 0.2s ease-in-out;
+            transform: scale(1.03);
+        }
+    }
+}
