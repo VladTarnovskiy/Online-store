@@ -1,18 +1,40 @@
-import './news.css';
-import type Data from '../../types/types';
+// import Logo from '../../../assets/logo-x.png'
 
 class Header {
     draw(): void {
-        //need to conver to js
+        const header = <HTMLElement>document.querySelector('.header');
 
-        // <!-- <div class="header__title-wrap">
-        //   <div class="header__logo"><img src="./assets/logo-x.png" alt="logo" /></div>
-        //   <h1 class="header__title">Online store</h1>
-        // </div>
-        // <a class="basket">
-        //   <div class="basket__img"></div>
-        //   <div class="basket__checker">0</div>
-        // </a> -->
+        const headerTitlewrap = <HTMLElement>document.createElement('div');
+        headerTitlewrap.className = 'header__title-wrap';
+
+        const basket = <HTMLElement>document.createElement('a');
+        basket.className = 'basket';
+
+        const headerLogo = <HTMLElement>document.createElement('div');
+        headerLogo.className = 'header__logo';
+
+        const imgLogo = <HTMLElement>document.createElement('div');
+        imgLogo.className = 'header__logo-img'
+        imgLogo.setAttribute('href', '#main-page')
+
+        const headerTitle = <HTMLElement>document.createElement('h1');
+        headerTitle.className = 'header__title';
+        headerTitle.textContent = 'Online store';
+
+        const basketImg = <HTMLElement>document.createElement('div');
+        basketImg.className = 'basket__img';
+
+        const basketChecker = <HTMLElement>document.createElement('div');
+        basketChecker.className = 'basket__checker';
+        basketChecker.textContent = '0';
+
+        headerLogo.appendChild(imgLogo);
+        headerTitlewrap.appendChild(headerLogo);
+        headerTitlewrap.appendChild(headerTitle);
+        basket.appendChild(basketImg);
+        basket.appendChild(basketChecker);
+        header.appendChild(headerTitlewrap);
+        header.appendChild(basket);
     }
 }
 export default Header;

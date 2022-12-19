@@ -14,10 +14,20 @@
             height: 80px;
             margin-right: 15px;
 
-            img {
+            .header__logo-img {
                 display: inline-block;
                 width: 80px;
                 height: 80px;
+                background-image: url(../assets/logo.png);
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                cursor: pointer;
+            }
+
+            .header__logo-img:hover {
+                @extend %transition;
+                transform: scale(1.03);
             }
         }
 

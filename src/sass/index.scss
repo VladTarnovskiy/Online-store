@@ -7,6 +7,7 @@
 // Base
 @import "base/fonts";
 @import "base/normalize";
+@import "base/common";
 
 // Components
 @import "components/button";
@@ -15,6 +16,8 @@
 // Layout
 @import "layout/footer";
 @import "layout/header";
+@import "layout/aside";
+@import "layout/products";
 
 
 // Pages

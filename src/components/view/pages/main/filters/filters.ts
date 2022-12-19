@@ -1,5 +1,4 @@
-import './news.css';
-import type Data from '../../../../types/types';
+// import type Data from '../../../../types/types';
 
 class Filters {
     draw(): void {
