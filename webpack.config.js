@@ -3,6 +3,7 @@ const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const EslintPlugin = require('eslint-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const baseConfig = {
     devtool: 'eval-source-map',
@@ -27,7 +28,7 @@ const baseConfig = {
             },
             {
                 test: /\.(scss|css)$/,
-                use: ['style-loader', 'css-loader', 'sass-loader'],
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
             },
             {
                 test: /\.ts/,
@@ -45,6 +46,7 @@ const baseConfig = {
             template: path.resolve(__dirname, './src/index.html'),
             filename: 'index.html',
         }),
+        new MiniCssExtractPlugin({ filename: 'style.css' }),
         new CleanWebpackPlugin(),
         new EslintPlugin()
     ],
