@@ -1,0 +1,7 @@
+.filters {
+    min-height: 600px;
+    width: 20%;
+    box-shadow: $box-shadow;
+    background-color: $light-grey-color;
+    @extend %blocksettings;
+}
