@@ -5,16 +5,17 @@ export interface Data {
 }
 
 export interface CardItem{
-    _id:number;
-    _title:string;
-    _category:string;
-    _brand:string;
-    _price:number;
-    _discountPercentage:string;
-    _rating:string;
-    _stock:string;
-    _thumbnail:string;
-    _images: string[];
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    discountPercentage: number;
+    rating: number;
+    stock: number;
+    brand: string;
+    category: string;
+    thumbnail: string;
+    images: string[];
 }
 
 export default CardItem;

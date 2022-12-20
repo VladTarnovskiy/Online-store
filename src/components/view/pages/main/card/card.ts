@@ -1,8 +1,8 @@
-// import CatdItem from '../../../../types/types';
+import CatdItem from '../../../../types/types';
 
 class Card {
-    draw(): void {
-    // need cover to js
+    draw(data: CatdItem): void {
+    // for info!!!
     //     <!-- <div class="card">
     //     <div class="card__title">Title</div>
     //     <ul class="card__description">
@@ -25,9 +25,13 @@ class Card {
 
     const card = <HTMLElement>document.createElement('div');
     card.className = 'card';
+    card.style.backgroundImage = `url('${data.thumbnail}')`
     
         const cardTitle = <HTMLElement>document.createElement('div');
         cardTitle.className = 'card__title';
+        const textTitle = <HTMLElement>document.createElement('div');
+        textTitle.textContent = data.title;
+        cardTitle.appendChild(textTitle);
 
         const cardDescription = <HTMLElement>document.createElement('ul');
         cardDescription.className = 'card__description';
@@ -38,6 +42,7 @@ class Card {
 
                 const cardPropOneValue = <HTMLElement>document.createElement('span');
                 cardPropOneValue.className = 'card__value card__value_category';
+                cardPropOneValue.textContent = data.category;
                 cardPropOne.appendChild(cardPropOneValue);
             
             const cardPropTwo = <HTMLElement>document.createElement('li');
@@ -46,6 +51,7 @@ class Card {
 
                 const cardPropTwoValue = <HTMLElement>document.createElement('span');
                 cardPropTwoValue.className = 'card__value card__value_brand';
+                cardPropTwoValue.textContent = data.brand;
                 cardPropTwo.appendChild(cardPropTwoValue);
         
             const cardPropThree = <HTMLElement>document.createElement('li');
@@ -54,8 +60,9 @@ class Card {
 
                 const cardPropThreeValue = <HTMLElement>document.createElement('span');
                 cardPropThreeValue.className = 'card__value card__value_price';
+                cardPropThreeValue.textContent = String(data.price);
                 const cardPropThreeValueDollar = <HTMLElement>document.createElement('span');
-                cardPropThreeValueDollar.textContent = '$';
+                cardPropThreeValueDollar.textContent = ' $';
                 cardPropThreeValue.appendChild(cardPropThreeValueDollar);
                 cardPropThree.appendChild(cardPropThreeValue);
 
@@ -65,6 +72,7 @@ class Card {
 
                 const cardPropFourValue = <HTMLElement>document.createElement('span');
                 cardPropFourValue.className = 'card__value card__value_discount';
+                cardPropFourValue.textContent = String(data.discountPercentage);
                 cardPropFour.appendChild(cardPropFourValue);
 
             const cardPropFive = <HTMLElement>document.createElement('li');
@@ -73,6 +81,7 @@ class Card {
 
                 const cardPropFiveValue = <HTMLElement>document.createElement('span');
                 cardPropFiveValue.className = 'card__value card__value_raiting';
+                cardPropFiveValue.textContent = String(data.rating);
                 cardPropFive.appendChild(cardPropFiveValue);
 
             const cardPropSix = <HTMLElement>document.createElement('li');
@@ -81,6 +90,7 @@ class Card {
 
                 const cardPropSixValue = <HTMLElement>document.createElement('span');
                 cardPropSixValue.className = 'card__value card__value_stock';
+                cardPropSixValue.textContent = String(data.stock);
                 cardPropSix.appendChild(cardPropSixValue);
 
         cardDescription.appendChild(cardPropOne);

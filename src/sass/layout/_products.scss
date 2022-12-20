@@ -3,21 +3,16 @@
     flex-direction: column;
     min-height: 600px;
     width: 75%;
-    box-shadow: $box-shadow;
-    @extend %blocksettings;
-
-    .sort {
-        width: 100%;
-        height: 100px;
-        box-shadow: $box-shadow;
-        margin-bottom: 20px;
-        border-radius: 10px;
-    }
+    box-sizing: border-box;
 
     .productItems {
         width: 100%;
         box-shadow: $box-shadow;
         @extend %blocksettings;
         box-sizing: border-box;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        justify-items: center;
+        gap: 10px;
     }
 }

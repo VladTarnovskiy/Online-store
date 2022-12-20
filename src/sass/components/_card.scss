@@ -4,23 +4,27 @@
     width: 100%;
     height: 100%;
     box-shadow: $box-shadow;
-    padding: 10px;
-    background-image: url('https://i.dummyjson.com/data/products/1/thumbnail.jpg');
+    padding: 8px;
+    // background-image: url('https://i.dummyjson.com/data/products/1/thumbnail.jpg');
     background-position: center;
     background-size: cover;
     color: $white-color;
     border-radius: 10px;
     box-sizing: border-box;
+    border: 1px solid $light-black-color;
 
     .card__title {
         text-align: center;
-        padding-top: 10px;
-        height: 25px;
+        padding: 2px;
+        height: 35px;
         background-color: rgba($middle-black-color, $alpha: 0.8);
         border: 1px $white-color solid;
         border-radius: 5px;
         color: $light-blue-color;
         font-size: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .card__description {

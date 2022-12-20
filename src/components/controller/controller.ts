@@ -1,5 +1,7 @@
 import AppView from '../view/appView';
-// import DataFilters from '../datafilters/datafilters';
+import Card from '../view/pages/main/card/card';
+import {productData} from '../model/data'
+import CardItem from '../types/types';
 
 export const enum PageIds {
   MainPage = 'main-page',
@@ -10,6 +12,18 @@ export const enum PageIds {
 class AppController extends AppView {
   private static container: HTMLElement = document.body;
   // private static defaultPageId: string = 'main-page';
+
+    cards: Card;
+    productsData: unknown;
+    // filters: Filters;
+    
+    constructor() {
+      super()
+        // this.card = new Card();
+        // this.filters = new Filters();
+        this.cards = new Card();
+        this.productsData = productData.products;
+    }
 
   //start routing
   // static renderNewPage(idPage: string) {
@@ -44,11 +58,18 @@ class AppController extends AppView {
   // }
 
   //endrouting
-
+  viewCard() {
+    // const production = document.querySelector('.productItems')
+    productData.products.forEach((item) => {
+      this.cards.draw(item)
+    })
+  }
 
   run() {
     // App.container.append(this....render());
+    
     this.drawMain()
+    this.viewCard()
     // App.renderNewPage('main-page');
     // this.enableRouteChange();
   }

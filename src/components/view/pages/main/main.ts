@@ -1,18 +1,19 @@
-import Card from './card/card';
+// import Card from './card/card';
 // import Filters from './filters/filters';
 import Products from './products/products';
-// import Sort from './sort/sort';
+import Sort from './sort/sort';
 
 export class Main {
-    card: Card;
+    // card: Card;
     products: Products;
+    sort: Sort;
     // filters: Filters;
-    // sort: Sort;
+    
     constructor() {
-        this.card = new Card();
+        // this.card = new Card();
         this.products = new Products();
         // this.filters = new Filters();
-        // this.sort = new Sort();
+        this.sort = new Sort();
     }
 
     mainGridContainer () {
@@ -31,10 +32,9 @@ export class Main {
         this.mainGridContainer()
         // this.filters.draw()
         this.products.draw()
-        this.card.draw()
-        // this.sort.draw()
+        // this.card.draw()
+        this.sort.draw()
     }
-    //else need create gride to this elements
 }
 
 export default Main;

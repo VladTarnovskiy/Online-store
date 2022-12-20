@@ -1,4 +1,4 @@
-import productData from "./data"
+import {productData} from "./data";
 
 class DataFilters {
     initDataProduct = productData.products;
