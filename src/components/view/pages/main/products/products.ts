@@ -5,11 +5,11 @@ class Products {
         const sort = <HTMLElement>document.createElement('div');
         sort.className = 'sort';
 
-        const productItems = <HTMLElement>document.createElement('div');
-        productItems.className = 'productItems';
+        const prodContainer = <HTMLElement>document.createElement('div');
+        prodContainer.className = 'product-items';
 
         products.appendChild(sort);
-        products.appendChild(productItems);
+        products.appendChild(prodContainer);
     }
 }
 export default Products;

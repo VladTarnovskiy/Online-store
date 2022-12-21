@@ -69,9 +69,17 @@ class Sort {
 
         const viewList = <HTMLElement>document.createElement('div');
         viewList.className = 'view__item view__list';
+        viewList.addEventListener('click', () => {
+            const prodContainer = <HTMLElement>document.querySelector('.product-items');
+            prodContainer.classList.add('product-items_list');
+        })
 
         const viewBlocks = <HTMLElement>document.createElement('div');
         viewBlocks.className = 'view__item view__block view__item_active';
+        viewBlocks.addEventListener('click', () => {
+            const prodContainer = <HTMLElement>document.querySelector('.product-items');
+            prodContainer.classList.remove('product-items_list');
+        })
 
         viewContainer.appendChild(viewList);
         viewContainer.appendChild(viewBlocks);

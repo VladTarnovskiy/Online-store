@@ -1,9 +1,6 @@
 import {productData} from "./data";
 
-class DataFilters {
-    initDataProduct = productData.products;
-    filterDataProduct = this.initDataProduct;
-
+export class Filters {
     getFilterByPrice (data){
 
     }

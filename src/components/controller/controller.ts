@@ -1,29 +1,23 @@
 import AppView from '../view/appView';
-import Card from '../view/pages/main/card/card';
-import {productData} from '../model/data'
-import CardItem from '../types/types';
+import {Model} from '../model/model';
 
-export const enum PageIds {
-  MainPage = 'main-page',
-  SettingsPage = 'basket-page',
-  StatisticsPage = 'erorr-page',
-}
+// export const enum PageIds {
+//   MainPage = 'main-page',
+//   SettingsPage = 'basket-page',
+//   StatisticsPage = 'erorr-page',
+// }
+
+export type Callback = (() => void);
 
 class AppController extends AppView {
   private static container: HTMLElement = document.body;
   // private static defaultPageId: string = 'main-page';
-
-    cards: Card;
-    productsData: unknown;
-    // filters: Filters;
+  module: Model;
     
-    constructor() {
-      super()
-        // this.card = new Card();
-        // this.filters = new Filters();
-        this.cards = new Card();
-        this.productsData = productData.products;
-    }
+  constructor() {
+    super()
+      this.module = new Model();
+  }
 
   //start routing
   // static renderNewPage(idPage: string) {
@@ -58,25 +52,21 @@ class AppController extends AppView {
   // }
 
   //endrouting
-  viewCard() {
-    // const production = document.querySelector('.productItems')
-    productData.products.forEach((item) => {
-      this.cards.draw(item)
-    })
+  
+  private prodoctsview() {
+    const viewContainer = <HTMLElement>document.querySelector('.view__container')
+    viewContainer.addEventListener('click', this.module.getProducts);
   }
 
   run() {
     // App.container.append(this....render());
     
-    this.drawMain()
-    this.viewCard()
+    this.drawMain();
+    this.module.getProductsdef();
+    this.prodoctsview();
     // App.renderNewPage('main-page');
     // this.enableRouteChange();
   }
-
-//методы если кликать по кноскам сортировки вызывается нужный метод класса DataFilters и возвратить обновленный масив данных
-
-
 }
 
 export default AppController;
