@@ -21,10 +21,13 @@ export class Model{
      }
 
      getProducts(e: MouseEvent) {
-        const tar = <HTMLElement>e.target;
-        if (tar.classList.contains('view__block')){
+        const productsContainer = <HTMLElement>document.querySelector('.product-items');
+        const target = <HTMLElement>e.target;
+        if (target.classList.contains('view__block')){
+            productsContainer.replaceChildren();
             this.view.viewCardBlock(this.filterDataProduct.products)
-        } else if (tar.classList.contains('view__list')){
+        } else if (target.classList.contains('view__list')){
+            productsContainer.replaceChildren();
             this.view.viewCardList(this.filterDataProduct.products)
         }
         

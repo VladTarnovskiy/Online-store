@@ -55,7 +55,9 @@ class AppController extends AppView {
   
   private prodoctsview() {
     const viewContainer = <HTMLElement>document.querySelector('.view__container')
-    viewContainer.addEventListener('click', this.module.getProducts);
+    viewContainer.addEventListener('click', (event)=>{
+      this.module.getProducts(event)
+    });
   }
 
   run() {
