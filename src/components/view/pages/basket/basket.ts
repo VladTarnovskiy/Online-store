@@ -9,8 +9,21 @@ export class BasketView {
         this.result = new Result();
     }
 
-    draw(data: Data): void {
-        
+    basketGridContainer () {
+        const sortSection = <HTMLElement>document.createElement('div');
+        sortSection.className = 'filters';
+
+        const productsSection = <HTMLElement>document.createElement('div');
+        productsSection.className = 'products';
+        productsSection.textContent = 'Basket don"t realize yet';
+
+        const main = <HTMLElement>document.querySelector('main');
+        main.appendChild(sortSection);
+        main.appendChild(productsSection);
+    }
+
+    draw(): void {
+        this.basketGridContainer();
     }
 }
 

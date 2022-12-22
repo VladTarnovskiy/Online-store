@@ -1,5 +1,3 @@
-//Здесь будут все типы и интерфейсы
-
 export interface CardItem{
     id: number;
     title: string;
@@ -32,3 +30,5 @@ export interface Data{
     skip: number;
     limit: number;
 }
+
+export type Callback = (() => void);

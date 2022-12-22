@@ -1,4 +1,4 @@
-import {CardItem} from '../../../../types/types';
+import {CardItem} from '../types/types';
 
 class Card {
     drawBlock(data: CardItem): void {

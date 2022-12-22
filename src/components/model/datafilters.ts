@@ -1,17 +1,17 @@
-import {productData} from "./data";
+// import {productData} from "./data";
 
 export class Filters {
-    getFilterByPrice (data){
+    // getFilterByPrice (data){
 
-    }
+    // }
 
-    getFilterByCategory (){
+    // getFilterByCategory (){
 
-    }
+    // }
 
-    getFilterByBrand (){
+    // getFilterByBrand (){
 
-    }
+    // }
 
     //и другие методы фильтрации
 }

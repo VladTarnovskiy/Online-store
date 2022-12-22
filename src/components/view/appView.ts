@@ -4,13 +4,12 @@ import {productData} from "../model/data";
 import Header from './header/header';
 import Footer from './footer/footer';
 import Main from './pages/main/main';
+import Basket from './pages/basket/basket';
+// import Error from './pages/error/error';
 import PageGrid from './grid/page-grid';
-import Card from '../view/pages/main/card/card';
+import Card from '../templates/card';
 import {Data} from "../types/types";
 
-// import CardItem from "../types/types"
-// import Basket from './pages/basket/basket';
-// import Error from './pages/error/error';
 
 export class AppView {
     PageGrid: PageGrid;
@@ -18,7 +17,7 @@ export class AppView {
     footer: Footer;
     main: Main;
     card: Card;
-    // basket: Basket;
+    basket: Basket;
     // error: Error;
 
     constructor() {
@@ -27,7 +26,7 @@ export class AppView {
         this.footer = new Footer();
         this.main = new Main();
         this.card = new Card();
-        // this.basket = new Basket();
+        this.basket = new Basket();
         // this.error = new Error();
     }
 
@@ -36,10 +35,10 @@ export class AppView {
         //Желатель вынести в отдельный класс гриды
     }
 
-    drawGridBasketPage(): void {
-        //здесь нужно базовую сделать сетку страницы
-        //Желатель вынести в отдельный класс гриды
-    }
+    // drawGridBasketPage(): void {
+    //     const viewContainer = <HTMLElement>document.querySelector('body')
+    //     viewContainer.replaceChildren()
+    // }
 
     drawMain(): void{
         this.PageGrid.draw();
@@ -62,12 +61,12 @@ export class AppView {
         })
     }
 
-    // drawBasket(data: Data): void{
-    //     this.drawGridBasketPage()
-    //     this.header.draw();
-    //     this.basket.draw(data);
-    //     this.footer.draw();
-    // }
+    drawBasket(): void{
+        this.PageGrid.draw()
+        this.header.draw();
+        this.basket.draw();
+        this.footer.draw();
+    }
 
     // drawError(data: Data): void{
     //     this.error.draw();

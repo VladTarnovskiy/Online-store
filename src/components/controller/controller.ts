@@ -1,17 +1,15 @@
 import AppView from '../view/appView';
 import {Model} from '../model/model';
 
-// export const enum PageIds {
-//   MainPage = 'main-page',
-//   SettingsPage = 'basket-page',
-//   StatisticsPage = 'erorr-page',
-// }
-
-export type Callback = (() => void);
+export const enum PageIds {
+  MainPage = 'main-page',
+  BasketPage = 'basket-page',
+  ErrorPage = 'erorr-page',
+}
 
 class AppController extends AppView {
   private static container: HTMLElement = document.body;
-  // private static defaultPageId: string = 'main-page';
+  private static defaultPageId = 'main-page';
   module: Model;
     
   constructor() {
@@ -19,55 +17,57 @@ class AppController extends AppView {
       this.module = new Model();
   }
 
-  //start routing
-  // static renderNewPage(idPage: string) {
-  //   const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
-  //   if (currentPageHTML) {
-  //     currentPageHTML.remove();
-  //   }
-  //   // let page: Page | null = null;
+  // start routing
+    renderNewPage(idPage: string) {
+    const currentPageHTML = <HTMLElement>document.querySelector('body');
+    currentPageHTML.replaceChildren();
 
-  //   if (idPage === PageIds.MainPage) {
-  //     page = new MainPage(idPage);
-  //   } else if (idPage === PageIds.SettingsPage) {
-  //     page = new SettingsPage(idPage);
-  //   } else if (idPage === PageIds.StatisticsPage) {
-  //     page = new StatisticsPage(idPage);
-  //   } else {
-  //     page = new ErrorPage(idPage, ErrorTypes.Error_404);
-  //   }
+    if (idPage === PageIds.MainPage) {
+      this.drawMain();
+    this.module.getProductsdef();
+    this.productsSort()
+    this.productsView();
+    } else if (idPage === PageIds.BasketPage) {
+      console.log('hhhhhhh');
+      this.drawBasket();
+    } else {
+      // this.drawError();
+      alert('Error, basket dont realize yet')
+    }
+  }
 
-  //   if (page) {
-  //     const pageHTML = page.render();
-  //     pageHTML.id = App.defaultPageId;
-  //     App.container.append(pageHTML);
-  //   }
-  // }
+  private enableRouteChange() {
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.slice(1);
+      this.renderNewPage(hash);
+    });
 
-  // private enableRouteChange() {
-  //   window.addEventListener('hashchange', () => {
-  //     const hash = window.location.hash.slice(1);
-  //     App.renderNewPage(hash);
-  //   });
-  // }
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.slice(1);
+      this.renderNewPage(hash);
+    });
+  }
 
   //endrouting
   
-  private prodoctsview() {
+  private productsView() {
     const viewContainer = <HTMLElement>document.querySelector('.view__container')
     viewContainer.addEventListener('click', (event)=>{
       this.module.getProducts(event)
     });
   }
 
+  private productsSort() {
+    const sortInput = <HTMLElement>document.querySelector('.sort__select')
+    sortInput.addEventListener('change', (event)=>{
+      this.module.sortProducts(event)
+    });
+  }
+
   run() {
-    // App.container.append(this....render());
-    
-    this.drawMain();
-    this.module.getProductsdef();
-    this.prodoctsview();
-    // App.renderNewPage('main-page');
-    // this.enableRouteChange();
+    window.location.hash='main-page';
+    this.renderNewPage('main-page');
+    this.enableRouteChange();
   }
 }
 

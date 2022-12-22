@@ -1,5 +1,4 @@
-import './result';
-import type Data from '../../../../types/types';
+import type {Data} from '../../../../types/types';
 
 class Result {
     draw(data: Data): void {

@@ -18,6 +18,11 @@ class Sort {
         selectSort.setAttribute('name', 'products-sort');
         selectSort.setAttribute('title', 'products-sort');
 
+        const selectItemDefault  = <HTMLElement>document.createElement('option');
+        selectItemDefault.className = 'select__item';
+        selectItemDefault.setAttribute('value', 'default');
+        selectItemDefault.textContent= 'Без сортировки';
+
         const selectItemOne  = <HTMLElement>document.createElement('option');
         selectItemOne.className = 'select__item';
         selectItemOne.setAttribute('value', 'priceInc');
@@ -38,6 +43,7 @@ class Sort {
         selectItemFour.setAttribute('value', 'rateDec');
         selectItemFour.textContent= 'По убыванию рейтинга';
 
+        selectSort.appendChild(selectItemDefault);
         selectSort.appendChild(selectItemOne);
         selectSort.appendChild(selectItemTwo);
         selectSort.appendChild(selectItemThree);
