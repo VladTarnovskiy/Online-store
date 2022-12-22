@@ -1,0 +1,18 @@
+.button {
+  font-family: $roboto-bold-font;
+  box-shadow: $box-shadow;
+  border-radius: 10px;
+  @extend %transition;
+
+  &:hover {
+      @extend %btn-hover;
+  }
+
+  &_filters {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: $blue-color;
+    background-color: $white-color;
+    border: 1px solid $blue-color;
+  }
+}

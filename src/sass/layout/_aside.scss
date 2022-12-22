@@ -5,3 +5,8 @@
     background-color: $light-grey-color;
     @extend %blocksettings;
 }
+
+.filters-buttons {
+    display: flex;
+    justify-content: space-evenly;
+}
