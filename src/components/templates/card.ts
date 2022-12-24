@@ -53,7 +53,7 @@ class Card {
 
     const cardPropFourValue = <HTMLElement>document.createElement('span');
     cardPropFourValue.className = 'card__value card__value_discount';
-    cardPropFourValue.textContent = String(data.discountPercentage);
+    cardPropFourValue.textContent = `${String(data.discountPercentage)} %`;
     cardPropFour.appendChild(cardPropFourValue);
 
     const cardPropFive = <HTMLElement>document.createElement('li');
@@ -93,8 +93,12 @@ class Card {
     cardButtonAdd.className = 'card__button card__button_add';
     cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.addEventListener('click', () => {
-      cardButtonAdd.classList.add('card__button-add_active');
-      cardButtonAdd.textContent = 'In cart';
+      cardButtonAdd.classList.toggle('card__button-add_active');
+      if (cardButtonAdd.classList.contains('card__button-add_active')) {
+        cardButtonAdd.textContent = 'In cart';
+      } else {
+        cardButtonAdd.textContent = 'Add to cart';
+      }
     });
 
     const cardButtonDetails = <HTMLElement>document.createElement('div');
@@ -171,8 +175,12 @@ class Card {
     cardButtonAdd.className = 'card__button card__button_add';
     cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.addEventListener('click', () => {
-      cardButtonAdd.classList.add('card__button-add_active');
-      cardButtonAdd.textContent = 'In cart';
+      cardButtonAdd.classList.toggle('card__button-add_active');
+      if (cardButtonAdd.classList.contains('card__button-add_active')) {
+        cardButtonAdd.textContent = 'In cart';
+      } else {
+        cardButtonAdd.textContent = 'Add to cart';
+      }
     });
 
     const cardButtonDetails = <HTMLElement>document.createElement('div');
@@ -187,8 +195,8 @@ class Card {
     productsContainer.appendChild(card);
   }
 
-  drawCardBasket(data: CardItem): void {
-    const productsContainer = <HTMLElement>document.querySelector('.product-items');
+  drawCardBasket(/*data: CardItem*/): void {
+    const productsContainer = <HTMLElement>document.querySelector('.basket__prod-container');
 
     const card = <HTMLElement>document.createElement('div');
     card.className = 'card card_list';
@@ -199,7 +207,7 @@ class Card {
 
     const cardImg = <HTMLElement>document.createElement('img');
     cardImg.className = 'card__img';
-    cardImg.setAttribute('src', `${data.thumbnail}`);
+    cardImg.setAttribute('src', `{data.thumbnail}`);
     wrapperImg.appendChild(cardImg);
 
     const descriptWrapper = <HTMLElement>document.createElement('div');
@@ -209,56 +217,89 @@ class Card {
     const cardTitle = <HTMLElement>document.createElement('div');
     cardTitle.className = 'card__title';
     const textTitle = <HTMLElement>document.createElement('div');
-    textTitle.textContent = data.title;
+    textTitle.textContent = `data.title`;
     cardTitle.appendChild(textTitle);
     descriptWrapper.appendChild(cardTitle);
 
     const carddescript = <HTMLElement>document.createElement('div');
     carddescript.className = 'card__descript';
-    carddescript.textContent = data.description;
+    carddescript.textContent = `data.description`;
     descriptWrapper.appendChild(carddescript);
 
     const cardPropThreeValue = <HTMLElement>document.createElement('span');
     cardPropThreeValue.className = 'card__value card__value_price';
-    cardPropThreeValue.textContent = String(data.price);
+    cardPropThreeValue.textContent = String(`data.price`);
     const cardPropThreeValueDollar = <HTMLElement>document.createElement('span');
-    cardPropThreeValueDollar.textContent = ' $';
+    cardPropThreeValueDollar.textContent = '$';
     cardPropThreeValue.appendChild(cardPropThreeValueDollar);
     descriptWrapper.appendChild(cardPropThreeValue);
 
     const cardPropRate = <HTMLElement>document.createElement('div');
     cardPropRate.className = 'card__rate';
 
+    const cardBasketDec = <HTMLElement>document.createElement('div');
+    cardBasketDec.className = 'card__basket-description';
+
+    const cardDescRate = <HTMLElement>document.createElement('div');
+    cardDescRate.className = 'card__rate';
+    cardDescRate.textContent = 'Raiting: ';
+
     const propRateText = <HTMLElement>document.createElement('div');
     propRateText.className = 'card__rate-text';
-    propRateText.textContent = `${String(data.rating)} / 5`;
+    propRateText.textContent = `${String(`data.rating`)} / 5`;
 
     const propRateStar = <HTMLElement>document.createElement('div');
     propRateStar.className = 'card__rate-icon';
-    cardPropRate.appendChild(propRateText);
-    cardPropRate.appendChild(propRateStar);
+    cardDescRate.appendChild(propRateText);
+    cardDescRate.appendChild(propRateStar);
 
-    descriptWrapper.appendChild(cardPropRate);
+    const cardDescDisc = <HTMLElement>document.createElement('div');
+    cardDescDisc.className = 'card_desc-item card__basket-disc';
+    cardDescDisc.textContent = `Discount:{x}`;
 
-    const cardButtons = <HTMLElement>document.createElement('div');
-    cardButtons.className = 'card__buttons';
+    cardBasketDec.appendChild(cardDescRate);
+    cardBasketDec.appendChild(cardDescDisc);
 
-    const cardButtonAdd = <HTMLElement>document.createElement('div');
-    cardButtonAdd.className = 'card__button card__button_add';
-    cardButtonAdd.textContent = 'Add to cart';
-    cardButtonAdd.addEventListener('click', () => {
-      cardButtonAdd.classList.add('card__button-add_active');
-      cardButtonAdd.textContent = 'In cart';
-    });
+    //controller item
+    const itemController = <HTMLElement>document.createElement('div');
+    itemController.className = 'card__item-controller';
+    card.appendChild(itemController);
 
-    const cardButtonDetails = <HTMLElement>document.createElement('div');
-    cardButtonDetails.className = 'card__button card__button_detail';
-    cardButtonDetails.textContent = 'Details';
+    const itemStock = <HTMLElement>document.createElement('div');
+    itemStock.className = 'card__item-stock';
+    itemStock.textContent = 'Stock: ';
 
-    cardButtons.appendChild(cardButtonAdd);
-    cardButtons.appendChild(cardButtonDetails);
+    const itemStockValue = <HTMLElement>document.createElement('span');
+    itemStockValue.className = 'card__stock-value';
+    itemStockValue.textContent = String(`data.price`);
 
-    descriptWrapper.appendChild(cardButtons);
+    itemStock.appendChild(itemStockValue);
+    itemController.appendChild(itemStock);
+
+    const itemControl = <HTMLElement>document.createElement('div');
+    itemControl.className = 'card__item-control';
+
+    const cardButtonPlus = <HTMLElement>document.createElement('div');
+    cardButtonPlus.className = 'card__btn-control card__item-plus';
+
+    const itemCounter = <HTMLElement>document.createElement('div');
+    itemCounter.className = 'card__item-counter';
+    itemCounter.textContent = '1';
+
+    const cardButtonMinus = <HTMLElement>document.createElement('div');
+    cardButtonMinus.className = 'card__btn-control card__item-minus';
+
+    itemControl.appendChild(cardButtonPlus);
+    itemControl.appendChild(itemCounter);
+    itemControl.appendChild(cardButtonMinus);
+    itemController.appendChild(itemControl);
+
+    const totlalPrice = <HTMLElement>document.createElement('div');
+    totlalPrice.className = 'card__item-stock';
+    totlalPrice.textContent = `XXXXXX $ `;
+    itemController.appendChild(totlalPrice);
+
+    descriptWrapper.appendChild(cardBasketDec);
 
     productsContainer.appendChild(card);
   }

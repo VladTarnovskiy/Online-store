@@ -25,8 +25,9 @@ class AppController extends Model {
     if (idPage === PageIds.MainPage) {
       this.view.drawMain();
       this.productsSort();
-      this.productsView();
       this.productsSearch();
+      this.productsView();
+
       this.localStorage();
     } else if (idPage === PageIds.BasketPage) {
       console.log('hhhhhhh');

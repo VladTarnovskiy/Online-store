@@ -9,9 +9,66 @@
         box-shadow: $box-shadow;
         background-color: $light-grey-color;
         @extend %blocksettings;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+
+        .basket__prod-title {
+            text-align: center;
+            padding: 4px;
+            height: 35px;
+            background-color: $white-color;
+            border: 1px $blue-color solid;
+            border-radius: 5px;
+            color: $black-color;
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: $roboto-bold-font;
+            margin-bottom: 6px;
+        }
+
+        .basket__prod-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            box-shadow: 0px 2px 4px rgb(27 78 163 / 20%), 0px 4px 8px rgb(41 121 255 / 20%);
+            box-sizing: border-box;
+        }
+
+        .card__basket-description {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 40px;
+            width: 100%;
+
+            //basket description and rating
+
+            .card__rate {
+                font-size: 1.3rem;
+                color: $black-color;
+
+                .card__rate-text {
+                    text-align: center;
+                    width: 100%;
+                    height: fit-content;
+                    color: #000000;
+                    font-size: 1.3rem;
+                    margin-bottom: 0;
+                }
+
+                .card_desc-item {
+                    text-align: center;
+                }
+            }
+
+            .card__basket-disc {
+                @extend %transition;
+                color: $black-color;
+                font-size: 1.3rem;
+                width: fit-content;
+                height: auto;
+            }
+        }
     }
 
     .basket__result {
@@ -47,8 +104,6 @@
             font-size: 1.3rem;
         }
 
-        .result__counter {}
-
         .result__price {
             margin-bottom: 20px;
             font-family: $roboto-bold-font;
@@ -81,6 +136,7 @@
             font-size: 1.3rem;
             width: 110px;
             font-family: $roboto-bold-font;
+            border: none;
 
             &:hover {
                 @extend %btn-hover;

@@ -4,14 +4,14 @@ import { Filters } from './datafilters';
 import { CardItem } from '../types/types';
 import { Data } from '../types/types';
 
-export class Model {
+export class Model extends AppView {
   initDataProduct: CardItem[] = productData.products;
   filterDataProduct: CardItem[];
-  view: AppView;
+
   filters: Filters;
 
   constructor() {
-    this.view = new AppView();
+    super();
     this.filters = new Filters();
     this.filterDataProduct = productData.products.slice(0);
   }
@@ -21,11 +21,11 @@ export class Model {
     const target = <HTMLElement>e.target;
     if (target.classList.contains('view__block')) {
       productsContainer.replaceChildren();
-      this.view.viewCardBlock(this.filterDataProduct);
+      this.viewCardBlock(this.filterDataProduct);
       localStorage.setItem('view', 'block');
     } else if (target.classList.contains('view__list')) {
       productsContainer.replaceChildren();
-      this.view.viewCardList(this.filterDataProduct);
+      this.viewCardList(this.filterDataProduct);
       localStorage.setItem('view', 'list');
     }
   }
@@ -69,36 +69,29 @@ export class Model {
 
   searchProducts(e: Event) {
     const productsContainer = <HTMLElement>document.querySelector('.product-items');
+    const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    this.filterDataProduct.filter((item) => {
-      const x = item.title.toLowerCase().split(' ');
-      x.forEach((it) => {
-        if (it === target.value.toLowerCase()) {
-          console.log('true');
-          return true;
-        }
+    const arr: CardItem[] = [];
+    if (target.value === '') {
+      this.initDataProduct.forEach((item) => arr.push(item));
+    } else {
+      this.initDataProduct.forEach((item) => {
+        const itemTitle = item.title.toLowerCase().split(' ');
+        const itemDescr = item.description.toLowerCase().split(' ');
+        const brandDescr = item.brand.toLowerCase().split(' ');
+        const categoryDescr = item.brand.toLowerCase().split(' ');
+        const arrSearchData = itemTitle.concat(itemDescr, brandDescr, categoryDescr);
+
+        arrSearchData.forEach((it) => {
+          if (it === target.value.toLowerCase() && !arr.includes(item)) {
+            arr.push(item);
+          }
+        });
       });
-    });
-
-    //     const y: CardItem[] = [];
-    //     this.filterDataProduct.forEach((item: CardItem) => {
-    //         const x = item.title.toLowerCase().split(' ')
-
-    //         x.forEach((it) => {
-    //             if(it === target.value.toLowerCase()){
-    //                y.push(item)
-    //                 console.log(y)
-    //             }
-    //         })
-
-    //     })
-    // this.filterDataProduct = y.slice()
-
-    // this.filterDataProduct.filter((item) => {
-    //     return (item.title.toLowerCase() === target.value.toLowerCase())
-
-    // })
+    }
+    productsCounter.textContent = `${arr.length}`;
+    this.filterDataProduct = arr.slice();
     this.localStorage();
   }
 
@@ -112,12 +105,12 @@ export class Model {
       listBut.classList.add('view__item_active');
       blockBut.classList.remove('view__item_active');
       prodContainer.classList.add('product-items_list');
-      this.view.viewCardList(this.filterDataProduct);
+      this.viewCardList(this.filterDataProduct);
     } else {
       blockBut.classList.add('view__item_active');
       listBut.classList.remove('view__item_active');
       prodContainer.classList.remove('product-items_list');
-      this.view.viewCardBlock(this.filterDataProduct);
+      this.viewCardBlock(this.filterDataProduct);
     }
 
     //сортировка продуктов

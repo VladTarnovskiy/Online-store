@@ -1,27 +1,38 @@
 import Result from './result/result';
-import BasketProd from './products/basketProd';
-
 import PageGrid from '../../grid/page-grid';
 import Header from '../../header/header';
 import Footer from '../../footer/footer';
 
+import Card from '../../../templates/card';
+
 class BasketView {
-  basketProducts: BasketProd;
   result: Result;
   PageGrid: PageGrid;
   header: Header;
   footer: Footer;
+  card: Card;
+
   constructor() {
-    this.basketProducts = new BasketProd();
     this.result = new Result();
     this.PageGrid = new PageGrid();
     this.header = new Header();
     this.footer = new Footer();
+    this.card = new Card();
   }
 
   basketGridContainer() {
     const basketProd = <HTMLElement>document.createElement('div');
     basketProd.className = 'basket__prod';
+
+    const basketProdTille = <HTMLElement>document.createElement('div');
+    basketProdTille.className = 'basket__prod-title';
+    basketProdTille.textContent = 'Products in cart';
+
+    const basketProdContainer = <HTMLElement>document.createElement('div');
+    basketProdContainer.className = 'basket__prod-container';
+
+    basketProd.appendChild(basketProdTille);
+    basketProd.appendChild(basketProdContainer);
 
     const basketSummary = <HTMLElement>document.createElement('aside');
     basketSummary.className = 'basket__result';
@@ -35,7 +46,8 @@ class BasketView {
     this.PageGrid.drawGrid();
     this.header.draw();
     this.basketGridContainer();
-    this.basketProducts.draw();
+    this.card.drawCardBasket();
+    this.result.draw();
     this.footer.draw();
   }
 }
