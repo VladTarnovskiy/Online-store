@@ -1,8 +1,6 @@
-import type {Data} from '../../../../types/types';
+import type { Data } from '../../../../types/types';
 
 class Result {
-    draw(data: Data): void {
-        
-    }
+  draw(): void {}
 }
 export default Result;

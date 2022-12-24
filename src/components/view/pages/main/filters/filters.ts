@@ -1,8 +1,6 @@
 // import type Data from '../../../../types/types';
 
 class Filters {
-    draw(): void {
-        
-    }
+  draw(): void {}
 }
 export default Filters;

@@ -44,6 +44,16 @@
         font-size: 1rem;
     }
 
+    .products__search {
+        height: 40px;
+        border-radius: 20px;
+        width: 200px;
+        font-size: 1rem;
+        padding: 5px;
+        outline: none;
+        border: 2px $black-color solid;
+    }
+
     .view__container {
         width: 120px;
         height: 40px;

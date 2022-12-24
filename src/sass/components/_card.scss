@@ -73,6 +73,7 @@
 
         .card__button {
             height: 100%;
+            width: 62px;
             box-shadow: $box-shadow;
             display: flex;
             justify-content: center;
@@ -88,6 +89,10 @@
             &:hover {
                 @extend %btn-hover;
             }
+        }
+
+        .card__button-add_active {
+            background-color: rgba($orange-color, $alpha: 0.9);
         }
     }
 }
@@ -208,10 +213,15 @@
                 border-radius: 5px;
                 font-size: 1rem;
                 @extend %transition;
+                width: 80px;
 
                 &:hover {
                     @extend %btn-hover;
                 }
+            }
+
+            .card__button-add_active {
+                background-color: rgba($orange-color, $alpha: 0.9);
             }
         }
     }

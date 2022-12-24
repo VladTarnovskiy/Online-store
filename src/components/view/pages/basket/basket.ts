@@ -1,30 +1,43 @@
 import Result from './result/result';
-import Products from './products/products';
+import BasketProd from './products/basketProd';
 
-export class BasketView {
-    products: Products;
-    result: Result;
-    constructor() {
-        this.products = new Products();
-        this.result = new Result();
-    }
+import PageGrid from '../../grid/page-grid';
+import Header from '../../header/header';
+import Footer from '../../footer/footer';
 
-    basketGridContainer () {
-        const sortSection = <HTMLElement>document.createElement('div');
-        sortSection.className = 'filters';
+class BasketView {
+  basketProducts: BasketProd;
+  result: Result;
+  PageGrid: PageGrid;
+  header: Header;
+  footer: Footer;
+  constructor() {
+    this.basketProducts = new BasketProd();
+    this.result = new Result();
+    this.PageGrid = new PageGrid();
+    this.header = new Header();
+    this.footer = new Footer();
+  }
 
-        const productsSection = <HTMLElement>document.createElement('div');
-        productsSection.className = 'products';
-        productsSection.textContent = 'Basket don"t realize yet';
+  basketGridContainer() {
+    const basketProd = <HTMLElement>document.createElement('div');
+    basketProd.className = 'basket__prod';
 
-        const main = <HTMLElement>document.querySelector('main');
-        main.appendChild(sortSection);
-        main.appendChild(productsSection);
-    }
+    const basketSummary = <HTMLElement>document.createElement('aside');
+    basketSummary.className = 'basket__result';
 
-    draw(): void {
-        this.basketGridContainer();
-    }
+    const main = <HTMLElement>document.querySelector('main');
+    main.appendChild(basketProd);
+    main.appendChild(basketSummary);
+  }
+
+  draw(): void {
+    this.PageGrid.drawGrid();
+    this.header.draw();
+    this.basketGridContainer();
+    this.basketProducts.draw();
+    this.footer.draw();
+  }
 }
 
 export default BasketView;
