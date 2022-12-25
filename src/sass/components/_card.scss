@@ -440,5 +440,13 @@
                 }
             }
         }
+
+        .card__item-total-price {
+            width: 100%;
+            text-align: center;
+            color: $black-color;
+            margin-bottom: 2px;
+            font-size: 1.3rem;
+        }
     }
 }

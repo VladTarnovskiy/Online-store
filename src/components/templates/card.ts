@@ -278,13 +278,29 @@ class Card {
 
     const cardButtonPlus = <HTMLElement>document.createElement('div');
     cardButtonPlus.className = 'card__btn-control card__item-plus';
+    cardButtonPlus.setAttribute('data-id', `${data.id}`);
+    // cardButtonPlus.addEventListener('click', () => {
+    //   if (Number(itemCounter.textContent) < data.stock) {
+    //     itemCounter.textContent = String(Number(itemCounter.textContent) + 1);
+    //     totlalPrice.textContent = `${(
+    //       (data.price - (data.price * data.discountPercentage) / 100) *
+    //       Number(itemCounter.textContent)
+    //     ).toFixed(2)} $`;
+    //   }
+    // });
 
     const itemCounter = <HTMLElement>document.createElement('div');
     itemCounter.className = 'card__item-counter';
-    itemCounter.textContent = '1';
+    itemCounter.textContent = `${data.amount}`;
 
     const cardButtonMinus = <HTMLElement>document.createElement('div');
     cardButtonMinus.className = 'card__btn-control card__item-minus';
+    cardButtonMinus.setAttribute('data-id', `${data.id}`);
+    // cardButtonMinus.addEventListener('click', () => {
+    //   if (Number(itemCounter.textContent) > 1) {
+    //     itemCounter.textContent = String(Number(itemCounter.textContent) - 1);
+    //   }
+    // });
 
     itemControl.appendChild(cardButtonPlus);
     itemControl.appendChild(itemCounter);
@@ -292,8 +308,8 @@ class Card {
     itemController.appendChild(itemControl);
 
     const totlalPrice = <HTMLElement>document.createElement('div');
-    totlalPrice.className = 'card__item-stock';
-    totlalPrice.textContent = `${Math.round(data.price - (data.price * data.discountPercentage) / 100)} $ `;
+    totlalPrice.className = 'card__item-total-price';
+    totlalPrice.textContent = `${(data.price - (data.price * data.discountPercentage) / 100).toFixed(2)} $`;
     itemController.appendChild(totlalPrice);
 
     descriptWrapper.appendChild(cardBasketDec);

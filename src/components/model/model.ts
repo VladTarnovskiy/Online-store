@@ -1,3 +1,4 @@
+// import AppController from '../controller/controller';
 import AppView from '../view/appView';
 import { productData } from './data';
 import { Filters } from './datafilters';
@@ -5,6 +6,7 @@ import { CardItem } from '../types/types';
 import { Data } from '../types/types';
 
 export class Model extends AppView {
+  // controller: AppController;
   initDataProduct: CardItem[] = productData.products;
   filterDataProduct: CardItem[] = productData.products.slice(0);
   arrProductsBasket: CardItem[] = [];
@@ -14,6 +16,7 @@ export class Model extends AppView {
   constructor() {
     super();
     this.filters = new Filters();
+    // this.controller = new AppController();
   }
 
   getProducts(e: MouseEvent) {
@@ -96,12 +99,81 @@ export class Model extends AppView {
   }
 
   addProduct(e: Event) {
+    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const target = <HTMLElement>e.target;
-    // const arrBasket: CardItem[] = [];
     this.initDataProduct.forEach((item) => {
       if (String(item.id) === target.dataset.id) {
-        this.arrProductsBasket.push(item);
+        if (target.classList.contains('card__button-add_active')) {
+          item.amount = 1;
+          item.totalPrice = Number(
+            ((item.price - (item.price * item.discountPercentage) / 100) * item.amount).toFixed(2)
+          );
+          this.arrProductsBasket.push(item);
+
+          console.log(this.arrProductsBasket);
+        } else {
+          this.arrProductsBasket.forEach((itemBasket, index) => {
+            if (itemBasket === item) {
+              this.arrProductsBasket.splice(index, 1);
+            }
+          });
+        }
       }
+      basketChecker.textContent = `${this.arrProductsBasket.length}`;
+    });
+  }
+
+  showResultBasket() {
+    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
+    const resultCounter = <HTMLElement>document.querySelector('.result__counter');
+    const numberItems = document.querySelectorAll<HTMLElement>('.card__item-counter');
+    basketChecker.textContent = `${this.arrProductsBasket.length}`;
+    let count = 0;
+    numberItems.forEach((item) => {
+      count = count + Number(item.textContent);
+    });
+    resultCounter.textContent = String(count);
+    this.basketCardChangeInfo();
+  }
+
+  basketCardChangeInfo() {
+    const basketItems = document.querySelectorAll<HTMLElement>('.card_basket');
+
+    basketItems.forEach((item, index) => {
+      item.addEventListener('click', (event) => {
+        const basketItemCounter = <HTMLElement>item.querySelector('.card__item-counter');
+        const basketItemTotalPrice = <HTMLElement>item.querySelector('.card__item-total-price');
+        const target = <HTMLElement>event.target;
+        const arrItem = this.arrProductsBasket[index];
+        // const itemNum = Number(target.getAttribute('data-id'));
+        if (target.classList.contains('card__item-plus')) {
+          if (Number(basketItemCounter.textContent) < arrItem.stock) {
+            arrItem.amount = arrItem.amount + 1;
+            basketItemCounter.textContent = `${arrItem.amount}`;
+            basketItemTotalPrice.textContent = `${(
+              (arrItem.price - (arrItem.price * arrItem.discountPercentage) / 100) *
+              Number(basketItemCounter.textContent)
+            ).toFixed(2)} $`;
+          }
+        } else if (target.classList.contains('card__item-minus')) {
+          if (Number(basketItemCounter.textContent) > 0) {
+            arrItem.amount = arrItem.amount - 1;
+            basketItemCounter.textContent = `${arrItem.amount}`;
+            basketItemTotalPrice.textContent = `${(
+              (arrItem.price - (arrItem.price * arrItem.discountPercentage) / 100) *
+              Number(basketItemCounter.textContent)
+            ).toFixed(2)} $`;
+          } else {
+            console.log('fq');
+            this.arrProductsBasket.splice(index, 1);
+            const basketProductsContainer = <HTMLElement>document.querySelector('.basket__prod-container');
+            basketProductsContainer.replaceChildren();
+
+            this.viewCardBasket(this.arrProductsBasket);
+            // this.controller.addProduct();
+          }
+        }
+      });
     });
   }
 

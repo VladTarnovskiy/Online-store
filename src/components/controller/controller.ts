@@ -32,6 +32,8 @@ class AppController extends Model {
     } else if (idPage === PageIds.BasketPage) {
       this.view.drawBasket();
       this.viewCardBasket(this.arrProductsBasket);
+      this.showResultBasket();
+      // this.basketCardChangeInfo();
     } else {
       // this.drawError();
       alert('Error, basket dont realize yet');
@@ -76,7 +78,6 @@ class AppController extends Model {
     const addButtons = document.querySelectorAll<HTMLElement>('.card__button_add');
     addButtons.forEach((item) => {
       item.addEventListener('click', (event) => {
-        console.log('drhbe');
         this.addProduct(event);
       });
     });

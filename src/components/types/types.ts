@@ -10,6 +10,8 @@ export interface CardItem {
   category: string;
   thumbnail: string;
   images: string[];
+  amount?: number;
+  totalPrice?: number;
 }
 
 export interface Data {
