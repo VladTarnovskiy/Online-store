@@ -1,11 +1,11 @@
-import { listCategories, valueEachCategory } from './getListsOfPropData';
+import { DataValueEachOfCategory } from '../../../../types/types';
 
-export function showListOfFilter(className: string, parentElement: HTMLDivElement, nameFilter: string) {
+export function showListOfFilter(className: string, parentElement: HTMLDivElement, listFilter: Set<string>, nameFilter: string, valueEachItemList: DataValueEachOfCategory) {
   const list: HTMLUListElement = document.createElement('ul');
   list.className = `${className}`;
   parentElement.append(list);
 
-  listCategories.forEach((prop: string) => {
+  listFilter.forEach((prop: string) => {
     const li: HTMLLIElement = document.createElement('li');
     li.className = `${className}__item`;
     list.append(li);
@@ -28,7 +28,7 @@ export function showListOfFilter(className: string, parentElement: HTMLDivElemen
 
     const valueElement: HTMLSpanElement = document.createElement('span');
     valueElement.className = `${className}__value`;
-    valueElement.textContent = `(${valueEachCategory[prop]})`;
+    valueElement.textContent = `(${valueEachItemList[prop]})`;
     li.append(valueElement);
   })
 }

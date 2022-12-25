@@ -1,4 +1,7 @@
 .filters {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     min-height: 600px;
     width: 20%;
     box-shadow: $box-shadow;
@@ -8,11 +11,10 @@
     .filters-buttons {
         display: flex;
         justify-content: space-evenly;
-        margin-bottom: 20px;
     }
 }
 
-.category {
+.category, .brand {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,14 +23,14 @@
     box-shadow: $box-shadow;
     background-color: $white-color;
 
-    .category__title {
+    .category__title, .brand__title {
         font-family: $roboto-bold-font;
         font-size: 18px;
         color: $blue-color;
         margin: 0;
     }
 
-    .category__block {
+    .category__block, .brand__block {
         max-height: 230px;
         width: 100%;
         align-self: flex-start;
@@ -54,11 +56,11 @@
         }
     }
 
-    .filter-category {
+    .filter-block {
         padding: 0;
     }
 
-    .filter-category__item {
+    .filter-block__item {
         display: flex;
         align-items: center;
         font-size: 16px;
@@ -66,30 +68,30 @@
         user-select: none;
     }
     
-    .filter-category__label {
+    .filter-block__label {
         cursor: pointer;
 
         &:hover {
             color: $orange-color;
             @extend %transition;
 
-            .filter-category__text::before {
+            .filter-block__text::before {
                 border-color: $orange-color;
             }
         }
     }
 
-    .filter-category__input {
+    .filter-block__input {
         position: absolute;
         z-index: -1;
         opacity: 0;
 
-        &:checked + .filter-category__text::before {
+        &:checked + .filter-block__text::before {
             background-color: $blue-color;
         }
     }
     
-    .filter-category__text {
+    .filter-block__text {
         display: inline-flex;
         align-items: center;
 
@@ -107,7 +109,7 @@
         }
     }
 
-    .filter-category__value {
+    .filter-block__value {
         margin-left: auto;
         padding-right: 10px;
     }

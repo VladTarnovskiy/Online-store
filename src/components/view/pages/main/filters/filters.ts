@@ -1,4 +1,5 @@
 import Component from '../../../../templates/components';
+import { listCategories, valueEachCategory, listOfBrands, valueEachBrand } from './getListsOfPropData';
 import { showListOfFilter } from './filterList';
 
 class Filters extends Component {
@@ -34,8 +35,23 @@ class Filters extends Component {
         categoryBlock.className = 'category__block';
         categoryWrapper.append(categoryBlock);
 
-        showListOfFilter('filter-category', categoryBlock, 'category');
+        showListOfFilter('filter-block', categoryBlock, listCategories, 'category', valueEachCategory);
 
+
+        const brandWrapper: HTMLDivElement = document.createElement('div');
+        brandWrapper.className = 'brand';
+        this.container.append(brandWrapper);
+
+        const brandTitle: HTMLHeadingElement = document.createElement('h2');
+        brandTitle.className = 'brand__title';
+        brandTitle.textContent = 'Brand';
+        brandWrapper.append(brandTitle);
+
+        const brandBlock: HTMLDivElement = document.createElement('div');
+        brandBlock.className = 'brand__block';
+        brandWrapper.append(brandBlock);
+
+        showListOfFilter('filter-block', brandBlock, listOfBrands, 'brand', valueEachBrand);
     }
 
     render(): HTMLElement {

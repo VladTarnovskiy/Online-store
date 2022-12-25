@@ -32,3 +32,35 @@ function getListOfValueEachCategory(): DataValueEachOfCategory {
 }
 
 export const valueEachCategory: DataValueEachOfCategory = getListOfValueEachCategory();
+
+function getListOfBrands(): Set<string> {
+  const arrayProducts: DataObject[] = data.products;
+  const objectBrand: Set<string> = new Set();
+  
+  for (let i = 0; i < arrayProducts.length; i++) {
+    objectBrand.add(arrayProducts[i].brand)
+  }
+
+  return objectBrand;
+}
+
+export const listOfBrands: Set<string> = getListOfBrands();
+
+function getListOfValueEachBrand(): DataValueEachOfCategory {
+  const listValueOfEachBrand: DataValueEachOfCategory = {};
+  const arrayProducts: DataObject[] = data.products;
+
+  listOfBrands.forEach((key: string): void => {
+    listValueOfEachBrand[key] = 0;
+
+    for (let i = 0; i < arrayProducts.length; i++) {
+      if (key === arrayProducts[i].brand) {
+        listValueOfEachBrand[key] += 1;
+      }
+    }
+  });
+
+  return listValueOfEachBrand;
+}
+
+export const valueEachBrand: DataValueEachOfCategory = getListOfValueEachBrand();
