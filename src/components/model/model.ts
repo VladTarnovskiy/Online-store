@@ -6,14 +6,14 @@ import { Data } from '../types/types';
 
 export class Model extends AppView {
   initDataProduct: CardItem[] = productData.products;
-  filterDataProduct: CardItem[];
+  filterDataProduct: CardItem[] = productData.products.slice(0);
+  arrProductsBasket: CardItem[] = [];
 
   filters: Filters;
 
   constructor() {
     super();
     this.filters = new Filters();
-    this.filterDataProduct = productData.products.slice(0);
   }
 
   getProducts(e: MouseEvent) {
@@ -72,9 +72,9 @@ export class Model extends AppView {
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    const arr: CardItem[] = [];
+    const arrSearch: CardItem[] = [];
     if (target.value === '') {
-      this.initDataProduct.forEach((item) => arr.push(item));
+      this.initDataProduct.forEach((item) => arrSearch.push(item));
     } else {
       this.initDataProduct.forEach((item) => {
         const itemTitle = item.title.toLowerCase().split(' ');
@@ -84,15 +84,25 @@ export class Model extends AppView {
         const arrSearchData = itemTitle.concat(itemDescr, brandDescr, categoryDescr);
 
         arrSearchData.forEach((it) => {
-          if (it === target.value.toLowerCase() && !arr.includes(item)) {
-            arr.push(item);
+          if (it === target.value.toLowerCase() && !arrSearch.includes(item)) {
+            arrSearch.push(item);
           }
         });
       });
     }
-    productsCounter.textContent = `${arr.length}`;
-    this.filterDataProduct = arr.slice();
+    productsCounter.textContent = `${arrSearch.length}`;
+    this.filterDataProduct = arrSearch.slice();
     this.localStorage();
+  }
+
+  addProduct(e: Event) {
+    const target = <HTMLElement>e.target;
+    // const arrBasket: CardItem[] = [];
+    this.initDataProduct.forEach((item) => {
+      if (String(item.id) === target.dataset.id) {
+        this.arrProductsBasket.push(item);
+      }
+    });
   }
 
   localStorage() {

@@ -29,11 +29,11 @@ export class AppView {
     });
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // viewCardBasket(data: any) {
-  //   data.forEach((item) => {
-  //     this.card.drawCardBasket(item);
-  //   });
-  // }
+  viewCardBasket(data: any) {
+    data.forEach((item) => {
+      this.card.drawCardBasket(item);
+    });
+  }
 
   drawMain(): void {
     this.main.draw();

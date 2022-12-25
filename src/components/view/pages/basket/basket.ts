@@ -3,21 +3,17 @@ import PageGrid from '../../grid/page-grid';
 import Header from '../../header/header';
 import Footer from '../../footer/footer';
 
-import Card from '../../../templates/card';
-
 class BasketView {
   result: Result;
   PageGrid: PageGrid;
   header: Header;
   footer: Footer;
-  card: Card;
 
   constructor() {
     this.result = new Result();
     this.PageGrid = new PageGrid();
     this.header = new Header();
     this.footer = new Footer();
-    this.card = new Card();
   }
 
   basketGridContainer() {
@@ -46,7 +42,6 @@ class BasketView {
     this.PageGrid.drawGrid();
     this.header.draw();
     this.basketGridContainer();
-    this.card.drawCardBasket();
     this.result.draw();
     this.footer.draw();
   }

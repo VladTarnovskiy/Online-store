@@ -4,7 +4,7 @@
     @extend %wrapper;
 
     .basket__prod {
-        width: 60%;
+        width: 65%;
         min-height: 300px;
         box-shadow: $box-shadow;
         background-color: $light-grey-color;
@@ -29,50 +29,16 @@
         .basket__prod-container {
             display: flex;
             flex-direction: column;
+            gap: 10px;
             width: 100%;
             box-shadow: 0px 2px 4px rgb(27 78 163 / 20%), 0px 4px 8px rgb(41 121 255 / 20%);
             box-sizing: border-box;
         }
 
-        .card__basket-description {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 40px;
-            width: 100%;
-
-            //basket description and rating
-
-            .card__rate {
-                font-size: 1.3rem;
-                color: $black-color;
-
-                .card__rate-text {
-                    text-align: center;
-                    width: 100%;
-                    height: fit-content;
-                    color: #000000;
-                    font-size: 1.3rem;
-                    margin-bottom: 0;
-                }
-
-                .card_desc-item {
-                    text-align: center;
-                }
-            }
-
-            .card__basket-disc {
-                @extend %transition;
-                color: $black-color;
-                font-size: 1.3rem;
-                width: fit-content;
-                height: auto;
-            }
-        }
     }
 
     .basket__result {
-        width: 35%;
+        width: 30%;
         min-height: 300px;
         box-shadow: $box-shadow;
         background-color: $light-grey-color;

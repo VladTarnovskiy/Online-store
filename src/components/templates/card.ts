@@ -91,6 +91,7 @@ class Card {
 
     const cardButtonAdd = <HTMLElement>document.createElement('div');
     cardButtonAdd.className = 'card__button card__button_add';
+    cardButtonAdd.setAttribute('data-id', `${data.id}`);
     cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
@@ -173,6 +174,7 @@ class Card {
 
     const cardButtonAdd = <HTMLElement>document.createElement('div');
     cardButtonAdd.className = 'card__button card__button_add';
+    cardButtonAdd.setAttribute('data-id', `${data.id}`);
     cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
@@ -195,11 +197,11 @@ class Card {
     productsContainer.appendChild(card);
   }
 
-  drawCardBasket(/*data: CardItem*/): void {
+  drawCardBasket(data: CardItem): void {
     const productsContainer = <HTMLElement>document.querySelector('.basket__prod-container');
 
     const card = <HTMLElement>document.createElement('div');
-    card.className = 'card card_list';
+    card.className = 'card card_basket';
 
     const wrapperImg = <HTMLElement>document.createElement('div');
     wrapperImg.className = 'wrapper__img';
@@ -207,7 +209,7 @@ class Card {
 
     const cardImg = <HTMLElement>document.createElement('img');
     cardImg.className = 'card__img';
-    cardImg.setAttribute('src', `{data.thumbnail}`);
+    cardImg.setAttribute('src', `${data.thumbnail}`);
     wrapperImg.appendChild(cardImg);
 
     const descriptWrapper = <HTMLElement>document.createElement('div');
@@ -217,18 +219,18 @@ class Card {
     const cardTitle = <HTMLElement>document.createElement('div');
     cardTitle.className = 'card__title';
     const textTitle = <HTMLElement>document.createElement('div');
-    textTitle.textContent = `data.title`;
+    textTitle.textContent = `${data.title}`;
     cardTitle.appendChild(textTitle);
     descriptWrapper.appendChild(cardTitle);
 
     const carddescript = <HTMLElement>document.createElement('div');
     carddescript.className = 'card__descript';
-    carddescript.textContent = `data.description`;
+    carddescript.textContent = `${data.description}`;
     descriptWrapper.appendChild(carddescript);
 
     const cardPropThreeValue = <HTMLElement>document.createElement('span');
     cardPropThreeValue.className = 'card__value card__value_price';
-    cardPropThreeValue.textContent = String(`data.price`);
+    cardPropThreeValue.textContent = String(`${data.price}`);
     const cardPropThreeValueDollar = <HTMLElement>document.createElement('span');
     cardPropThreeValueDollar.textContent = '$';
     cardPropThreeValue.appendChild(cardPropThreeValueDollar);
@@ -242,20 +244,15 @@ class Card {
 
     const cardDescRate = <HTMLElement>document.createElement('div');
     cardDescRate.className = 'card__rate';
-    cardDescRate.textContent = 'Raiting: ';
-
-    const propRateText = <HTMLElement>document.createElement('div');
-    propRateText.className = 'card__rate-text';
-    propRateText.textContent = `${String(`data.rating`)} / 5`;
+    cardDescRate.textContent = `Raiting: ${String(`${data.rating}`)} `;
 
     const propRateStar = <HTMLElement>document.createElement('div');
     propRateStar.className = 'card__rate-icon';
-    cardDescRate.appendChild(propRateText);
     cardDescRate.appendChild(propRateStar);
 
     const cardDescDisc = <HTMLElement>document.createElement('div');
     cardDescDisc.className = 'card_desc-item card__basket-disc';
-    cardDescDisc.textContent = `Discount:{x}`;
+    cardDescDisc.textContent = `Discount: ${data.discountPercentage} %`;
 
     cardBasketDec.appendChild(cardDescRate);
     cardBasketDec.appendChild(cardDescDisc);
@@ -271,7 +268,7 @@ class Card {
 
     const itemStockValue = <HTMLElement>document.createElement('span');
     itemStockValue.className = 'card__stock-value';
-    itemStockValue.textContent = String(`data.price`);
+    itemStockValue.textContent = String(`${data.stock}`);
 
     itemStock.appendChild(itemStockValue);
     itemController.appendChild(itemStock);
@@ -296,7 +293,7 @@ class Card {
 
     const totlalPrice = <HTMLElement>document.createElement('div');
     totlalPrice.className = 'card__item-stock';
-    totlalPrice.textContent = `XXXXXX $ `;
+    totlalPrice.textContent = `${Math.round(data.price - (data.price * data.discountPercentage) / 100)} $ `;
     itemController.appendChild(totlalPrice);
 
     descriptWrapper.appendChild(cardBasketDec);

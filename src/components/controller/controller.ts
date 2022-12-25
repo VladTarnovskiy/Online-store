@@ -27,11 +27,11 @@ class AppController extends Model {
       this.productsSort();
       this.productsSearch();
       this.productsView();
-
       this.localStorage();
+      this.addProductsCart();
     } else if (idPage === PageIds.BasketPage) {
-      console.log('hhhhhhh');
       this.view.drawBasket();
+      this.viewCardBasket(this.arrProductsBasket);
     } else {
       // this.drawError();
       alert('Error, basket dont realize yet');
@@ -69,6 +69,16 @@ class AppController extends Model {
     const searchInput = <HTMLElement>document.querySelector('.products__search');
     searchInput.addEventListener('input', (event) => {
       this.searchProducts(event);
+    });
+  }
+
+  private addProductsCart() {
+    const addButtons = document.querySelectorAll<HTMLElement>('.card__button_add');
+    addButtons.forEach((item) => {
+      item.addEventListener('click', (event) => {
+        console.log('drhbe');
+        this.addProduct(event);
+      });
     });
   }
 
