@@ -95,6 +95,7 @@ export class Model extends AppView {
   }
 
   addProduct(e: Event) {
+    console.log('fdg');
     const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const target = <HTMLElement>e.target;
     this.initDataProduct.forEach((item) => {

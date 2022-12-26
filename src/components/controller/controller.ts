@@ -60,6 +60,7 @@ class AppController extends Model {
     const viewContainer = <HTMLElement>document.querySelector('.view__container');
     viewContainer.addEventListener('click', (event) => {
       this.getProducts(event);
+      this.addProductsCart();
     });
   }
 
@@ -67,6 +68,7 @@ class AppController extends Model {
     const sortInput = <HTMLElement>document.querySelector('.sort__select');
     sortInput.addEventListener('change', (event) => {
       this.sortProducts(event);
+      this.addProductsCart();
     });
   }
 
@@ -74,6 +76,7 @@ class AppController extends Model {
     const searchInput = <HTMLElement>document.querySelector('.products__search');
     searchInput.addEventListener('input', (event) => {
       this.searchProducts(event);
+      this.addProductsCart();
     });
   }
 
