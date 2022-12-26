@@ -47,10 +47,10 @@ class AppController extends Model {
       this.renderNewPage(hash);
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-      const hash = window.location.hash.slice(1);
-      this.renderNewPage(hash);
-    });
+    // window.addEventListener('DOMContentLoaded', () => {
+    //   const hash = window.location.hash.slice(1);
+    //   this.renderNewPage(hash);
+    // });
   }
   //endrouting
 
@@ -87,8 +87,8 @@ class AppController extends Model {
   }
 
   run() {
-    this.renderNewPage('main-page');
     this.enableRouteChange();
+    this.renderNewPage('main-page');
   }
 }
 
