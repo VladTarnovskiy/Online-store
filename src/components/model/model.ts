@@ -1,4 +1,3 @@
-// import AppController from '../controller/controller';
 import AppView from '../view/appView';
 import { productData } from './data';
 import { Filters } from './datafilters';
@@ -6,17 +5,14 @@ import { CardItem } from '../types/types';
 import { Data } from '../types/types';
 
 export class Model extends AppView {
-  // controller: AppController;
   initDataProduct: CardItem[] = productData.products;
   filterDataProduct: CardItem[] = productData.products.slice(0);
   arrProductsBasket: CardItem[] = [];
-
   filters: Filters;
 
   constructor() {
     super();
     this.filters = new Filters();
-    // this.controller = new AppController();
   }
 
   getProducts(e: MouseEvent) {
@@ -109,8 +105,6 @@ export class Model extends AppView {
             ((item.price - (item.price * item.discountPercentage) / 100) * item.amount).toFixed(2)
           );
           this.arrProductsBasket.push(item);
-
-          console.log(this.arrProductsBasket);
         } else {
           this.arrProductsBasket.forEach((itemBasket, index) => {
             if (itemBasket === item) {
@@ -127,7 +121,6 @@ export class Model extends AppView {
     const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const resultCounter = <HTMLElement>document.querySelector('.result__counter');
     const resultPriceCounter = <HTMLElement>document.querySelector('.result__price-counter');
-
     const resultPromo = <HTMLInputElement>document.querySelector('.result__promo');
     const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
     basketChecker.textContent = `${this.arrProductsBasket.length}`;
@@ -236,7 +229,7 @@ export class Model extends AppView {
   }
 
   localStorage() {
-    //вид продуктов
+    //products view
     const viewStorage = localStorage.getItem('view');
     const prodContainer = <HTMLElement>document.querySelector('.product-items');
     const blockBut = <HTMLElement>document.querySelector('.view__block');
@@ -253,7 +246,7 @@ export class Model extends AppView {
       this.viewCardBlock(this.filterDataProduct);
     }
 
-    //сортировка продуктов
+    //products sort
     const sortProd = localStorage.getItem('sort');
     const sortSelect = document.querySelectorAll<HTMLInputElement>('.select__item');
     sortSelect.forEach((item) => {

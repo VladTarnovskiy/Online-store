@@ -34,10 +34,11 @@ class AppController extends Model {
       this.viewCardBasket(this.arrProductsBasket);
       this.showResultBasket();
       this.basketCardChangeInfo();
-    } else {
-      // this.drawError();
-      alert('Error, basket dont realize yet');
     }
+    // else {
+    //   // this.drawError();
+    //   alert('Error, basket dont realize yet');
+    // }
   }
 
   private enableRouteChange() {
@@ -86,7 +87,6 @@ class AppController extends Model {
   }
 
   run() {
-    window.location.hash = 'main-page';
     this.renderNewPage('main-page');
     this.enableRouteChange();
   }

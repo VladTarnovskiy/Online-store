@@ -1,4 +1,3 @@
-import AppController from '../controller/controller';
 import Main from './pages/main/main';
 import Basket from './pages/basket/basket';
 import Card from '../templates/card';
@@ -8,14 +7,12 @@ export class AppView {
   main: Main;
   card: Card;
   basket: Basket;
-  // controller: AppController;
   // error: Error;
 
   constructor() {
     this.main = new Main();
     this.card = new Card();
     this.basket = new Basket();
-    // this.controller = new AppController();
     // this.error = new Error();
   }
 
@@ -35,7 +32,6 @@ export class AppView {
     data.forEach((item: CardItem) => {
       this.card.drawCardBasket(item);
     });
-    // this.controller.showResultBasket;
   }
 
   drawMain(): void {
