@@ -1,7 +1,212 @@
 .filters {
-    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     width: 20%;
     box-shadow: $box-shadow;
     background-color: $light-grey-color;
     @extend %blocksettings;
+
+    .filters-buttons {
+        display: flex;
+        justify-content: space-evenly;
+    }
+}
+
+.category, .brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid $blue-color;
+    @extend %blocksettings;
+    box-shadow: $box-shadow;
+    background-color: $white-color;
+
+    .category__title, .brand__title {
+        font-family: $roboto-bold-font;
+        font-size: 18px;
+        color: $blue-color;
+        background-color: $secondary-bg-color;
+        width: 100%;
+        text-align: center;
+        border-radius: 5px;
+        padding-bottom: 5px;
+        margin: 0;
+    }
+
+    .category__block, .brand__block {
+        max-height: 230px;
+        width: 100%;
+        align-self: flex-start;
+        overflow: hidden;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: $radio-bg-color;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: $blue-color;
+            border-radius: 5px;
+            border: 1px solid$radio-bg-color;
+
+            &:hover {
+                background-color: $middle-black-color;
+            }
+        }
+    }
+
+    .filter-block {
+        padding: 0;
+        max-height: inherit;
+    }
+
+    .filter-block__item {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        margin-bottom: 5px;
+        user-select: none;
+    }
+    
+    .filter-block__label {
+        cursor: pointer;
+
+        &:hover {
+            color: $orange-color;
+            @extend %transition;
+
+            .filter-block__text::before {
+                border-color: $orange-color;
+            }
+        }
+    }
+
+    .filter-block__input {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+        width: 0;
+        height: 0;
+
+        &:checked + .filter-block__text::before {
+            background-color: $blue-color;
+        }
+    }
+    
+    .filter-block__text {
+        display: inline-flex;
+        align-items: center;
+
+        &::before {
+            content: '✓';
+            color: $white-color;
+            font-weight: 700;
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border: 1px solid $light-black-color;
+            border-radius: 0.25em;
+            margin-right: 10px;
+            @extend %transition;
+        }
+    }
+
+    .filter-block__value {
+        margin-left: auto;
+        padding-right: 10px;
+    }
+}
+
+.price, .stock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid $blue-color;
+    @extend %blocksettings;
+    box-shadow: $box-shadow;
+    background-color: $white-color;
+    user-select: none;
+
+    .price__title, .stock__title {
+        font-family: $roboto-bold-font;
+        font-size: 18px;
+        color: $blue-color;
+        background-color: $secondary-bg-color;
+        width: 100%;
+        text-align: center;
+        border-radius: 5px;
+        padding-bottom: 5px;
+        margin: 0;
+        margin-bottom: 15px;
+    }
+
+    .price__block, .stock__block {
+        width: 100%;
+    }
+
+    .slider-text {
+        display: flex;
+        justify-content: space-between;
+        font-size: 18px;
+    }
+
+    .slider-text__min-price::after, .slider-text__max-price::after {
+        content: '€';
+        margin-left: 5px;
+    }
+}
+
+.slider-price, .slider-stock {
+    width: 100%;
+    height: 6px;
+    background-color: $radio-bg-color;
+    border-radius: 5px;
+    outline: none;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.progress-line-price, .progress-line-stock {
+    height: 100%;
+    background-color: $blue-color;
+    border-radius: 5px;
+    position: absolute;
+    left: 1%;
+    right: 1%;
+}
+
+.slider__range {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 103%;
+    appearance: none;
+    pointer-events: none;
+    background: none;
+    outline: none;
+}
+
+.slider__range::-webkit-slider-thumb {
+    pointer-events: auto;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: $blue-color;
+    border-radius: 50%;
+    border: 1px solid $white-color;
+    cursor: pointer;
+
+    &:hover {
+        border: 1px solid $black-color;
+    }
+
+    &:active {
+        background-color: $white-color;
+        border: 1px solid $blue-color;
+    }
 }

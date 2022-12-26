@@ -17,4 +17,23 @@ export interface CardItem{
     _images: string[];
 }
 
+
+export interface DataObject {
+    id: number;
+    title: string;
+    description: string;
+    price: number;
+    discountPercentage: number;
+    rating: number;
+    stock: number;
+    brand: string;
+    category: string;
+    thumbnail: string;
+    images: string[];
+}
+
+export interface DataValueEachOfCategory {
+    [key: string]: number;
+}
+
 export default CardItem;
