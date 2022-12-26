@@ -33,7 +33,7 @@ class AppController extends Model {
       this.view.drawBasket();
       this.viewCardBasket(this.arrProductsBasket);
       this.showResultBasket();
-      // this.basketCardChangeInfo();
+      this.basketCardChangeInfo();
     } else {
       // this.drawError();
       alert('Error, basket dont realize yet');
@@ -54,6 +54,8 @@ class AppController extends Model {
   //endrouting
 
   private productsView() {
+    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
+    basketChecker.textContent = `${this.arrProductsBasket.length}`;
     const viewContainer = <HTMLElement>document.querySelector('.view__container');
     viewContainer.addEventListener('click', (event) => {
       this.getProducts(event);

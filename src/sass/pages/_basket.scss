@@ -71,17 +71,52 @@
         }
 
         .result__price {
-            margin-bottom: 20px;
+            position: relative;
+            margin-bottom: 30px;
             font-family: $roboto-bold-font;
             font-size: 1.3rem;
         }
 
-        .result_promo {
+        .result__percent_promo {
+            position: absolute;
+            left: -60px;
+            top: 0px;
+            display: none;
+            margin-bottom: 20px;
+            font-family: $roboto-bold-font;
+            font-size: 1.3rem;
+            color: $red-color;
+        }
+
+        .result__percent_promo.promo_active {
             display: block;
+        }
+
+        .result__price.promo_disabled {
+            text-decoration: line-through;
+            color: $red-color;
+        }
+
+        .result__price_promo {
+            position: absolute;
+            left: -50%;
+            transform: translateX(50%);
+            bottom: -40px;
+            display: none;
+            margin-bottom: 20px;
+            font-family: $roboto-bold-font;
+            font-size: 1.3rem;
+            color: $black-color;
+            text-decoration: none;
+        }
+
+        .result__price_promo.promo_active {
+            display: block;
+        }
+
+        .result__promo {
             text-align: center;
-            height: 30px;
             margin-bottom: 5px;
-            font-size: 1.1rem;
         }
 
         .result__promo-hint {

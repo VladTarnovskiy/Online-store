@@ -419,7 +419,7 @@
             .card__btn-control {
                 box-sizing: border-box;
                 padding: 8px;
-                height: 45px;
+                height: 40px;
                 box-shadow: $box-shadow;
                 display: flex;
                 justify-content: center;
@@ -427,7 +427,7 @@
                 background-color: rgba($light-blue-color, $alpha: 0.9);
                 border-radius: 50%;
                 @extend %transition;
-                width: 45px;
+                width: 40px;
                 line-height: 30px;
                 font-size: 2rem;
 
@@ -437,6 +437,14 @@
 
                 &:active {
                     transform: scale(1.2);
+                }
+            }
+
+            .card__btn-control_disabled {
+                background-color: $grey-color;
+
+                &:hover {
+                    background-color: $grey-color;
                 }
             }
         }

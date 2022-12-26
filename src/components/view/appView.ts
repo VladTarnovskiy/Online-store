@@ -2,37 +2,40 @@ import AppController from '../controller/controller';
 import Main from './pages/main/main';
 import Basket from './pages/basket/basket';
 import Card from '../templates/card';
+import { CardItem } from '../types/types';
 
 export class AppView {
   main: Main;
   card: Card;
   basket: Basket;
+  // controller: AppController;
   // error: Error;
 
   constructor() {
     this.main = new Main();
     this.card = new Card();
     this.basket = new Basket();
+    // this.controller = new AppController();
     // this.error = new Error();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  viewCardBlock(data: any) {
-    data.forEach((item) => {
+  viewCardBlock(data: CardItem[]) {
+    data.forEach((item: CardItem) => {
       this.card.drawBlock(item);
     });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  viewCardList(data: any) {
-    data.forEach((item) => {
+
+  viewCardList(data: CardItem[]) {
+    data.forEach((item: CardItem) => {
       this.card.drawList(item);
     });
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  viewCardBasket(data: any) {
-    data.forEach((item) => {
+
+  viewCardBasket(data: CardItem[]) {
+    data.forEach((item: CardItem) => {
       this.card.drawCardBasket(item);
     });
+    // this.controller.showResultBasket;
   }
 
   drawMain(): void {

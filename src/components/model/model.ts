@@ -126,38 +126,95 @@ export class Model extends AppView {
   showResultBasket() {
     const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const resultCounter = <HTMLElement>document.querySelector('.result__counter');
-    const numberItems = document.querySelectorAll<HTMLElement>('.card__item-counter');
+    const resultPriceCounter = <HTMLElement>document.querySelector('.result__price-counter');
+
+    const resultPromo = <HTMLInputElement>document.querySelector('.result__promo');
+    const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
     basketChecker.textContent = `${this.arrProductsBasket.length}`;
-    let count = 0;
-    numberItems.forEach((item) => {
-      count = count + Number(item.textContent);
+    let countAmount = 0;
+    let countTotalPrice = 0;
+    this.arrProductsBasket.forEach((item) => {
+      countAmount = countAmount + item.amount!;
     });
-    resultCounter.textContent = String(count);
-    this.basketCardChangeInfo();
+    this.arrProductsBasket.forEach((item) => {
+      countTotalPrice = countTotalPrice + item.totalPrice! * item.amount!;
+    });
+    resultCounter.textContent = String(countAmount);
+    resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
+
+    if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
+      resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
+    } else if (
+      resultPromo.value === 'RS, RSSchool' ||
+      resultPromo.value === 'RS,RSSchool' ||
+      resultPromo.value === 'RS RSSchool'
+    ) {
+      resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.8).toFixed(2)} $`;
+    } else {
+      resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
+    }
+
+    this.showPromoCodeBasket(countTotalPrice);
+  }
+
+  showPromoCodeBasket(countTotalPrice: number) {
+    const resultPromo = <HTMLInputElement>document.querySelector('.result__promo');
+    const resultPriceCounter = <HTMLElement>document.querySelector('.result__price-counter');
+    const resultPrice = <HTMLElement>document.querySelector('.result__price');
+    const resultPricePromo = <HTMLElement>document.querySelector('.result__price_promo');
+    const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
+    const resulPromoPercentr = <HTMLElement>document.querySelector('.result__percent_promo');
+    resultPromo.addEventListener('input', () => {
+      if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
+        resultPrice.classList.add('promo_disabled');
+        resultPricePromo.classList.add('promo_active');
+        resulPromoPercentr.classList.add('promo_active');
+        resulPromoPercentr.textContent = '-10%';
+        resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
+      } else if (
+        resultPromo.value === 'RS, RSSchool' ||
+        resultPromo.value === 'RS,RSSchool' ||
+        resultPromo.value === 'RS RSSchool'
+      ) {
+        resultPrice.classList.add('promo_disabled');
+        resultPricePromo.classList.add('promo_active');
+        resulPromoPercentr.classList.add('promo_active');
+        resulPromoPercentr.textContent = '-20%';
+        resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.8).toFixed(2)} $`;
+      } else {
+        resultPrice.classList.remove('promo_disabled');
+        resultPricePromo.classList.remove('promo_active');
+        resulPromoPercentr.classList.remove('promo_active');
+        resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
+      }
+    });
   }
 
   basketCardChangeInfo() {
     const basketItems = document.querySelectorAll<HTMLElement>('.card_basket');
-
     basketItems.forEach((item, index) => {
       item.addEventListener('click', (event) => {
         const basketItemCounter = <HTMLElement>item.querySelector('.card__item-counter');
         const basketItemTotalPrice = <HTMLElement>item.querySelector('.card__item-total-price');
+        const basketItemPlusButton = <HTMLElement>item.querySelector('.card__item-plus');
         const target = <HTMLElement>event.target;
         const arrItem = this.arrProductsBasket[index];
-        // const itemNum = Number(target.getAttribute('data-id'));
         if (target.classList.contains('card__item-plus')) {
           if (Number(basketItemCounter.textContent) < arrItem.stock) {
-            arrItem.amount = arrItem.amount + 1;
+            arrItem.amount = arrItem.amount! + 1;
             basketItemCounter.textContent = `${arrItem.amount}`;
             basketItemTotalPrice.textContent = `${(
               (arrItem.price - (arrItem.price * arrItem.discountPercentage) / 100) *
               Number(basketItemCounter.textContent)
             ).toFixed(2)} $`;
+          } else {
+            target.classList.add('card__btn-control_disabled');
           }
+          this.showResultBasket();
         } else if (target.classList.contains('card__item-minus')) {
-          if (Number(basketItemCounter.textContent) > 0) {
-            arrItem.amount = arrItem.amount - 1;
+          if (Number(basketItemCounter.textContent) > 1) {
+            basketItemPlusButton.classList.remove('card__btn-control_disabled');
+            arrItem.amount = arrItem.amount! - 1;
             basketItemCounter.textContent = `${arrItem.amount}`;
             basketItemTotalPrice.textContent = `${(
               (arrItem.price - (arrItem.price * arrItem.discountPercentage) / 100) *
@@ -170,8 +227,9 @@ export class Model extends AppView {
             basketProductsContainer.replaceChildren();
 
             this.viewCardBasket(this.arrProductsBasket);
-            // this.controller.addProduct();
+            this.basketCardChangeInfo();
           }
+          this.showResultBasket();
         }
       });
     });
