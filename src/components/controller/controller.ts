@@ -1,61 +1,95 @@
 import AppView from '../view/appView';
-// import DataFilters from '../datafilters/datafilters';
+import { Model } from '../model/model';
 
 export const enum PageIds {
   MainPage = 'main-page',
-  SettingsPage = 'basket-page',
-  StatisticsPage = 'erorr-page',
+  BasketPage = 'basket-page',
+  ErrorPage = 'erorr-page',
 }
 
-class AppController extends AppView {
+class AppController extends Model {
   private static container: HTMLElement = document.body;
-  // private static defaultPageId: string = 'main-page';
+  private static defaultPageId = 'main-page';
+  view: AppView;
 
-  //start routing
-  // static renderNewPage(idPage: string) {
-  //   const currentPageHTML = document.querySelector(`#${App.defaultPageId}`);
-  //   if (currentPageHTML) {
-  //     currentPageHTML.remove();
-  //   }
-  //   // let page: Page | null = null;
-
-  //   if (idPage === PageIds.MainPage) {
-  //     page = new MainPage(idPage);
-  //   } else if (idPage === PageIds.SettingsPage) {
-  //     page = new SettingsPage(idPage);
-  //   } else if (idPage === PageIds.StatisticsPage) {
-  //     page = new StatisticsPage(idPage);
-  //   } else {
-  //     page = new ErrorPage(idPage, ErrorTypes.Error_404);
-  //   }
-
-  //   if (page) {
-  //     const pageHTML = page.render();
-  //     pageHTML.id = App.defaultPageId;
-  //     App.container.append(pageHTML);
-  //   }
-  // }
-
-  // private enableRouteChange() {
-  //   window.addEventListener('hashchange', () => {
-  //     const hash = window.location.hash.slice(1);
-  //     App.renderNewPage(hash);
-  //   });
-  // }
-
-  //endrouting
-
-
-  run() {
-    // App.container.append(this....render());
-    this.drawMain()
-    // App.renderNewPage('main-page');
-    // this.enableRouteChange();
+  constructor() {
+    super();
+    this.view = new AppView();
   }
 
-//методы если кликать по кноскам сортировки вызывается нужный метод класса DataFilters и возвратить обновленный масив данных
+  // start routing
+  renderNewPage(idPage: string) {
+    const currentPageHTML = <HTMLElement>document.querySelector('body');
+    currentPageHTML.replaceChildren();
 
+    if (idPage === PageIds.MainPage) {
+      this.view.drawMain();
+      this.productsSort();
+      this.productsSearch();
+      this.productsView();
+      this.localStorage();
+      this.addProductsCart();
+    } else if (idPage === PageIds.BasketPage) {
+      this.view.drawBasket();
+      this.viewCardBasket(this.arrProductsBasket);
+      this.showResultBasket();
+      this.basketCardChangeInfo();
+    }
+    // else {
+    //   // this.drawError();
+    //   alert('Error, basket dont realize yet');
+    // }
+  }
 
+  private enableRouteChange() {
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.slice(1);
+      this.renderNewPage(hash);
+    });
+
+    // window.addEventListener('DOMContentLoaded', () => {
+    //   const hash = window.location.hash.slice(1);
+    //   this.renderNewPage(hash);
+    // });
+  }
+  //endrouting
+
+  private productsView() {
+    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
+    basketChecker.textContent = `${this.arrProductsBasket.length}`;
+    const viewContainer = <HTMLElement>document.querySelector('.view__container');
+    viewContainer.addEventListener('click', (event) => {
+      this.getProducts(event);
+    });
+  }
+
+  private productsSort() {
+    const sortInput = <HTMLElement>document.querySelector('.sort__select');
+    sortInput.addEventListener('change', (event) => {
+      this.sortProducts(event);
+    });
+  }
+
+  private productsSearch() {
+    const searchInput = <HTMLElement>document.querySelector('.products__search');
+    searchInput.addEventListener('input', (event) => {
+      this.searchProducts(event);
+    });
+  }
+
+  private addProductsCart() {
+    const addButtons = document.querySelectorAll<HTMLElement>('.card__button_add');
+    addButtons.forEach((item) => {
+      item.addEventListener('click', (event) => {
+        this.addProduct(event);
+      });
+    });
+  }
+
+  run() {
+    this.enableRouteChange();
+    this.renderNewPage('main-page');
+  }
 }
 
 export default AppController;

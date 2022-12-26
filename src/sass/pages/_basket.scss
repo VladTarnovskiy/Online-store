@@ -1,0 +1,149 @@
+#basket {
+    display: flex;
+    justify-content: space-between;
+    @extend %wrapper;
+
+    .basket__prod {
+        width: 65%;
+        min-height: 300px;
+        box-shadow: $box-shadow;
+        background-color: $light-grey-color;
+        @extend %blocksettings;
+
+        .basket__prod-title {
+            text-align: center;
+            padding: 4px;
+            height: 35px;
+            background-color: $white-color;
+            border: 1px $blue-color solid;
+            border-radius: 5px;
+            color: $black-color;
+            font-size: 1.4rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: $roboto-bold-font;
+            margin-bottom: 6px;
+        }
+
+        .basket__prod-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            box-shadow: 0px 2px 4px rgb(27 78 163 / 20%), 0px 4px 8px rgb(41 121 255 / 20%);
+            box-sizing: border-box;
+        }
+
+    }
+
+    .basket__result {
+        width: 30%;
+        min-height: 300px;
+        box-shadow: $box-shadow;
+        background-color: $light-grey-color;
+        @extend %blocksettings;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 1.2rem;
+
+        .result__title {
+            width: 100%;
+            text-align: center;
+            padding: 4px;
+            height: 35px;
+            background-color: #ffffff;
+            border: 1px #2264D1 solid;
+            border-radius: 5px;
+            color: #000000;
+            font-size: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Roboto Bold", sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .result__amount {
+            margin-bottom: 4px;
+            font-size: 1.3rem;
+        }
+
+        .result__price {
+            position: relative;
+            margin-bottom: 30px;
+            font-family: $roboto-bold-font;
+            font-size: 1.3rem;
+        }
+
+        .result__percent_promo {
+            position: absolute;
+            left: -60px;
+            top: 0px;
+            display: none;
+            margin-bottom: 20px;
+            font-family: $roboto-bold-font;
+            font-size: 1.3rem;
+            color: $red-color;
+        }
+
+        .result__percent_promo.promo_active {
+            display: block;
+        }
+
+        .result__price.promo_disabled {
+            text-decoration: line-through;
+            color: $red-color;
+        }
+
+        .result__price_promo {
+            position: absolute;
+            left: -50%;
+            transform: translateX(50%);
+            bottom: -40px;
+            display: none;
+            margin-bottom: 20px;
+            font-family: $roboto-bold-font;
+            font-size: 1.3rem;
+            color: $black-color;
+            text-decoration: none;
+        }
+
+        .result__price_promo.promo_active {
+            display: block;
+        }
+
+        .result__promo {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .result__promo-hint {
+            font-family: $roboto-light-font;
+            margin-bottom: 40px;
+        }
+
+        .result__button {
+            height: 50px;
+            box-shadow: 0px 2px 4px rgb(27 78 163 / 20%), 0px 4px 8px rgb(41 121 255 / 20%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-left: 5px;
+            padding-right: 5px;
+            background-color: rgba(157, 194, 255, 0.9);
+            border-radius: 5px;
+            font-size: 1.3rem;
+            width: 110px;
+            font-family: $roboto-bold-font;
+            border: none;
+
+            &:hover {
+                @extend %btn-hover;
+                @extend %transition;
+            }
+        }
+    }
+
+}

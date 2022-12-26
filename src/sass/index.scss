@@ -12,6 +12,8 @@
 // Components
 @import "components/button";
 @import "components/card";
+@import "components/sort";
+@import "components/modalWindow";
 
 // Layout
 @import "layout/footer";
@@ -21,4 +23,5 @@
 
 
 // Pages
+@import "pages/basket";
 @import "pages/main";

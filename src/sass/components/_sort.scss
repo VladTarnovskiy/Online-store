@@ -1,0 +1,98 @@
+.sort {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-shadow: $box-shadow;
+    margin-bottom: 20px;
+    @extend %blocksettings;
+    background-color: $light-grey-color;
+    box-sizing: border-box;
+
+    .sort__container {
+        position: relative;
+        width: 180px;
+        height: 50px;
+        font-size: 0.9rem;
+
+        .sort__title {
+            position: absolute;
+            left: 10px;
+            top: -10px;
+            font-family: $roboto-light-font;
+            background-color: $white-color;
+            padding: 3px;
+            color: $middle-grey-color;
+            border-radius: 3px;
+        }
+
+        .sort__select {
+            width: 180px;
+            height: 40px;
+            border-radius: 5px;
+            box-shadow: $box-shadow;
+            cursor: pointer;
+            border: 1px solid $black-color;
+
+            .select__item {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .sort__counter {
+        font-size: 1rem;
+    }
+
+    .products__search {
+        height: 40px;
+        border-radius: 20px;
+        width: 200px;
+        font-size: 1rem;
+        padding: 5px;
+        outline: none;
+        border: 2px $black-color solid;
+    }
+
+    .view__container {
+        width: 120px;
+        height: 40px;
+        box-shadow: $box-shadow;
+        @extend %blocksettings;
+        padding: 4px;
+        box-sizing: border-box;
+        border: 1px solid $black-color;
+        display: flex;
+        justify-content: space-between;
+
+        .view__list {
+            @extend %background-img;
+            background-image: url(../assets/list.svg)
+        }
+
+        .view__block {
+            @extend %background-img;
+            background-image: url(../assets/grid.png)
+        }
+
+        .view__item {
+            box-shadow: $box-shadow;
+            height: 100%;
+            width: 47%;
+            border-radius: 8px;
+            @extend %transition;
+        }
+
+        .view__item_active {
+            cursor: pointer;
+            transform: scale(1.08);
+            background-color: $orange-color;
+        }
+
+        .view__item:hover {
+            cursor: pointer;
+            transform: scale(1.08);
+            background-color: $orange-color;
+        }
+    }
+}

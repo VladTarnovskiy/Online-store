@@ -1,53 +1,50 @@
-import Header from './header/header';
-import Footer from './footer/footer';
 import Main from './pages/main/main';
-import PageGrid from './grid/page-grid';
-// import Basket from './pages/basket/basket';
-// import Error from './pages/error/error';
+import Basket from './pages/basket/basket';
+import Card from '../templates/card';
+import { CardItem } from '../types/types';
 
 export class AppView {
-    PageGrid: PageGrid;
-    header: Header;
-    footer: Footer;
-    main: Main;
-    // basket: Basket;
-    // error: Error;
-    constructor() {
-        this.PageGrid = new PageGrid();
-        this.header = new Header();
-        this.footer = new Footer();
-        this.main = new Main();
-        // this.basket = new Basket();
-        // this.error = new Error();
-    }
+  main: Main;
+  card: Card;
+  basket: Basket;
+  // error: Error;
 
-    drawGridMainPage(): void {
-        //здесь нужно базовую сделать сетку страницы
-        //Желатель вынести в отдельный класс гриды
-    }
+  constructor() {
+    this.main = new Main();
+    this.card = new Card();
+    this.basket = new Basket();
+    // this.error = new Error();
+  }
 
-    drawGridBasketPage(): void {
-        //здесь нужно базовую сделать сетку страницы
-        //Желатель вынести в отдельный класс гриды
-    }
+  viewCardBlock(data: CardItem[]) {
+    data.forEach((item: CardItem) => {
+      this.card.drawBlock(item);
+    });
+  }
 
-    drawMain(): void{
-        this.PageGrid.draw();
-        this.header.draw();
-        this.main.draw();
-        this.footer.draw();
-    }
+  viewCardList(data: CardItem[]) {
+    data.forEach((item: CardItem) => {
+      this.card.drawList(item);
+    });
+  }
 
-    // drawBasket(data: Data): void{
-    //     this.drawGridBasketPage()
-    //     this.header.draw();
-    //     this.basket.draw(data);
-    //     this.footer.draw();
-    // }
+  viewCardBasket(data: CardItem[]) {
+    data.forEach((item: CardItem) => {
+      this.card.drawCardBasket(item);
+    });
+  }
 
-    // drawError(data: Data): void{
-    //     this.error.draw();
-    // }
+  drawMain(): void {
+    this.main.draw();
+  }
+
+  drawBasket(): void {
+    this.basket.draw();
+  }
+
+  // drawError(data: Data): void{
+  //     this.error.draw();
+  // }
 }
 
 export default AppView;

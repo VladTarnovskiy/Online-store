@@ -1,8 +1,8 @@
 import './footer';
 
 class Footer {
-    draw(): void {
-    const footer = <HTMLElement>document.querySelector('footer')
+  draw(): void {
+    const footer = <HTMLElement>document.querySelector('footer');
 
     const list = <HTMLElement>document.createElement('ul');
     list.className = 'footer__list';
@@ -13,14 +13,13 @@ class Footer {
     linkGit.className = 'footer__git-logo';
     listOne.appendChild(linkGit);
 
-
     const listTwo = <HTMLElement>document.createElement('li');
     listTwo.className = 'footer__date';
     listTwo.textContent = '©2022';
 
     const listThree = <HTMLElement>document.createElement('li');
     const linkSchool = <HTMLElement>document.createElement('a');
-    linkSchool.setAttribute('href', 'https://rs.school/index.html')
+    linkSchool.setAttribute('href', 'https://rs.school/index.html');
     linkSchool.className = 'footer__rs-logo';
     listThree.appendChild(linkSchool);
 
@@ -29,7 +28,7 @@ class Footer {
     list.appendChild(listThree);
 
     footer.appendChild(list);
-    }
+  }
 }
 
 export default Footer;

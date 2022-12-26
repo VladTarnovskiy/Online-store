@@ -1,36 +1,54 @@
-import Card from './card/card';
+
+import PageGrid from '../../grid/page-grid';
+
 import Filters from './filters/filters';
 import Products from './products/products';
-// import Sort from './sort/sort';
+import Sort from './sort/sort';
+import Header from '../../header/header';
+import Footer from '../../footer/footer';
+// import Error from './pages/error/error';
 
-class Main {
-    card: Card;
-    products: Products;
-    filters: Filters;
-    // sort: Sort;
+export class Main {
+  products: Products;
+  sort: Sort;
+  PageGrid: PageGrid;
+  header: Header;
+  footer: Footer;
+  filters: Filters;
 
-    constructor() {
-        this.card = new Card();
-        this.products = new Products();
-        this.filters = new Filters('aside', 'filters');
-        // this.sort = new Sort();
-    }
+  constructor() {
+    this.products = new Products();
+    this.filters = new Filters('aside', 'filters');
+    this.sort = new Sort();
+    this.PageGrid = new PageGrid();
+    this.header = new Header();
+    this.footer = new Footer();
+  }
 
-    mainGridContainer () {
-        const productsSection = <HTMLElement>document.createElement('div');
-        productsSection.className = 'products';
-        const main = <HTMLElement>document.querySelector('main');
-        main.append(this.filters.render());
-        // main.appendChild(sortSection);
-        main.appendChild(productsSection);
-    }
+  mainGridContainer() {
+    const sortSection = <HTMLElement>document.createElement('aside');
+    sortSection.className = 'filters';
 
-    draw(): void {
-        this.mainGridContainer()
-        this.products.draw()
-        this.card.draw()
-        // this.sort.draw()
-    }
+    const productsSection = <HTMLElement>document.createElement('div');
+    productsSection.className = 'products';
+
+    const main = <HTMLElement>document.querySelector('main');
+    main.appendChild(sortSection);
+    main.append(this.filters.render());
+    main.appendChild(productsSection);
+  }
+
+
+  draw(): void {
+    // this.filters.draw()
+    this.PageGrid.drawGrid();
+    this.mainGridContainer();
+    this.header.draw();
+    this.footer.draw();
+    this.products.draw();
+    this.sort.draw();
+  }
+   
     //else need create gride to this elements
 }
 
