@@ -1,4 +1,3 @@
-
 import PageGrid from '../../grid/page-grid';
 
 import Filters from './filters/filters';
@@ -18,7 +17,8 @@ export class Main {
 
   constructor() {
     this.products = new Products();
-    this.filters = new Filters('aside', 'filters');
+    // this.filters = new Filters('aside', 'filters');
+    this.filters = new Filters();
     this.sort = new Sort();
     this.PageGrid = new PageGrid();
     this.header = new Header();
@@ -26,30 +26,29 @@ export class Main {
   }
 
   mainGridContainer() {
-    const sortSection = <HTMLElement>document.createElement('aside');
-    sortSection.className = 'filters';
+    const filtersSection = <HTMLElement>document.createElement('aside');
+    filtersSection.className = 'filters';
 
     const productsSection = <HTMLElement>document.createElement('div');
     productsSection.className = 'products';
 
     const main = <HTMLElement>document.querySelector('main');
-    main.appendChild(sortSection);
-    main.append(this.filters.render());
+    main.appendChild(filtersSection);
+    // main.append(this.filters.render());
     main.appendChild(productsSection);
   }
 
-
   draw(): void {
-    // this.filters.draw()
     this.PageGrid.drawGrid();
     this.mainGridContainer();
     this.header.draw();
     this.footer.draw();
     this.products.draw();
     this.sort.draw();
+    this.filters.draw();
   }
-   
-    //else need create gride to this elements
+
+  //else need create gride to this elements
 }
 
 export default Main;
