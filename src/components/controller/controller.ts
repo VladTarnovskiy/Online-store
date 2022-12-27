@@ -22,10 +22,10 @@ class AppController extends Model {
     const currentPageHTML = <HTMLElement>document.querySelector('body');
     currentPageHTML.replaceChildren();
 
-    if (idPage === PageIds.MainPage) {
+    if (idPage === PageIds.MainPage || idPage === '') {
       this.view.drawMain();
-      this.productsSort();
       this.productsSearch();
+      this.productsSort();
       this.productsView();
       this.localStorage();
       this.addProductsCart();
@@ -43,14 +43,15 @@ class AppController extends Model {
 
   private enableRouteChange() {
     window.addEventListener('hashchange', () => {
+      // localStorage.setItem('hashPage', `${window.location.hash.slice(1)}`);
       const hash = window.location.hash.slice(1);
       this.renderNewPage(hash);
     });
 
-    // window.addEventListener('DOMContentLoaded', () => {
-    //   const hash = window.location.hash.slice(1);
-    //   this.renderNewPage(hash);
-    // });
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.slice(1);
+      this.renderNewPage(hash);
+    });
   }
   //endrouting
 
@@ -82,6 +83,7 @@ class AppController extends Model {
 
   private addProductsCart() {
     const addButtons = document.querySelectorAll<HTMLElement>('.card__button_add');
+    // this.localStorage();
     addButtons.forEach((item) => {
       item.addEventListener('click', (event) => {
         this.addProduct(event);

@@ -90,9 +90,17 @@ class Card {
     cardButtons.className = 'card__buttons';
 
     const cardButtonAdd = <HTMLElement>document.createElement('div');
-    cardButtonAdd.className = 'card__button card__button_add';
+    if (data.inBasket === true) {
+      cardButtonAdd.className = 'card__button card__button_add card__button-add_active';
+      cardButtonAdd.textContent = 'In cart';
+    } else {
+      cardButtonAdd.className = 'card__button card__button_add';
+      cardButtonAdd.textContent = 'Add to cart';
+    }
+    // cardButtonAdd.className = 'card__button card__button_add';
+    // cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.setAttribute('data-id', `${data.id}`);
-    cardButtonAdd.textContent = 'Add to cart';
+    // cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
       if (cardButtonAdd.classList.contains('card__button-add_active')) {
@@ -104,6 +112,7 @@ class Card {
 
     const cardButtonDetails = <HTMLElement>document.createElement('div');
     cardButtonDetails.className = 'card__button card__button_detail';
+    cardButtonDetails.setAttribute('data-id', `${data.id}`);
     cardButtonDetails.textContent = 'Details';
 
     cardButtons.appendChild(cardButtonAdd);
@@ -173,9 +182,15 @@ class Card {
     cardButtons.className = 'card__buttons';
 
     const cardButtonAdd = <HTMLElement>document.createElement('div');
-    cardButtonAdd.className = 'card__button card__button_add';
+    // cardButtonAdd.className = 'card__button card__button_add';
     cardButtonAdd.setAttribute('data-id', `${data.id}`);
-    cardButtonAdd.textContent = 'Add to cart';
+    if (data.inBasket === true) {
+      cardButtonAdd.className = 'card__button card__button_add card__button-add_active';
+      cardButtonAdd.textContent = 'In cart';
+    } else {
+      cardButtonAdd.className = 'card__button card__button_add';
+      cardButtonAdd.textContent = 'Add to cart';
+    }
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
       if (cardButtonAdd.classList.contains('card__button-add_active')) {
@@ -187,6 +202,7 @@ class Card {
 
     const cardButtonDetails = <HTMLElement>document.createElement('div');
     cardButtonDetails.className = 'card__button card__button_detail';
+    cardButtonDetails.setAttribute('data-id', `${data.id}`);
     cardButtonDetails.textContent = 'Details';
 
     cardButtons.appendChild(cardButtonAdd);
@@ -316,6 +332,10 @@ class Card {
 
     productsContainer.appendChild(card);
   }
+
+  // darwCardDetailPage (data: CardItem): void {
+
+  // }
 }
 
 export default Card;
