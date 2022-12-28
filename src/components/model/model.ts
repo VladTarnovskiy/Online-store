@@ -30,33 +30,28 @@ export class Model extends AppView {
   }
 
   sortWays(data: string | null) {
-    console.log(data);
     switch (data) {
       case 'priceInc':
         localStorage.setItem('sort', 'priceInc');
         this.filterDataProduct.sort((a, b) => {
           return a.price - b.price;
         });
-        localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
         break;
       case 'priceDec':
         localStorage.setItem('sort', 'priceDec');
         this.filterDataProduct.sort((a, b) => {
           return b.price - a.price;
         });
-        localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
         break;
       case 'rateInc':
         localStorage.setItem('sort', 'rateInc');
         this.filterDataProduct.sort((a, b) => {
-          localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
           return a.rating - b.rating;
         });
         break;
       case 'rateDec':
         localStorage.setItem('sort', 'rateDec');
         this.filterDataProduct.sort((a, b) => {
-          localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
           return b.rating - a.rating;
         });
         break;
@@ -69,6 +64,7 @@ export class Model extends AppView {
     productsContainer.replaceChildren();
     this.sortWays(target.value);
     this.localStorage();
+    // localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
   }
 
   searchProducts(e: Event) {
@@ -78,15 +74,14 @@ export class Model extends AppView {
     productsContainer.replaceChildren();
     const arrSearch: CardItem[] = [];
     if (target.value === '') {
-      this.filterDataProduct.forEach((item) => arrSearch.push(item));
+      this.initDataProduct.forEach((item) => arrSearch.push(item));
     } else {
-      this.filterDataProduct.forEach((item) => {
+      this.initDataProduct.forEach((item) => {
         const itemTitle = item.title.toLowerCase().split(' ');
         const itemDescr = item.description.toLowerCase().split(' ');
         const brandDescr = item.brand.toLowerCase().split(' ');
         const categoryDescr = item.brand.toLowerCase().split(' ');
         const arrSearchData = itemTitle.concat(itemDescr, brandDescr, categoryDescr);
-
         arrSearchData.forEach((it) => {
           if (it === target.value.toLowerCase() && !arrSearch.includes(item)) {
             arrSearch.push(item);
@@ -96,6 +91,8 @@ export class Model extends AppView {
     }
     productsCounter.textContent = `${arrSearch.length}`;
     this.filterDataProduct = arrSearch.slice();
+    localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('searchValue', `${target.value}`);
     this.localStorage();
   }
@@ -124,6 +121,16 @@ export class Model extends AppView {
       basketChecker.textContent = `${this.arrProductsBasket.length}`;
       localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    });
+  }
+
+  addDetailPage(data: number) {
+    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
+    basketChecker.textContent = `${this.arrProductsBasket.length}`;
+    this.filterDataProduct.forEach((item) => {
+      if (item.id === data) {
+        this.card.darwCardDetailPage(item);
+      }
     });
   }
 
@@ -265,8 +272,15 @@ export class Model extends AppView {
       if (item.value === `${sortProd}`) {
         item.setAttribute('selected', '');
         this.sortWays(sortProd);
+        // localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
       }
     });
+
+    //search
+    const prodSearch = <HTMLInputElement>document.querySelector('.products__search');
+    const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
+    prodSearch.value = localStorage.getItem('searchValue')!;
+    productsCounter.textContent = localStorage.getItem('countProd')!;
 
     //products view
     const viewStorage = localStorage.getItem('view');
