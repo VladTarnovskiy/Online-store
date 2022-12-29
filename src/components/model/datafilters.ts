@@ -1,11 +1,9 @@
-// import {productData} from "./data";
+// import Model from './model';
 
-export class Filters {
-  // getFilterByPrice (data){
-  // }
-  // getFilterByCategory (){
-  // }
-  // getFilterByBrand (){
-  // }
-  //и другие методы фильтрации
-}
+// export class Filters {
+//   getFilterByPrice(data) {
+
+//   }
+//   getFilterByCategory() {}
+//   getFilterByBrand() {}
+// }

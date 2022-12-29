@@ -31,6 +31,7 @@ class AppController extends Model {
       this.localStorage();
       this.addProductsCart();
       this.getDetailPage();
+      this.getfilterCategoryrData();
     } else if (idPage === PageIds.BasketPage) {
       this.view.drawBasket();
       this.viewCardBasket(this.arrProductsBasket);
@@ -70,6 +71,7 @@ class AppController extends Model {
     viewContainer.addEventListener('click', (event) => {
       this.getProducts(event);
       this.addProductsCart();
+      this.getDetailPage();
     });
   }
 
@@ -96,6 +98,16 @@ class AppController extends Model {
     addButtons.forEach((item) => {
       item.addEventListener('click', (event) => {
         this.addProduct(event);
+      });
+    });
+  }
+
+  private getfilterCategoryrData() {
+    const category = <HTMLElement>document.querySelector('.filters');
+    const checkboxesCategry = category.querySelectorAll<HTMLElement>('.filter-block__input');
+    checkboxesCategry.forEach((item) => {
+      item.addEventListener('change', (event) => {
+        this.filterByCategory(event);
       });
     });
   }

@@ -457,7 +457,7 @@ class Card {
 
     const prodItemTwoContent = <HTMLElement>document.createElement('div');
     prodItemTwoContent.className = 'prod__descript-item-conent';
-    prodItemTwoContent.textContent = `${card.discountPercentage}`;
+    prodItemTwoContent.textContent = `${card.discountPercentage} %`;
     prodItemTwoContainer.appendChild(prodItemTwoTitle);
     prodItemTwoContainer.appendChild(prodItemTwoContent);
 
@@ -471,7 +471,16 @@ class Card {
 
     const prodItemThreeContent = <HTMLElement>document.createElement('div');
     prodItemThreeContent.className = 'prod__descript-item-conent';
-    prodItemThreeContent.textContent = `${card.rating}`;
+
+    const prodItemThreeText = <HTMLElement>document.createElement('div');
+    prodItemThreeText.className = 'prod__descript-item-text';
+    prodItemThreeText.textContent = `${card.rating}`;
+
+    const propRateStar = <HTMLElement>document.createElement('div');
+    propRateStar.className = 'card__rate-icon';
+    prodItemThreeContent.appendChild(prodItemThreeText);
+    prodItemThreeContent.appendChild(propRateStar);
+
     prodItemThreeContainer.appendChild(prodItemThreeTitle);
     prodItemThreeContainer.appendChild(prodItemThreeContent);
 

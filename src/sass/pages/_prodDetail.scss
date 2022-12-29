@@ -146,7 +146,23 @@
                     }
 
                     .prod__descript-item-conent {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
                         font-size: 1.2rem;
+
+                        .prod__descript-item-text {}
+
+                        .card__rate-icon {
+
+                            background-image: url(../assets/star.png);
+                            background-size: contain;
+                            width: 22px;
+                            height: 22px;
+                            display: inline-block;
+                            margin-bottom: 5px;
+                            margin-left: 4px;
+                        }
                     }
                 }
             }

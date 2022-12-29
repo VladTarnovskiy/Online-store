@@ -1,6 +1,6 @@
 import AppView from '../view/appView';
 import { productData } from './data';
-import { Filters } from './datafilters';
+// import { Filters } from './datafilters';
 import { CardItem } from '../types/types';
 import { Data } from '../types/types';
 
@@ -8,11 +8,13 @@ export class Model extends AppView {
   initDataProduct: CardItem[] = productData.products;
   filterDataProduct: CardItem[] = productData.products.slice(0);
   arrProductsBasket: CardItem[] = [];
-  filters: Filters;
+  arrFiltCategory: string[] = [];
+  arrWaysBrand: string[] = [];
+  // filters: Filters;
 
   constructor() {
     super();
-    this.filters = new Filters();
+    // this.filters = new Filters();
   }
 
   getProducts(e: MouseEvent) {
@@ -27,6 +29,15 @@ export class Model extends AppView {
       this.viewCardList(this.filterDataProduct);
       localStorage.setItem('view', 'list');
     }
+  }
+
+  sortProducts(e: Event) {
+    const productsContainer = <HTMLElement>document.querySelector('.product-items');
+    const target = <HTMLInputElement>e.target;
+    productsContainer.replaceChildren();
+    this.sortWays(target.value);
+    this.localStorage();
+    // localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
   }
 
   sortWays(data: string | null) {
@@ -58,13 +69,118 @@ export class Model extends AppView {
     }
   }
 
-  sortProducts(e: Event) {
+  filterByCategory(e: Event) {
     const productsContainer = <HTMLElement>document.querySelector('.product-items');
+    const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    this.sortWays(target.value);
+    const arrSearch: CardItem[] = [];
+    const arrWithBrand: CardItem[] = [];
+    if (target.name === 'category') {
+      // console.log('here');
+      if (target.checked) {
+        this.arrFiltCategory.push(target.value);
+        console.log(this.arrFiltCategory);
+        // this.initDataProduct.forEach((item) => {
+        //   this.arrFiltCategory.forEach((itemWays) => {
+        //     if (item.category === itemWays) {
+        //       arrSearch.push(item);
+        //     }
+        //   });
+        // });
+      } else {
+        this.arrFiltCategory.splice(this.arrFiltCategory.indexOf(target.value), 1);
+        // if (this.arrFiltCategory.length === 0) {
+        //   this.initDataProduct.forEach((item) => arrSearch.push(item));
+        // } else {
+        //   this.initDataProduct.forEach((item) => {
+        //     this.arrFiltCategory.forEach((itemWays) => {
+        //       if (item.category === itemWays) {
+        //         arrSearch.push(item);
+        //       }
+        //     });
+        //   });
+        // }
+      }
+    } else if (target.name === 'brand') {
+      // console.log('here');
+      if (target.checked) {
+        this.arrWaysBrand.push(target.value);
+        console.log(this.arrWaysBrand);
+        // this.initDataProduct.forEach((item) => {
+        //   this.arrWaysBrand.forEach((itemWays) => {
+        //     if (item.brand === itemWays) {
+        //       arrSearch.push(item);
+        //     }
+        //   });
+        // });
+      } else {
+        this.arrWaysBrand.splice(this.arrWaysBrand.indexOf(target.value), 1);
+        // if (this.arrWaysBrand.length === 0) {
+        //   this.initDataProduct.forEach((item) => arrSearch.push(item));
+        // } else {
+        //   this.initDataProduct.forEach((item) => {
+        //     this.arrWaysBrand.forEach((itemWays) => {
+        //       if (item.brand === itemWays) {
+        //         arrSearch.push(item);
+        //       }
+        //     });
+        //   });
+        // }
+      }
+    }
+
+    if (target.checked) {
+      this.initDataProduct.forEach((item) => {
+        this.arrFiltCategory.forEach((itemWays) => {
+          if (item.category === itemWays) {
+            arrSearch.push(item);
+          }
+        });
+      });
+      this.filterDataProduct = arrSearch.slice();
+    } else {
+      if (this.arrFiltCategory.length === 0) {
+        this.initDataProduct.forEach((item) => arrSearch.push(item));
+      }
+      this.filterDataProduct = arrSearch.slice();
+    }
+
+    if (this.arrWaysBrand.length > 0) {
+      if (this.arrFiltCategory.length === 0) {
+        this.initDataProduct.forEach((item) => arrSearch.push(item));
+      }
+      if (target.checked) {
+        arrSearch.forEach((item) => {
+          this.arrWaysBrand.forEach((itemWays) => {
+            if (item.brand === itemWays) {
+              arrWithBrand.push(item);
+            }
+          });
+        });
+        this.filterDataProduct = arrWithBrand.slice();
+      } else {
+        if (this.arrWaysBrand.length === 0) {
+          arrSearch.forEach((item) => arrSearch.push(item));
+        } else {
+          arrSearch.forEach((item) => {
+            this.arrWaysBrand.forEach((itemWays) => {
+              if (item.brand === itemWays) {
+                arrWithBrand.push(item);
+              }
+            });
+          });
+        }
+        this.filterDataProduct = arrWithBrand.slice();
+      }
+    }
+
+    productsCounter.textContent = `${arrSearch.length}`;
+
+    localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    localStorage.setItem('countProd', `${productsCounter.textContent}`);
+    localStorage.setItem('arrFiltCategory', `${JSON.stringify(this.arrFiltCategory)}`);
     this.localStorage();
-    // localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
   }
 
   searchProducts(e: Event) {
@@ -72,6 +188,7 @@ export class Model extends AppView {
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
+    // const arrCurrent = this.filterDataProduct.slice(0);
     const arrSearch: CardItem[] = [];
     if (target.value === '') {
       this.initDataProduct.forEach((item) => arrSearch.push(item));

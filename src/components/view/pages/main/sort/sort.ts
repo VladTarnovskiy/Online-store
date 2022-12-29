@@ -10,7 +10,7 @@ class Sort {
 
     const sortTitle = <HTMLElement>document.createElement('div');
     sortTitle.className = 'sort__title';
-    sortTitle.textContent = 'Сортировка';
+    sortTitle.textContent = 'Sorting';
 
     const selectSort = <HTMLElement>document.createElement('select');
     selectSort.className = 'sort__select';
@@ -22,27 +22,27 @@ class Sort {
     selectItemDefault.setAttribute('value', 'default');
     selectItemDefault.setAttribute('disabled', '');
     selectItemDefault.setAttribute('selected', '');
-    selectItemDefault.textContent = 'выберете способ';
+    selectItemDefault.textContent = 'choose method';
 
     const selectItemOne = <HTMLElement>document.createElement('option');
     selectItemOne.className = 'select__item';
     selectItemOne.setAttribute('value', 'priceInc');
-    selectItemOne.textContent = 'по возрастанию цены';
+    selectItemOne.textContent = 'price increase';
 
     const selectItemTwo = <HTMLElement>document.createElement('option');
     selectItemTwo.className = 'select__item';
     selectItemTwo.setAttribute('value', 'priceDec');
-    selectItemTwo.textContent = 'по убыванию цены';
+    selectItemTwo.textContent = 'price decrease';
 
     const selectItemThree = <HTMLElement>document.createElement('option');
     selectItemThree.className = 'select__item';
     selectItemThree.setAttribute('value', 'rateInc');
-    selectItemThree.textContent = 'по возрастанию рейтинга';
+    selectItemThree.textContent = 'rate increase';
 
     const selectItemFour = <HTMLElement>document.createElement('option');
     selectItemFour.className = 'select__item';
     selectItemFour.setAttribute('value', 'rateDec');
-    selectItemFour.textContent = 'по убыванию рейтинга';
+    selectItemFour.textContent = 'rate decrease';
 
     selectSort.appendChild(selectItemDefault);
     selectSort.appendChild(selectItemOne);
@@ -59,7 +59,7 @@ class Sort {
 
     const productsCounter = <HTMLElement>document.createElement('div');
     productsCounter.className = 'sort__counter';
-    productsCounter.textContent = 'Найдено товаров: ';
+    productsCounter.textContent = 'Products found: ';
 
     const productsCounterDisplay = <HTMLElement>document.createElement('span');
     productsCounterDisplay.className = 'sort__counter-display';
@@ -73,7 +73,7 @@ class Sort {
     const productsSearch = <HTMLElement>document.createElement('input');
     productsSearch.className = 'products__search';
     productsSearch.setAttribute('type', 'search');
-    productsSearch.setAttribute('placeholder', 'Поиск продуктов');
+    productsSearch.setAttribute('placeholder', 'Product search');
     container.appendChild(productsSearch);
 
     //переключение вида отображения продуктов
