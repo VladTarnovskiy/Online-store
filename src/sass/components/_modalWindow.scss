@@ -47,6 +47,11 @@
     padding: 5px;
   }
 
+  .popup__input.error {
+    border-color: $bright-red-color;
+    background-color: $light-red-color;
+  }
+
 
   .credit-card {
     display: flex;

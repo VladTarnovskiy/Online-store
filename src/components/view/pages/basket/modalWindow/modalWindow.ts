@@ -109,6 +109,73 @@ class ModalWindow {
       popupButton.setAttribute('type', 'submit');
       popupButton.textContent = 'Confirm';
       popupForm.append(popupButton);
+
+      const inputList: HTMLInputElement[] = [nameCustomer, phoneNumberCustomer, addressCustomer, emailCustomer, cardNumber, validDateInput, validCodeInput];
+      const emptyArrayList: HTMLInputElement[]  = Array.from(inputList).filter((input: HTMLInputElement) => input.value === '');
+
+      popupForm.onsubmit = formSent;
+
+      async function formSent(e: Event) {
+        e.preventDefault();
+
+        validation();
+      }
+
+      function validation() {
+
+        inputList.forEach((input: HTMLInputElement): void => {
+          inputRemoveError(input);
+          if (input === phoneNumberCustomer) {
+            if (!validatePhone(input.value)) {
+              inputAddError(input);
+            }
+          } else if (input === addressCustomer) {
+            if (!validateAddress(input.value)) {
+              inputAddError(input);
+            }
+          } else if (input === nameCustomer) {
+            if (!validateName(input.value)) {
+              inputAddError(input);
+            }
+          } else if (input === emailCustomer) {
+            if (!validateEmail(input.value)) {
+              inputAddError(input);
+            }
+          } else {
+            if (input.value === '') {
+              inputAddError(input);
+            }
+          }
+        });
+      }
+
+      function inputAddError(el: HTMLInputElement) {
+        el.classList.add('error');
+      }
+
+      function inputRemoveError(el: HTMLInputElement) {
+        el.classList.remove('error');
+      }
+
+      function validateName(val: string) {
+        const reg: RegExp = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
+        return reg.test(String(val).toLowerCase());
+      }
+
+      function validatePhone(val: string) {
+        const reg: RegExp = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
+        return reg.test(String(val).toLowerCase());
+      }
+
+      function validateAddress(val: string) {
+        const reg: RegExp = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
+        return reg.test(String(val).toLowerCase());
+      }
+
+      function validateEmail(val: string) {
+        const reg: RegExp = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
+        return reg.test(String(val).toLowerCase());
+      }
     });
   }
 }
