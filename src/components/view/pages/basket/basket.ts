@@ -1,5 +1,5 @@
 import Result from './result/result';
-// import ModalWindow from './modalWindow/modalWindow';
+import ModalWindow from './modalWindow/modalWindow';
 import PageGrid from '../../grid/page-grid';
 import Header from '../../header/header';
 import Footer from '../../footer/footer';
@@ -8,14 +8,14 @@ class BasketView {
   result: Result;
   PageGrid: PageGrid;
   header: Header;
-  // modalWindow: ModalWindow;
+  modalWindow: ModalWindow;
   footer: Footer;
 
   constructor() {
     this.result = new Result();
     this.PageGrid = new PageGrid();
     this.header = new Header();
-    // this.modalWindow = new ModalWindow();
+    this.modalWindow = new ModalWindow();
     this.footer = new Footer();
   }
 
@@ -46,7 +46,7 @@ class BasketView {
     this.header.draw();
     this.basketGridContainer();
     this.result.draw();
-    // this.modalWindow.draw();
+    this.modalWindow.draw();
     this.footer.draw();
   }
 }
