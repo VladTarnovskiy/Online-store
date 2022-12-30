@@ -75,7 +75,8 @@ class ModalWindow {
       const cardNumber: HTMLInputElement = document.createElement('input');
       cardNumber.className = 'popup__input credit-card__number';
       cardNumber.setAttribute('placeholder', 'Card number');
-      cardNumber.setAttribute('type', 'number');
+      cardNumber.setAttribute('type', 'text');
+      cardNumber.setAttribute('maxlength', '16');
       cardNumberBlock.append(cardNumber);
 
       const cardValidBlock: HTMLDivElement = document.createElement('div');
@@ -90,7 +91,8 @@ class ModalWindow {
       const validDateInput: HTMLInputElement = document.createElement('input');
       validDateInput.className = 'popup__input credit-card__valid';
       validDateInput.setAttribute('placeholder', 'Date');
-      validDateInput.setAttribute('type', 'number');
+      validDateInput.setAttribute('type', 'text');
+      validDateInput.setAttribute('maxlength', '4');
       validDateLabel.append(validDateInput);
 
       const validCodeLabel: HTMLLabelElement = document.createElement('label');
@@ -101,7 +103,8 @@ class ModalWindow {
       const validCodeInput: HTMLInputElement = document.createElement('input');
       validCodeInput.className = 'popup__input credit-card__valid';
       validCodeInput.setAttribute('placeholder', 'Code');
-      validCodeInput.setAttribute('type', 'number');
+      validCodeInput.setAttribute('type', 'text');
+      validCodeInput.setAttribute('maxlength', '3');
       validCodeLabel.append(validCodeInput);
 
       const popupButton: HTMLButtonElement = document.createElement('button');
@@ -111,8 +114,6 @@ class ModalWindow {
       popupForm.append(popupButton);
 
       const inputList: HTMLInputElement[] = [nameCustomer, phoneNumberCustomer, addressCustomer, emailCustomer, cardNumber, validDateInput, validCodeInput];
-      const emptyArrayList: HTMLInputElement[]  = Array.from(inputList).filter((input: HTMLInputElement) => input.value === '');
-
       popupForm.onsubmit = formSent;
 
       async function formSent(e: Event) {
@@ -139,6 +140,24 @@ class ModalWindow {
             }
           } else if (input === emailCustomer) {
             if (!validateEmail(input.value)) {
+              inputAddError(input);
+            }
+          } else if (input === cardNumber) {
+            if (!validateCard(input.value)) {
+              inputAddError(input);
+            } else if (+input.value[0] === 4) {
+              cardNumberImage.style.backgroundImage = 'url("assets/visa.png")';
+            } else if (+input.value[0] === 5) {
+              cardNumberImage.style.backgroundImage = 'url("assets/master-card.png")';
+            }
+          } else if (input === validDateInput) {
+            if (!validateDateCard(input.value)) {
+              inputAddError(input);
+            } else if (+(String(input.value).slice(0, 2)) > 12 || String(input.value).slice(0, 2) === '00') {
+              inputAddError(input);
+            }
+          } else if (input === validCodeInput) {
+            if (!(/^[0-9]{3}$/.test(String(input.value).toLowerCase()))) {
               inputAddError(input);
             }
           } else {
@@ -174,6 +193,16 @@ class ModalWindow {
 
       function validateEmail(val: string) {
         const reg: RegExp = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
+        return reg.test(String(val).toLowerCase());
+      }
+
+      function validateCard(val: string) {
+        const reg: RegExp = /^[0-9]{16}$/;
+        return reg.test(String(val).toLowerCase());
+      }
+
+      function validateDateCard(val: string) {
+        const reg: RegExp = /^[0-9]{4}$/;
         return reg.test(String(val).toLowerCase());
       }
     });

@@ -63,6 +63,12 @@
     border-radius: 10px;
     margin-bottom: 10px;
   }
+  
+  .credit-card input[type="number"]::-webkit-outer-spin-button,
+  .credit-card input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
+  }
+
 
   .credit-card__number-block {
     display: flex;
