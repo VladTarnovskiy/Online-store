@@ -8,11 +8,16 @@
       @extend %btn-hover;
   }
 
-  &_filters {
+  &_filters, &_popup {
     padding: 10px 20px;
     font-size: 14px;
     color: $blue-color;
     background-color: $white-color;
     border: 1px solid $blue-color;
+  }
+
+  &_popup {
+    padding: 10px 40px;
+    text-transform: uppercase;
   }
 }
