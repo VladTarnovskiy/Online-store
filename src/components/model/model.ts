@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import AppView from '../view/appView';
 import { productData } from './data';
 // import { Filters } from './datafilters';
@@ -74,96 +75,93 @@ export class Model extends AppView {
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    const arrSearch: CardItem[] = [];
+    const arrCategory: CardItem[] = [];
     const arrWithBrand: CardItem[] = [];
     if (target.name === 'category') {
-      // console.log('here');
       if (target.checked) {
         this.arrFiltCategory.push(target.value);
-        console.log(this.arrFiltCategory);
-        // this.initDataProduct.forEach((item) => {
-        //   this.arrFiltCategory.forEach((itemWays) => {
-        //     if (item.category === itemWays) {
-        //       arrSearch.push(item);
-        //     }
-        //   });
-        // });
       } else {
         this.arrFiltCategory.splice(this.arrFiltCategory.indexOf(target.value), 1);
-        // if (this.arrFiltCategory.length === 0) {
-        //   this.initDataProduct.forEach((item) => arrSearch.push(item));
-        // } else {
-        //   this.initDataProduct.forEach((item) => {
-        //     this.arrFiltCategory.forEach((itemWays) => {
-        //       if (item.category === itemWays) {
-        //         arrSearch.push(item);
-        //       }
-        //     });
-        //   });
-        // }
       }
     } else if (target.name === 'brand') {
-      // console.log('here');
       if (target.checked) {
         this.arrWaysBrand.push(target.value);
         console.log(this.arrWaysBrand);
-        // this.initDataProduct.forEach((item) => {
-        //   this.arrWaysBrand.forEach((itemWays) => {
-        //     if (item.brand === itemWays) {
-        //       arrSearch.push(item);
-        //     }
-        //   });
-        // });
       } else {
         this.arrWaysBrand.splice(this.arrWaysBrand.indexOf(target.value), 1);
-        // if (this.arrWaysBrand.length === 0) {
-        //   this.initDataProduct.forEach((item) => arrSearch.push(item));
-        // } else {
-        //   this.initDataProduct.forEach((item) => {
-        //     this.arrWaysBrand.forEach((itemWays) => {
-        //       if (item.brand === itemWays) {
-        //         arrSearch.push(item);
-        //       }
-        //     });
-        //   });
-        // }
       }
     }
 
+    //Get data from category
     if (target.checked) {
       this.initDataProduct.forEach((item) => {
         this.arrFiltCategory.forEach((itemWays) => {
           if (item.category === itemWays) {
-            arrSearch.push(item);
+            arrCategory.push(item);
           }
         });
       });
-      this.filterDataProduct = arrSearch.slice();
+      arrCategory.forEach((item) => {
+        this.arrProductsBasket.forEach((itemBasket) => {
+          if (item.id === itemBasket.id) {
+            item.inBasket = true;
+          }
+        });
+      });
+      this.filterDataProduct = arrCategory.slice();
     } else {
       if (this.arrFiltCategory.length === 0) {
-        this.initDataProduct.forEach((item) => arrSearch.push(item));
+        this.initDataProduct.forEach((item) => arrCategory.push(item));
+        console.log(arrCategory);
+      } else {
+        this.initDataProduct.forEach((item) => {
+          this.arrFiltCategory.forEach((itemWays) => {
+            if (item.category === itemWays) {
+              arrCategory.push(item);
+            }
+          });
+        });
       }
-      this.filterDataProduct = arrSearch.slice();
+      arrCategory.forEach((item) => {
+        this.arrProductsBasket.forEach((itemBasket) => {
+          if (item.id === itemBasket.id) {
+            item.inBasket = true;
+          }
+        });
+      });
+      this.filterDataProduct = arrCategory.slice();
     }
-
+    //Get data from brand
     if (this.arrWaysBrand.length > 0) {
       if (this.arrFiltCategory.length === 0) {
-        this.initDataProduct.forEach((item) => arrSearch.push(item));
+        this.initDataProduct.forEach((item) => {
+          if (!arrCategory.includes(item)) {
+            arrCategory.push(item);
+          }
+        });
       }
+
       if (target.checked) {
-        arrSearch.forEach((item) => {
+        arrCategory.forEach((item) => {
           this.arrWaysBrand.forEach((itemWays) => {
             if (item.brand === itemWays) {
               arrWithBrand.push(item);
             }
           });
         });
+        arrWithBrand.forEach((item) => {
+          this.arrProductsBasket.forEach((itemBasket) => {
+            if (item.id === itemBasket.id) {
+              item.inBasket = true;
+            }
+          });
+        });
         this.filterDataProduct = arrWithBrand.slice();
       } else {
         if (this.arrWaysBrand.length === 0) {
-          arrSearch.forEach((item) => arrSearch.push(item));
+          arrWithBrand.forEach((item) => arrCategory.push(item));
         } else {
-          arrSearch.forEach((item) => {
+          arrCategory.forEach((item) => {
             this.arrWaysBrand.forEach((itemWays) => {
               if (item.brand === itemWays) {
                 arrWithBrand.push(item);
@@ -171,29 +169,93 @@ export class Model extends AppView {
             });
           });
         }
+        arrWithBrand.forEach((item) => {
+          this.arrProductsBasket.forEach((itemBasket) => {
+            if (item.id === itemBasket.id) {
+              item.inBasket = true;
+            }
+          });
+        });
         this.filterDataProduct = arrWithBrand.slice();
       }
     }
 
-    productsCounter.textContent = `${arrSearch.length}`;
+    productsCounter.textContent = `${this.filterDataProduct.length}`;
 
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('arrFiltCategory', `${JSON.stringify(this.arrFiltCategory)}`);
+    localStorage.setItem('arrFiltBrand', `${JSON.stringify(this.arrWaysBrand)}`);
+    this.localStorage();
+  }
+
+  filterByRange() {
+    // const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
+    const productsContainer = <HTMLElement>document.querySelector('.product-items');
+    const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
+    const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
+    const minStock = <HTMLInputElement>document.querySelector('.slider__range_left-stock');
+    const maxStock = <HTMLInputElement>document.querySelector('.slider__range_right-stock');
+    const arrItems: CardItem[] = [];
+    productsContainer.replaceChildren();
+
+    localStorage.setItem('range__left-price', `${minPrice.value}`);
+    localStorage.setItem('range__right-price', `${maxPrice.value}`);
+    localStorage.setItem('range__left-stock', `${minStock.value}`);
+    localStorage.setItem('range__right-stock', `${maxStock.value}`);
+
+    this.initDataProduct.forEach((item) => {
+      if (
+        item.price >= Number(minPrice.value) &&
+        item.price <= Number(maxPrice.value) &&
+        item.stock >= Number(minStock.value) &&
+        item.stock <= Number(maxStock.value)
+      ) {
+        arrItems.push(item);
+      }
+    });
+
+    arrItems.forEach((item) => {
+      this.arrProductsBasket.forEach((itemBasket) => {
+        if (item.id === itemBasket.id) {
+          item.inBasket = true;
+        }
+      });
+    });
+    console.log(arrItems.length);
+    this.filterDataProduct = arrItems.slice();
+    // productsCounter.textContent = `${this.filterDataProduct.length}`;
+    localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+
     this.localStorage();
   }
 
   searchProducts(e: Event) {
+    console.log(this.arrProductsBasket);
     const productsContainer = <HTMLElement>document.querySelector('.product-items');
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    // const arrCurrent = this.filterDataProduct.slice(0);
+    console.log(this.initDataProduct);
+    const data = Array.from(this.initDataProduct);
+    console.log(data);
+    // ASK MENTOR!!!!!!!!!!! WHY ARE BOTH ARRAYS CHANGING IF I CHANGE ONLY COPY'S ARRAY
+    data.forEach((item) => {
+      item.inBasket = false;
+    });
+    console.log(data);
     const arrSearch: CardItem[] = [];
     if (target.value === '') {
-      this.initDataProduct.forEach((item) => arrSearch.push(item));
+      data.forEach((item) => {
+        this.arrProductsBasket.forEach((itemArr) => {
+          if (item.id === itemArr.id) {
+            item.inBasket = true;
+          }
+        });
+        arrSearch.push(item);
+      });
     } else {
-      this.initDataProduct.forEach((item) => {
+      data.forEach((item) => {
         const itemTitle = item.title.toLowerCase().split(' ');
         const itemDescr = item.description.toLowerCase().split(' ');
         const brandDescr = item.brand.toLowerCase().split(' ');
@@ -201,6 +263,11 @@ export class Model extends AppView {
         const arrSearchData = itemTitle.concat(itemDescr, brandDescr, categoryDescr);
         arrSearchData.forEach((it) => {
           if (it === target.value.toLowerCase() && !arrSearch.includes(item)) {
+            this.arrProductsBasket.forEach((itemArr) => {
+              if (item.id === itemArr.id) {
+                item.inBasket = true;
+              }
+            });
             arrSearch.push(item);
           }
         });
@@ -208,6 +275,7 @@ export class Model extends AppView {
     }
     productsCounter.textContent = `${arrSearch.length}`;
     this.filterDataProduct = arrSearch.slice();
+
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('searchValue', `${target.value}`);
@@ -217,7 +285,7 @@ export class Model extends AppView {
   addProduct(e: Event) {
     const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const target = <HTMLElement>e.target;
-    this.filterDataProduct.forEach((item) => {
+    this.filterDataProduct.forEach((item: CardItem): void => {
       if (String(item.id) === target.dataset.id) {
         if (target.classList.contains('card__button-add_active')) {
           item.amount = 1;
@@ -225,7 +293,9 @@ export class Model extends AppView {
           item.totalPrice = Number(
             ((item.price - (item.price * item.discountPercentage) / 100) * item.amount).toFixed(2)
           );
+          // if (!this.arrProductsBasket.includes(item)) {
           this.arrProductsBasket.push(item);
+          // }
         } else {
           this.arrProductsBasket.forEach((itemBasket, index) => {
             if (itemBasket.id === item.id) {
@@ -235,6 +305,7 @@ export class Model extends AppView {
           });
         }
       }
+
       basketChecker.textContent = `${this.arrProductsBasket.length}`;
       localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
@@ -370,9 +441,30 @@ export class Model extends AppView {
     });
   }
 
+  getResetFilters() {
+    localStorage.setItem('filtData', `${JSON.stringify(this.initDataProduct)}`);
+    localStorage.setItem('countProd', `100`);
+    localStorage.setItem('arrFiltCategory', `${JSON.stringify([])}`);
+    localStorage.setItem('arrFiltBrand', `${JSON.stringify([])}`);
+
+    localStorage.setItem('range__left-price', `0`);
+    localStorage.setItem('range__right-price', `2000`);
+    localStorage.setItem('range__left-stock', `0`);
+    localStorage.setItem('range__right-stock', `150`);
+
+    localStorage.setItem('searchValue', ``);
+    const filterItems = document.querySelectorAll<HTMLInputElement>('.filter-block__input');
+    filterItems.forEach((item) => {
+      item.checked = false;
+    });
+
+    this.localStorage();
+  }
+
   localStorage() {
     const arrBasket = JSON.parse(localStorage.getItem('arrBasket')!);
     const filtData = JSON.parse(localStorage.getItem('filtData')!);
+    const productsCount = <HTMLElement>document.querySelector('.sort__counter-display');
 
     //get data
     if (arrBasket) {
@@ -399,13 +491,83 @@ export class Model extends AppView {
     prodSearch.value = localStorage.getItem('searchValue')!;
     productsCounter.textContent = localStorage.getItem('countProd')!;
 
+    //filters
+    const filterItems = document.querySelectorAll<HTMLInputElement>('.filter-block__input');
+    const arrFiltCategory = JSON.parse(localStorage.getItem('arrFiltCategory')!);
+    const arrFiltBrand = JSON.parse(localStorage.getItem('arrFiltBrand')!);
+    if (arrFiltCategory) {
+      this.arrFiltCategory = arrFiltCategory;
+    }
+
+    if (arrFiltBrand) {
+      this.arrWaysBrand = arrFiltBrand;
+    }
+
+    filterItems.forEach((item) => {
+      if (arrFiltCategory) {
+        arrFiltCategory.forEach((itemCateg: string) => {
+          if (item.value === itemCateg) {
+            item.checked = true;
+          }
+        });
+      }
+
+      if (arrFiltBrand) {
+        arrFiltBrand.forEach((itemCateg: string) => {
+          if (item.value === itemCateg) {
+            console.log(item);
+            item.checked = true;
+          }
+        });
+      }
+    });
+
+    //rangeFilter
+    const minPriceValue = localStorage.getItem('range__left-price');
+    const maxPriceValue = localStorage.getItem('range__right-price');
+    const minStockValue = localStorage.getItem('range__left-stock');
+    const maxStockValue = localStorage.getItem('range__right-stock');
+
+    const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
+    const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
+    const minStock = <HTMLInputElement>document.querySelector('.slider__range_left-stock');
+    const maxStock = <HTMLInputElement>document.querySelector('.slider__range_right-stock');
+
+    const minPriceText = <HTMLElement>document.querySelector('.slider-text__min-price');
+    const maxPriceText = <HTMLElement>document.querySelector('.slider-text__max-price');
+    const minStockText = <HTMLElement>document.querySelector('.slider__text_min-stock');
+    const maxStockText = <HTMLElement>document.querySelector('.slider__text_max-stock');
+
+    if (minPriceValue) {
+      const progressLineOfPrice = <HTMLInputElement>document.querySelector('.progress-line-price');
+      progressLineOfPrice.style.left = `${(Number(minPriceValue) / +minPrice.max) * 100}%`;
+      progressLineOfPrice.style.right = `${100 - (Number(maxPriceValue) / +maxPrice.max) * 100}%`;
+      minPriceText.textContent = minPriceValue;
+      minPrice.value = minPriceValue;
+    }
+    if (maxPriceValue) {
+      maxPriceText.textContent = maxPriceValue;
+      maxPrice.value = maxPriceValue;
+    }
+    if (minStockValue) {
+      const progressLineOfStock = <HTMLInputElement>document.querySelector('.progress-line-stock');
+      progressLineOfStock.style.left = `${(Number(minStockValue) / +minStock.max) * 100}%`;
+      progressLineOfStock.style.right = `${100 - (Number(maxStockValue) / +maxStock.max) * 100}%`;
+      minStockText.textContent = minStockValue;
+      minStock.value = minStockValue;
+    }
+    if (maxStockValue) {
+      maxStockText.textContent = maxStockValue;
+      maxStock.value = maxStockValue;
+    }
+
     //products view
     const viewStorage = localStorage.getItem('view');
     const prodContainer = <HTMLElement>document.querySelector('.product-items');
     const blockBut = <HTMLElement>document.querySelector('.view__block');
     const listBut = <HTMLElement>document.querySelector('.view__list');
 
-    if (viewStorage === 'list') {
+    if (viewStorage! === 'list') {
       listBut.classList.add('view__item_active');
       blockBut.classList.remove('view__item_active');
       prodContainer.classList.add('product-items_list');
@@ -416,5 +578,7 @@ export class Model extends AppView {
       prodContainer.classList.remove('product-items_list');
       this.viewCardBlock(this.filterDataProduct);
     }
+
+    productsCount.textContent = `${this.filterDataProduct.length}`;
   }
 }

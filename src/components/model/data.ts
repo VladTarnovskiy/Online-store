@@ -1681,7 +1681,7 @@ export const productData = {
       discountPercentage: 13.63,
       rating: 4.04,
       stock: 115,
-      brand: 'METRO 70cc Motorcycle - MR70',
+      brand: 'METRO 70cc - MR70',
       category: 'motorcycle',
       thumbnail: 'https://i.dummyjson.com/data/products/91/thumbnail.jpg',
       images: [

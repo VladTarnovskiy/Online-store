@@ -32,6 +32,7 @@ class AppController extends Model {
       this.addProductsCart();
       this.getDetailPage();
       this.getfilterCategoryrData();
+      this.resetFilters();
     } else if (idPage === PageIds.BasketPage) {
       this.view.drawBasket();
       this.viewCardBasket(this.arrProductsBasket);
@@ -87,9 +88,9 @@ class AppController extends Model {
   private productsSearch() {
     const searchInput = <HTMLElement>document.querySelector('.products__search');
     searchInput.addEventListener('input', (event) => {
+      this.getDetailPage();
       this.searchProducts(event);
       this.addProductsCart();
-      this.getDetailPage();
     });
   }
 
@@ -100,15 +101,34 @@ class AppController extends Model {
         this.addProduct(event);
       });
     });
+    // this.productsSearch();
   }
 
   private getfilterCategoryrData() {
     const category = <HTMLElement>document.querySelector('.filters');
     const checkboxesCategry = category.querySelectorAll<HTMLElement>('.filter-block__input');
+    const sliders = category.querySelectorAll<HTMLElement>('.slider__range');
     checkboxesCategry.forEach((item) => {
       item.addEventListener('change', (event) => {
         this.filterByCategory(event);
+        this.addProductsCart();
+        this.getDetailPage();
       });
+    });
+
+    sliders.forEach((item) => {
+      item.addEventListener('input', (event) => {
+        this.filterByRange();
+        this.addProductsCart();
+        this.getDetailPage();
+      });
+    });
+  }
+
+  private resetFilters() {
+    const buttonReset = <HTMLElement>document.querySelector('.button_filters-reset');
+    buttonReset.addEventListener('click', () => {
+      this.getResetFilters();
     });
   }
 
