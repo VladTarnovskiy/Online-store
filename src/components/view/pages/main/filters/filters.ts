@@ -10,7 +10,7 @@ class Filters {
     container.append(buttonsBlock);
 
     const resetButton: HTMLButtonElement = document.createElement('button');
-    resetButton.className = 'button button_filters';
+    resetButton.className = 'button button_filters button_filters-reset';
     resetButton.textContent = 'Reset filters';
     buttonsBlock.append(resetButton);
 
@@ -165,10 +165,12 @@ class Filters {
     stockBlock.append(priceTextBlockOfStock);
 
     const minPriceTextBlockOfStock: HTMLSpanElement = document.createElement('span');
+    minPriceTextBlockOfStock.className = 'slider__text_min-stock';
     minPriceTextBlockOfStock.textContent = `${leftRangeOfStock.value}`;
     priceTextBlockOfStock.append(minPriceTextBlockOfStock);
 
     const maxPriceTextBlockOfStock: HTMLSpanElement = document.createElement('span');
+    maxPriceTextBlockOfStock.className = 'slider__text_max-stock';
     maxPriceTextBlockOfStock.textContent = `${rightRangeOfStock.value}`;
     priceTextBlockOfStock.append(maxPriceTextBlockOfStock);
 

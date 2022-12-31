@@ -90,9 +90,17 @@ class Card {
     cardButtons.className = 'card__buttons';
 
     const cardButtonAdd = <HTMLElement>document.createElement('div');
-    cardButtonAdd.className = 'card__button card__button_add';
+    if (data.inBasket === true) {
+      cardButtonAdd.className = 'card__button card__button_add card__button-add_active';
+      cardButtonAdd.textContent = 'In cart';
+    } else {
+      cardButtonAdd.className = 'card__button card__button_add';
+      cardButtonAdd.textContent = 'Add to cart';
+    }
+    // cardButtonAdd.className = 'card__button card__button_add';
+    // cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.setAttribute('data-id', `${data.id}`);
-    cardButtonAdd.textContent = 'Add to cart';
+    // cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
       if (cardButtonAdd.classList.contains('card__button-add_active')) {
@@ -104,6 +112,7 @@ class Card {
 
     const cardButtonDetails = <HTMLElement>document.createElement('div');
     cardButtonDetails.className = 'card__button card__button_detail';
+    cardButtonDetails.setAttribute('data-id', `${data.id}`);
     cardButtonDetails.textContent = 'Details';
 
     cardButtons.appendChild(cardButtonAdd);
@@ -173,9 +182,15 @@ class Card {
     cardButtons.className = 'card__buttons';
 
     const cardButtonAdd = <HTMLElement>document.createElement('div');
-    cardButtonAdd.className = 'card__button card__button_add';
+    // cardButtonAdd.className = 'card__button card__button_add';
     cardButtonAdd.setAttribute('data-id', `${data.id}`);
-    cardButtonAdd.textContent = 'Add to cart';
+    if (data.inBasket === true) {
+      cardButtonAdd.className = 'card__button card__button_add card__button-add_active';
+      cardButtonAdd.textContent = 'In cart';
+    } else {
+      cardButtonAdd.className = 'card__button card__button_add';
+      cardButtonAdd.textContent = 'Add to cart';
+    }
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
       if (cardButtonAdd.classList.contains('card__button-add_active')) {
@@ -187,6 +202,7 @@ class Card {
 
     const cardButtonDetails = <HTMLElement>document.createElement('div');
     cardButtonDetails.className = 'card__button card__button_detail';
+    cardButtonDetails.setAttribute('data-id', `${data.id}`);
     cardButtonDetails.textContent = 'Details';
 
     cardButtons.appendChild(cardButtonAdd);
@@ -315,6 +331,252 @@ class Card {
     descriptWrapper.appendChild(cardBasketDec);
 
     productsContainer.appendChild(card);
+  }
+
+  darwCardDetailPage(card: CardItem): void {
+    const container = <HTMLElement>document.querySelector('main');
+    const prodWrapper = <HTMLElement>document.createElement('div');
+    prodWrapper.className = 'product__wrapper';
+    container.appendChild(prodWrapper);
+    //product path
+    const pathProd = <HTMLElement>document.createElement('div');
+    pathProd.className = 'path__prod';
+
+    const pathStore = <HTMLElement>document.createElement('div');
+    pathStore.className = 'path__store';
+    pathStore.textContent = 'Store';
+
+    const pathDirection = <HTMLElement>document.createElement('div');
+    pathDirection.className = 'path__direction';
+    pathDirection.textContent = '>>';
+
+    const pathCategory = <HTMLElement>document.createElement('div');
+    pathCategory.className = 'path__category';
+    pathCategory.textContent = `${card.category}`;
+
+    const pathBrand = <HTMLElement>document.createElement('div');
+    pathBrand.className = 'path__brand';
+    pathBrand.textContent = `${card.brand}`;
+
+    const pathModel = <HTMLElement>document.createElement('div');
+    pathModel.className = 'path__title';
+    pathModel.textContent = `${card.title}`;
+
+    pathProd.appendChild(pathStore);
+    pathProd.appendChild(pathDirection);
+    pathProd.appendChild(pathCategory);
+    pathProd.appendChild(pathDirection.cloneNode(true));
+    pathProd.appendChild(pathBrand);
+    pathProd.appendChild(pathDirection.cloneNode(true));
+    pathProd.appendChild(pathModel);
+
+    const prodContainer = <HTMLElement>document.createElement('div');
+    prodContainer.className = 'prod';
+
+    const prodTitle = <HTMLElement>document.createElement('div');
+    prodTitle.className = 'prod__title';
+    prodTitle.textContent = `${card.title}`;
+    prodContainer.appendChild(prodTitle);
+
+    const prodDescriptContainer = <HTMLElement>document.createElement('div');
+    prodDescriptContainer.className = 'prod__descript-container';
+    prodContainer.appendChild(prodDescriptContainer);
+
+    const prodimgContainer = <HTMLElement>document.createElement('div');
+    prodimgContainer.className = 'prod__img-container';
+    prodDescriptContainer.appendChild(prodimgContainer);
+
+    let count = 1;
+    const prodImgDispaly = <HTMLElement>document.createElement('div');
+    prodImgDispaly.className = 'prod__img-display';
+    prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+
+    const prodImgButRight = <HTMLElement>document.createElement('button');
+    prodImgButRight.className = 'prod__img-but prod__img-but_right';
+    prodImgButRight.textContent = '>';
+    prodImgButRight.addEventListener('click', () => {
+      if (count < card.images.length - 1) {
+        count += 1;
+        // prodImgButRight.classList.remove('but_disabled');
+        // prodImgButLeft.classList.remove('but_disabled');
+        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+      } else {
+        // prodImgButRight.classList.add('but_disabled');
+        count = 0;
+        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+      }
+    });
+
+    const prodImgButLeft = <HTMLElement>document.createElement('button');
+    prodImgButLeft.className = 'prod__img-but prod__img-but_left';
+    prodImgButLeft.textContent = '<';
+    prodImgButLeft.addEventListener('click', () => {
+      if (count > 0) {
+        count -= 1;
+        // prodImgButLeft.classList.remove('but_disabled');
+        // prodImgButRight.classList.remove('but_disabled');
+        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+      } else {
+        count = card.images.length - 1;
+        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        // prodImgButLeft.classList.add('but_disabled');
+      }
+    });
+
+    prodimgContainer.appendChild(prodImgButLeft);
+    prodimgContainer.appendChild(prodImgDispaly);
+    prodimgContainer.appendChild(prodImgButRight);
+    prodDescriptContainer.appendChild(prodimgContainer);
+
+    //descript container
+    const prodListDescriptContainer = <HTMLElement>document.createElement('div');
+    prodListDescriptContainer.className = 'prod__descript-container';
+    prodDescriptContainer.appendChild(prodListDescriptContainer);
+
+    //item decript
+    const prodItemOneContainer = <HTMLElement>document.createElement('div');
+    prodItemOneContainer.className = 'prod__descript-item-container';
+
+    const prodItemOneTitle = <HTMLElement>document.createElement('div');
+    prodItemOneTitle.className = 'prod__descript-item-title';
+    prodItemOneTitle.textContent = 'Description:';
+
+    const prodItemOneContent = <HTMLElement>document.createElement('div');
+    prodItemOneContent.className = 'prod__descript-item-conent';
+    prodItemOneContent.textContent = `${card.description}`;
+    prodItemOneContainer.appendChild(prodItemOneTitle);
+    prodItemOneContainer.appendChild(prodItemOneContent);
+
+    //item decript
+    const prodItemTwoContainer = <HTMLElement>document.createElement('div');
+    prodItemTwoContainer.className = 'prod__descript-item-container';
+
+    const prodItemTwoTitle = <HTMLElement>document.createElement('div');
+    prodItemTwoTitle.className = 'prod__descript-item-title';
+    prodItemTwoTitle.textContent = 'Discount Percentage:';
+
+    const prodItemTwoContent = <HTMLElement>document.createElement('div');
+    prodItemTwoContent.className = 'prod__descript-item-conent';
+    prodItemTwoContent.textContent = `${card.discountPercentage} %`;
+    prodItemTwoContainer.appendChild(prodItemTwoTitle);
+    prodItemTwoContainer.appendChild(prodItemTwoContent);
+
+    //item decript
+    const prodItemThreeContainer = <HTMLElement>document.createElement('div');
+    prodItemThreeContainer.className = 'prod__descript-item-container';
+
+    const prodItemThreeTitle = <HTMLElement>document.createElement('div');
+    prodItemThreeTitle.className = 'prod__descript-item-title';
+    prodItemThreeTitle.textContent = 'Rating:';
+
+    const prodItemThreeContent = <HTMLElement>document.createElement('div');
+    prodItemThreeContent.className = 'prod__descript-item-conent';
+
+    const prodItemThreeText = <HTMLElement>document.createElement('div');
+    prodItemThreeText.className = 'prod__descript-item-text';
+    prodItemThreeText.textContent = `${card.rating}`;
+
+    const propRateStar = <HTMLElement>document.createElement('div');
+    propRateStar.className = 'card__rate-icon';
+    prodItemThreeContent.appendChild(prodItemThreeText);
+    prodItemThreeContent.appendChild(propRateStar);
+
+    prodItemThreeContainer.appendChild(prodItemThreeTitle);
+    prodItemThreeContainer.appendChild(prodItemThreeContent);
+
+    //item decript
+    const prodItemFourContainer = <HTMLElement>document.createElement('div');
+    prodItemFourContainer.className = 'prod__descript-item-container';
+
+    const prodItemFourTitle = <HTMLElement>document.createElement('div');
+    prodItemFourTitle.className = 'prod__descript-item-title';
+    prodItemFourTitle.textContent = 'Stock:';
+
+    const prodItemFourContent = <HTMLElement>document.createElement('div');
+    prodItemFourContent.className = 'prod__descript-item-conent';
+    prodItemFourContent.textContent = `${card.stock}`;
+    prodItemFourContainer.appendChild(prodItemFourTitle);
+    prodItemFourContainer.appendChild(prodItemFourContent);
+
+    //item decript
+    const prodItemFiveContainer = <HTMLElement>document.createElement('div');
+    prodItemFiveContainer.className = 'prod__descript-item-container';
+
+    const prodItemFiveTitle = <HTMLElement>document.createElement('div');
+    prodItemFiveTitle.className = 'prod__descript-item-title';
+    prodItemFiveTitle.textContent = 'Brand:';
+
+    const prodItemFiveContent = <HTMLElement>document.createElement('div');
+    prodItemFiveContent.className = 'prod__descript-item-conent';
+    prodItemFiveContent.textContent = `${card.brand}`;
+    prodItemFiveContainer.appendChild(prodItemFiveTitle);
+    prodItemFiveContainer.appendChild(prodItemFiveContent);
+
+    //item decript
+    const prodItemSixContainer = <HTMLElement>document.createElement('div');
+    prodItemSixContainer.className = 'prod__descript-item-container';
+
+    const prodItemSixTitle = <HTMLElement>document.createElement('div');
+    prodItemSixTitle.className = 'prod__descript-item-title';
+    prodItemSixTitle.textContent = 'Category:';
+
+    const prodItemSixContent = <HTMLElement>document.createElement('div');
+    prodItemSixContent.className = 'prod__descript-item-conent';
+    prodItemSixContent.textContent = `${card.category}`;
+    prodItemSixContainer.appendChild(prodItemSixTitle);
+    prodItemSixContainer.appendChild(prodItemSixContent);
+
+    prodListDescriptContainer.appendChild(prodItemOneContainer);
+    prodListDescriptContainer.appendChild(prodItemTwoContainer);
+    prodListDescriptContainer.appendChild(prodItemThreeContainer);
+    prodListDescriptContainer.appendChild(prodItemFourContainer);
+    prodListDescriptContainer.appendChild(prodItemFiveContainer);
+    prodListDescriptContainer.appendChild(prodItemSixContainer);
+
+    //button container
+    const prodButtonsContainer = <HTMLElement>document.createElement('div');
+    prodButtonsContainer.className = 'prod__buttons-container';
+    prodDescriptContainer.appendChild(prodButtonsContainer);
+
+    const prodPrice = <HTMLElement>document.createElement('div');
+    prodPrice.className = 'prod__price';
+    prodPrice.textContent = `${card.price} $`;
+
+    const cardButtonAdd = <HTMLElement>document.createElement('button');
+    cardButtonAdd.className = 'prod__but card__button_add';
+    cardButtonAdd.setAttribute('data-id', `${card.id}`);
+    cardButtonAdd.textContent = 'Add to cart';
+
+    if (card.inBasket === true) {
+      cardButtonAdd.className = 'prod__but card__button_add card__button-add_active';
+      cardButtonAdd.textContent = 'In cart';
+    } else {
+      cardButtonAdd.className = 'prod__but card__button_add';
+      cardButtonAdd.textContent = 'Add to cart';
+    }
+    // cardButtonAdd.className = 'card__button card__button_add';
+    // cardButtonAdd.textContent = 'Add to cart';
+    // cardButtonAdd.setAttribute('data-id', `${data.id}`);
+    // cardButtonAdd.textContent = 'Add to cart';
+    cardButtonAdd.addEventListener('click', () => {
+      cardButtonAdd.classList.toggle('card__button-add_active');
+      if (cardButtonAdd.classList.contains('card__button-add_active')) {
+        cardButtonAdd.textContent = 'In cart';
+      } else {
+        cardButtonAdd.textContent = 'Add to cart';
+      }
+    });
+
+    const prodButBuy = <HTMLElement>document.createElement('button');
+    prodButBuy.className = 'prod__but prod__but-buy';
+    prodButBuy.textContent = 'Buy now';
+
+    prodButtonsContainer.appendChild(prodPrice);
+    prodButtonsContainer.appendChild(cardButtonAdd);
+    prodButtonsContainer.appendChild(prodButBuy);
+
+    prodWrapper.appendChild(pathProd);
+    prodWrapper.appendChild(prodContainer);
   }
 }
 

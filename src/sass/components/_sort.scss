@@ -32,7 +32,7 @@
             border-radius: 5px;
             box-shadow: $box-shadow;
             cursor: pointer;
-            border: 1px solid $black-color;
+            border: 1px solid $blue-color;
 
             .select__item {
                 cursor: pointer;
@@ -42,6 +42,10 @@
 
     .sort__counter {
         font-size: 1rem;
+
+        // .sort__counter-display {
+        //     width: 100px;
+        // }
     }
 
     .products__search {
