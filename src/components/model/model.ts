@@ -11,6 +11,10 @@ export class Model extends AppView {
   arrProductsBasket: CardItem[] = [];
   arrFiltCategory: string[] = [];
   arrWaysBrand: string[] = [];
+
+  arrRange: CardItem[] = [];
+  arrSearch: CardItem[] = [];
+  arrCategory: CardItem[] = [];
   // filters: Filters;
 
   constructor() {
@@ -38,7 +42,8 @@ export class Model extends AppView {
     productsContainer.replaceChildren();
     this.sortWays(target.value);
     this.localStorage();
-    // localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    console.log('sort');
   }
 
   sortWays(data: string | null) {
@@ -86,7 +91,7 @@ export class Model extends AppView {
     } else if (target.name === 'brand') {
       if (target.checked) {
         this.arrWaysBrand.push(target.value);
-        console.log(this.arrWaysBrand);
+        // console.log(this.arrWaysBrand);
       } else {
         this.arrWaysBrand.splice(this.arrWaysBrand.indexOf(target.value), 1);
       }
@@ -108,7 +113,8 @@ export class Model extends AppView {
           }
         });
       });
-      this.filterDataProduct = arrCategory.slice();
+      // this.filterDataProduct = arrCategory.slice();
+      this.arrCategory = arrCategory.slice();
     } else {
       if (this.arrFiltCategory.length === 0) {
         this.initDataProduct.forEach((item) => arrCategory.push(item));
@@ -129,7 +135,8 @@ export class Model extends AppView {
           }
         });
       });
-      this.filterDataProduct = arrCategory.slice();
+      // this.filterDataProduct = arrCategory.slice();
+      this.arrCategory = arrCategory.slice();
     }
     //Get data from brand
     if (this.arrWaysBrand.length > 0) {
@@ -156,7 +163,8 @@ export class Model extends AppView {
             }
           });
         });
-        this.filterDataProduct = arrWithBrand.slice();
+        // this.filterDataProduct = arrWithBrand.slice();
+        this.arrCategory = arrWithBrand.slice();
       } else {
         if (this.arrWaysBrand.length === 0) {
           arrWithBrand.forEach((item) => arrCategory.push(item));
@@ -176,10 +184,12 @@ export class Model extends AppView {
             }
           });
         });
-        this.filterDataProduct = arrWithBrand.slice();
+        // this.filterDataProduct = arrWithBrand.slice();
+        this.arrCategory = arrWithBrand.slice();
       }
     }
 
+    this.commonFiltersData();
     productsCounter.textContent = `${this.filterDataProduct.length}`;
 
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
@@ -222,10 +232,11 @@ export class Model extends AppView {
         }
       });
     });
-    this.filterDataProduct = arrItems.slice();
+    this.arrRange = arrItems.slice();
+    // this.filterDataProduct = arrItems.slice();
     // productsCounter.textContent = `${this.filterDataProduct.length}`;
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
-
+    this.commonFiltersData();
     this.localStorage();
   }
 
@@ -272,13 +283,86 @@ export class Model extends AppView {
         });
       });
     }
-    productsCounter.textContent = `${arrSearch.length}`;
-    this.filterDataProduct = arrSearch.slice();
+    productsCounter.textContent = `${this.arrSearch.length}`;
+    // this.filterDataProduct = arrSearch.slice();
+    this.arrSearch = arrSearch.slice();
+    //Why dont work with root array data?
 
+    this.commonFiltersData();
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('searchValue', `${target.value}`);
     this.localStorage();
+  }
+
+  commonFiltersData() {
+    localStorage.setItem('arrRange', `${JSON.stringify(this.arrRange)}`);
+    localStorage.setItem('arrSearch', `${JSON.stringify(this.arrSearch)}`);
+    localStorage.setItem('arrCategory', `${JSON.stringify(this.arrCategory)}`);
+
+    if (this.arrCategory.length === 0) {
+      this.initDataProduct.forEach((item) => this.arrCategory.push(item));
+      this.arrCategory.forEach((item) => {
+        this.arrProductsBasket.forEach((itemBasket) => {
+          if (item.id === itemBasket.id) {
+            item.inBasket = true;
+          }
+        });
+      });
+    }
+
+    if (this.arrRange.length === 0) {
+      this.initDataProduct.forEach((item) => this.arrRange.push(item));
+      this.arrRange.forEach((item) => {
+        this.arrProductsBasket.forEach((itemBasket) => {
+          if (item.id === itemBasket.id) {
+            item.inBasket = true;
+          }
+        });
+      });
+    }
+
+    if (this.arrSearch.length === 0) {
+      this.initDataProduct.forEach((item) => this.arrSearch.push(item));
+      this.arrSearch.forEach((item) => {
+        this.arrProductsBasket.forEach((itemBasket) => {
+          if (item.id === itemBasket.id) {
+            item.inBasket = true;
+          }
+        });
+      });
+    }
+
+    const arrCategRange: CardItem[] = [];
+    const result: CardItem[] = [];
+    // if (this.arrCategory.length > 0 && this.arrRange.length > 0 && this.arrSearch.length > 0) {
+    this.arrCategory.forEach((itemC) => {
+      this.arrRange.forEach((itemR) => {
+        if (itemC.id === itemR.id) {
+          arrCategRange.push(itemC);
+        }
+      });
+    });
+
+    arrCategRange.forEach((itemC) => {
+      this.arrSearch.forEach((itemR) => {
+        if (itemC.id === itemR.id) {
+          result.push(itemC);
+        }
+      });
+    });
+    // arrCategRange = this.arrRange.filter((x) => this.arrCategory.indexOf(x) !== -1);
+    // result = arrCategRange.filter((x) => this.arrSearch.indexOf(x) !== -1);
+    // console.log('yes');
+    this.filterDataProduct = result.slice();
+    localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    // }
+
+    // console.log(this.arrRange);
+    // console.log(this.arrSearch);
+    // console.log(this.arrCategory);
+    // console.log(result);
+    // this.localStorage;
   }
 
   addProduct(e: Event) {
@@ -452,6 +536,10 @@ export class Model extends AppView {
     localStorage.setItem('range__left-stock', `0`);
     localStorage.setItem('range__right-stock', `150`);
 
+    localStorage.setItem('arrRange', `[]`);
+    localStorage.setItem('arrSearch', `[]`);
+    localStorage.setItem('arrCategory', `[]`);
+
     localStorage.setItem('searchValue', ``);
     const filterItems = document.querySelectorAll<HTMLInputElement>('.filter-block__input');
     filterItems.forEach((item) => {
@@ -481,10 +569,32 @@ export class Model extends AppView {
       if (item.value === `${sortProd}`) {
         item.setAttribute('selected', '');
         this.sortWays(sortProd);
+        console.log(sortProd);
         // localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
       }
     });
 
+    //filers common
+    const arrRange = JSON.parse(localStorage.getItem('arrRange')!);
+    const arrSearch = JSON.parse(localStorage.getItem('arrSearch')!);
+    const arrCategory = JSON.parse(localStorage.getItem('arrCategory')!);
+    // const filtDataProd = JSON.parse(localStorage.getItem('filtData')!);
+
+    // if (filtDataProd) {
+    //   this.filterDataProduct = filtDataProd;
+    // }
+
+    if (arrRange) {
+      this.arrRange = arrRange;
+    }
+
+    if (arrSearch) {
+      this.arrSearch = arrSearch;
+    }
+
+    if (arrCategory) {
+      this.arrCategory = arrCategory;
+    }
     //search
     const prodSearch = <HTMLInputElement>document.querySelector('.products__search');
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
@@ -579,5 +689,6 @@ export class Model extends AppView {
     }
 
     productsCount.textContent = `${this.filterDataProduct.length}`;
+    this.commonFiltersData();
   }
 }
