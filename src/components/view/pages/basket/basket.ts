@@ -46,7 +46,7 @@ class BasketView {
     this.header.draw();
     this.basketGridContainer();
     this.result.draw();
-    this.modalWindow.draw();
+    this.modalWindow.draw('.result__button');
     this.footer.draw();
   }
 }

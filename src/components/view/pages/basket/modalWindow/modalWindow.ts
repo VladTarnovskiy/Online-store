@@ -1,9 +1,9 @@
 class ModalWindow {
-  draw(): void {
-    const modalButton = <HTMLElement>document.querySelector('.result__button');
+  draw(data: string): void {
+    const modalButton = <HTMLElement>document.querySelector(data);
     const main = <HTMLElement>document.querySelector('main');
 
-    modalButton.addEventListener('click', () => {
+    function modalWindow() {
       const popup: HTMLDivElement = document.createElement('div');
       popup.className = 'popup';
       main.append(popup);
@@ -16,7 +16,7 @@ class ModalWindow {
         if (!(e.target as Element).closest('.popup__form')) {
           popup.remove();
         }
-      })
+      });
 
       const popupForm: HTMLFormElement = document.createElement('form');
       popupForm.className = 'popup__form';
@@ -85,7 +85,7 @@ class ModalWindow {
 
       const validDateLabel: HTMLLabelElement = document.createElement('label');
       validDateLabel.className = 'credit-card__valid-label';
-      validDateLabel.textContent = 'Valid thru:'
+      validDateLabel.textContent = 'Valid thru:';
       cardValidBlock.append(validDateLabel);
 
       const validDateInput: HTMLInputElement = document.createElement('input');
@@ -97,7 +97,7 @@ class ModalWindow {
 
       const validCodeLabel: HTMLLabelElement = document.createElement('label');
       validCodeLabel.className = 'credit-card__valid-label';
-      validCodeLabel.textContent = 'CVV:'
+      validCodeLabel.textContent = 'CVV:';
       cardValidBlock.append(validCodeLabel);
 
       const validCodeInput: HTMLInputElement = document.createElement('input');
@@ -113,7 +113,15 @@ class ModalWindow {
       popupButton.textContent = 'Confirm';
       popupForm.append(popupButton);
 
-      const inputList: HTMLInputElement[] = [nameCustomer, phoneNumberCustomer, addressCustomer, emailCustomer, cardNumber, validDateInput, validCodeInput];
+      const inputList: HTMLInputElement[] = [
+        nameCustomer,
+        phoneNumberCustomer,
+        addressCustomer,
+        emailCustomer,
+        cardNumber,
+        validDateInput,
+        validCodeInput,
+      ];
       popupForm.onsubmit = formSent;
 
       async function formSent(e: Event) {
@@ -123,7 +131,6 @@ class ModalWindow {
       }
 
       function validation() {
-
         inputList.forEach((input: HTMLInputElement): void => {
           inputRemoveError(input);
           if (input === phoneNumberCustomer) {
@@ -153,11 +160,11 @@ class ModalWindow {
           } else if (input === validDateInput) {
             if (!validateDateCard(input.value)) {
               inputAddError(input);
-            } else if (+(String(input.value).slice(0, 2)) > 12 || String(input.value).slice(0, 2) === '00') {
+            } else if (+String(input.value).slice(0, 2) > 12 || String(input.value).slice(0, 2) === '00') {
               inputAddError(input);
             }
           } else if (input === validCodeInput) {
-            if (!(/^[0-9]{3}$/.test(String(input.value).toLowerCase()))) {
+            if (!/^[0-9]{3}$/.test(String(input.value).toLowerCase())) {
               inputAddError(input);
             }
           } else {
@@ -177,35 +184,47 @@ class ModalWindow {
       }
 
       function validateName(val: string) {
-        const reg: RegExp = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
+        const reg = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
+        // const reg: RegExp = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
         return reg.test(String(val).toLowerCase());
       }
 
       function validatePhone(val: string) {
-        const reg: RegExp = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
+        const reg = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
+        // const reg: RegExp = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
         return reg.test(String(val).toLowerCase());
       }
 
       function validateAddress(val: string) {
-        const reg: RegExp = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
+        const reg = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
+        // const reg: RegExp = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
+
         return reg.test(String(val).toLowerCase());
       }
 
       function validateEmail(val: string) {
-        const reg: RegExp = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
+        const reg = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
+        // const reg: RegExp = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
+
         return reg.test(String(val).toLowerCase());
       }
 
       function validateCard(val: string) {
-        const reg: RegExp = /^[0-9]{16}$/;
+        const reg = /^[0-9]{16}$/;
+        // const reg: RegExp = /^[0-9]{16}$/;
+
         return reg.test(String(val).toLowerCase());
       }
 
       function validateDateCard(val: string) {
-        const reg: RegExp = /^[0-9]{4}$/;
+        const reg = /^[0-9]{4}$/;
+        // const reg: RegExp = /^[0-9]{4}$/;
         return reg.test(String(val).toLowerCase());
       }
-    });
+    }
+
+    modalButton.addEventListener('click', modalWindow);
   }
 }
+
 export default ModalWindow;

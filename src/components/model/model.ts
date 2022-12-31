@@ -112,7 +112,7 @@ export class Model extends AppView {
     } else {
       if (this.arrFiltCategory.length === 0) {
         this.initDataProduct.forEach((item) => arrCategory.push(item));
-        console.log(arrCategory);
+        // console.log34(arrCategory);
       } else {
         this.initDataProduct.forEach((item) => {
           this.arrFiltCategory.forEach((itemWays) => {
@@ -222,7 +222,6 @@ export class Model extends AppView {
         }
       });
     });
-    console.log(arrItems.length);
     this.filterDataProduct = arrItems.slice();
     // productsCounter.textContent = `${this.filterDataProduct.length}`;
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
@@ -231,19 +230,19 @@ export class Model extends AppView {
   }
 
   searchProducts(e: Event) {
-    console.log(this.arrProductsBasket);
+    // console.log(this.arrProductsBasket);
     const productsContainer = <HTMLElement>document.querySelector('.product-items');
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    console.log(this.initDataProduct);
+    // console.log(this.initDataProduct);
     const data = Array.from(this.initDataProduct);
-    console.log(data);
+    // console.log(data);
     // ASK MENTOR!!!!!!!!!!! WHY ARE BOTH ARRAYS CHANGING IF I CHANGE ONLY COPY'S ARRAY
     data.forEach((item) => {
       item.inBasket = false;
     });
-    console.log(data);
+    // console.log(data);
     const arrSearch: CardItem[] = [];
     if (target.value === '') {
       data.forEach((item) => {
@@ -318,6 +317,7 @@ export class Model extends AppView {
     this.filterDataProduct.forEach((item) => {
       if (item.id === data) {
         this.card.darwCardDetailPage(item);
+        this.modalWindow.draw('.prod__but-buy');
       }
     });
   }
@@ -515,7 +515,6 @@ export class Model extends AppView {
       if (arrFiltBrand) {
         arrFiltBrand.forEach((itemCateg: string) => {
           if (item.value === itemCateg) {
-            console.log(item);
             item.checked = true;
           }
         });

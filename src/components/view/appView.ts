@@ -3,12 +3,15 @@ import Basket from './pages/basket/basket';
 import ProductDetail from './pages/prod-detail/prod-detail';
 import Card from '../templates/card';
 import { CardItem } from '../types/types';
+import ModalWindow from '../view/pages/basket/modalWindow/modalWindow';
 
 export class AppView {
   main: Main;
   card: Card;
   basket: Basket;
   prodDetail: ProductDetail;
+  modalWindow: ModalWindow;
+
   // error: Error;
 
   constructor() {
@@ -16,6 +19,8 @@ export class AppView {
     this.card = new Card();
     this.basket = new Basket();
     this.prodDetail = new ProductDetail();
+    this.modalWindow = new ModalWindow();
+
     // this.error = new Error();
   }
 
