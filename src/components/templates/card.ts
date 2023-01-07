@@ -389,7 +389,12 @@ class Card {
     let count = 1;
     const prodImgDispaly = <HTMLElement>document.createElement('div');
     prodImgDispaly.className = 'prod__img-display';
-    prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+    // prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+
+    const prodImgItem = <HTMLElement>document.createElement('img');
+    prodImgItem.className = 'prod__img-item';
+    prodImgItem.setAttribute('src', `${card.images[count]}`);
+    prodImgDispaly.appendChild(prodImgItem);
 
     const prodImgButRight = <HTMLElement>document.createElement('button');
     prodImgButRight.className = 'prod__img-but prod__img-but_right';
@@ -399,11 +404,11 @@ class Card {
         count += 1;
         // prodImgButRight.classList.remove('but_disabled');
         // prodImgButLeft.classList.remove('but_disabled');
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
       } else {
         // prodImgButRight.classList.add('but_disabled');
         count = 0;
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
       }
     });
 
@@ -415,10 +420,10 @@ class Card {
         count -= 1;
         // prodImgButLeft.classList.remove('but_disabled');
         // prodImgButRight.classList.remove('but_disabled');
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
       } else {
         count = card.images.length - 1;
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
         // prodImgButLeft.classList.add('but_disabled');
       }
     });

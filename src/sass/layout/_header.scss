@@ -33,10 +33,11 @@
         }
 
         .header__title {
-            font-size: 2rem;
+            font-family: $roboto-bold-font;
+            font-size: 2.3rem;
             font-weight: 800;
             text-align: center;
-            padding-top: 18px;
+            padding-top: 11px;
         }
     }
 

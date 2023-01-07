@@ -76,7 +76,7 @@
 
         .card__button {
             height: 100%;
-            width: 62px;
+            width: 65px;
             box-shadow: $box-shadow;
             display: flex;
             justify-content: center;
@@ -91,6 +91,10 @@
 
             &:hover {
                 @extend %btn-hover;
+            }
+
+            &:active {
+                transform: scale(1.05);
             }
         }
 

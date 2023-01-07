@@ -268,19 +268,24 @@ export class Model extends AppView {
       data.forEach((item) => {
         const itemTitle = item.title.toLowerCase().split(' ');
         const itemDescr = item.description.toLowerCase().split(' ');
+        const categDescr = item.category.toLowerCase().split(' ');
         const brandDescr = item.brand.toLowerCase().split(' ');
         const categoryDescr = item.brand.toLowerCase().split(' ');
-        const arrSearchData = itemTitle.concat(itemDescr, brandDescr, categoryDescr);
-        arrSearchData.forEach((it) => {
-          if (it === target.value.toLowerCase() && !arrSearch.includes(item)) {
-            this.arrProductsBasket.forEach((itemArr) => {
-              if (item.id === itemArr.id) {
-                item.inBasket = true;
-              }
-            });
-            arrSearch.push(item);
-          }
-        });
+        const arrSearchData = itemTitle.concat(itemDescr, categDescr, brandDescr, categoryDescr);
+        const regex = new RegExp(`${target.value.toLowerCase()}`, 'gi');
+        // const x = arrSearchData.join('').match(regex);
+        // let result = str.match(/Java(Script)/g);
+        // console.log(x);
+        // arrSearchData.forEach((it) => {
+        if (arrSearchData.join('').match(regex) && !arrSearch.includes(item)) {
+          this.arrProductsBasket.forEach((itemArr) => {
+            if (item.id === itemArr.id) {
+              item.inBasket = true;
+            }
+          });
+          arrSearch.push(item);
+        }
+        // });
       });
     }
     productsCounter.textContent = `${this.arrSearch.length}`;
@@ -293,6 +298,32 @@ export class Model extends AppView {
     localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('searchValue', `${target.value}`);
     this.localStorage();
+  }
+
+  changeAmountOfFilter() {
+    const amountCatDisplays = document.querySelectorAll<HTMLElement>('.display_category');
+    const amountBrandDisplays = document.querySelectorAll<HTMLElement>('.display_brand');
+
+    amountCatDisplays.forEach((itemDisp) => {
+      let count = 0;
+      this.filterDataProduct.forEach((itemData) => {
+        if (itemDisp.dataset.filterBlock === itemData.category) {
+          count++;
+        }
+        itemDisp.textContent = `(${count})`;
+      });
+    });
+
+    amountBrandDisplays.forEach((itemDisp) => {
+      let count = 0;
+      this.filterDataProduct.forEach((itemData) => {
+        if (itemDisp.dataset.filterBlock === itemData.brand) {
+          count++;
+        }
+
+        itemDisp.textContent = `(${count})`;
+      });
+    });
   }
 
   commonFiltersData() {
@@ -357,7 +388,7 @@ export class Model extends AppView {
     this.filterDataProduct = result.slice();
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     // }
-
+    this.changeAmountOfFilter();
     // console.log(this.arrRange);
     // console.log(this.arrSearch);
     // console.log(this.arrCategory);

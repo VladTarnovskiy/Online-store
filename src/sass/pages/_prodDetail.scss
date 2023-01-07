@@ -79,6 +79,12 @@
                         cursor: pointer;
                         transition: all .1s ease-out;
                     }
+
+                    &:active {
+                        // top: 50%;
+                        // transform: translateY(-50%);
+                        transform: scale(1.08);
+                    }
                 }
 
                 .prod__img-but_right {
@@ -91,13 +97,15 @@
                 }
 
                 .prod__img-display {
-                    border-radius: 10px;
-                    width: 300px;
+                    width: 420px;
                     height: 300px;
-                    @extend %background-img;
-                    background-size: cover;
 
-
+                    .prod__img-item {
+                        display: inline-block;
+                        border-radius: 10px;
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
 
                 .but_disabled {
@@ -205,6 +213,12 @@
                     &:hover {
                         @extend %btn-hover;
                         @extend %transition;
+                    }
+                }
+
+                .card__button_add {
+                    &:active {
+                        transform: scale(1.05);
                     }
                 }
 
