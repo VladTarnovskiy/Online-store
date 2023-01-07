@@ -36,24 +36,28 @@ class ModalWindow {
       nameCustomer.setAttribute('placeholder', 'Name, Surname');
       nameCustomer.setAttribute('type', 'text');
       popupData.append(nameCustomer);
+      nameCustomer.addEventListener('blur', validateName);
 
       const phoneNumberCustomer: HTMLInputElement = document.createElement('input');
       phoneNumberCustomer.className = 'popup__input';
       phoneNumberCustomer.setAttribute('placeholder', 'Phone number');
       phoneNumberCustomer.setAttribute('type', 'tel');
       popupData.append(phoneNumberCustomer);
+      phoneNumberCustomer.addEventListener('blur', validatePhone);
 
       const addressCustomer: HTMLInputElement = document.createElement('input');
       addressCustomer.className = 'popup__input';
       addressCustomer.setAttribute('placeholder', 'Delivery address');
       addressCustomer.setAttribute('type', 'text');
       popupData.append(addressCustomer);
+      addressCustomer.addEventListener('blur', validateAddress);
 
       const emailCustomer: HTMLInputElement = document.createElement('input');
       emailCustomer.className = 'popup__input';
       emailCustomer.setAttribute('placeholder', 'E-mail');
       emailCustomer.setAttribute('type', 'email');
       popupData.append(emailCustomer);
+      emailCustomer.addEventListener('blur', validateEmail);
 
       const creditCardTitle: HTMLHeadingElement = document.createElement('h3');
       creditCardTitle.className = 'popup__title';
@@ -78,6 +82,8 @@ class ModalWindow {
       cardNumber.setAttribute('type', 'text');
       cardNumber.setAttribute('maxlength', '16');
       cardNumberBlock.append(cardNumber);
+      cardNumber.addEventListener('blur', validateCard);
+      cardNumber.addEventListener('keyup', renderCardLogo);
 
       const cardValidBlock: HTMLDivElement = document.createElement('div');
       cardValidBlock.className = 'credit-card__valid-block';
@@ -92,8 +98,9 @@ class ModalWindow {
       validDateInput.className = 'popup__input credit-card__valid';
       validDateInput.setAttribute('placeholder', 'Date');
       validDateInput.setAttribute('type', 'text');
-      validDateInput.setAttribute('maxlength', '4');
+      validDateInput.setAttribute('maxlength', '5');
       validDateLabel.append(validDateInput);
+      validDateInput.addEventListener('blur', validateDateCard);
 
       const validCodeLabel: HTMLLabelElement = document.createElement('label');
       validCodeLabel.className = 'credit-card__valid-label';
@@ -106,6 +113,7 @@ class ModalWindow {
       validCodeInput.setAttribute('type', 'text');
       validCodeInput.setAttribute('maxlength', '3');
       validCodeLabel.append(validCodeInput);
+      validCodeInput.addEventListener('blur', validateCVV);
 
       const popupButton: HTMLButtonElement = document.createElement('button');
       popupButton.className = 'button button_popup';
@@ -122,6 +130,7 @@ class ModalWindow {
         validDateInput,
         validCodeInput,
       ];
+      
       popupForm.onsubmit = formSent;
 
       async function formSent(e: Event) {
@@ -132,45 +141,8 @@ class ModalWindow {
 
       function validation() {
         inputList.forEach((input: HTMLInputElement): void => {
-          inputRemoveError(input);
-          if (input === phoneNumberCustomer) {
-            if (!validatePhone(input.value)) {
-              inputAddError(input);
-            }
-          } else if (input === addressCustomer) {
-            if (!validateAddress(input.value)) {
-              inputAddError(input);
-            }
-          } else if (input === nameCustomer) {
-            if (!validateName(input.value)) {
-              inputAddError(input);
-            }
-          } else if (input === emailCustomer) {
-            if (!validateEmail(input.value)) {
-              inputAddError(input);
-            }
-          } else if (input === cardNumber) {
-            if (!validateCard(input.value)) {
-              inputAddError(input);
-            } else if (+input.value[0] === 4) {
-              cardNumberImage.style.backgroundImage = 'url("assets/visa.png")';
-            } else if (+input.value[0] === 5) {
-              cardNumberImage.style.backgroundImage = 'url("assets/master-card.png")';
-            }
-          } else if (input === validDateInput) {
-            if (!validateDateCard(input.value)) {
-              inputAddError(input);
-            } else if (+String(input.value).slice(0, 2) > 12 || String(input.value).slice(0, 2) === '00') {
-              inputAddError(input);
-            }
-          } else if (input === validCodeInput) {
-            if (!/^[0-9]{3}$/.test(String(input.value).toLowerCase())) {
-              inputAddError(input);
-            }
-          } else {
-            if (input.value === '') {
-              inputAddError(input);
-            }
+          if (input.value === '') {
+            inputAddError(input);
           }
         });
       }
@@ -183,46 +155,79 @@ class ModalWindow {
         el.classList.remove('error');
       }
 
-      function validateName(val: string) {
+      function toggleError (value: boolean, el: HTMLInputElement): void {
+        if (!value) {
+          inputAddError(el);
+        } else {
+          inputRemoveError(el);
+        }
+      }
+
+      function validateName(this: HTMLInputElement): void {
         const reg = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
-        // const reg: RegExp = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
-        return reg.test(String(val).toLowerCase());
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
       }
 
-      function validatePhone(val: string) {
+      function validatePhone(this: HTMLInputElement): void {
         const reg = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
-        // const reg: RegExp = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
-        return reg.test(String(val).toLowerCase());
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
       }
 
-      function validateAddress(val: string) {
-        const reg = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
-        // const reg: RegExp = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
+      function validateAddress(this: HTMLInputElement): void {
+        const reg = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z0-9]{5,}( [а-яА-ЯёЁa-zA-Z0-9]{5,})?$/;
+        const result = reg.test(String(this.value).toLowerCase());
 
-        return reg.test(String(val).toLowerCase());
+        toggleError(result, this);
       }
 
-      function validateEmail(val: string) {
+      function validateEmail(this: HTMLInputElement): void {
         const reg = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
-        // const reg: RegExp = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
+        const result = reg.test(String(this.value).toLowerCase());
 
-        return reg.test(String(val).toLowerCase());
+        toggleError(result, this);
       }
 
-      function validateCard(val: string) {
+      function validateCard(this: HTMLInputElement): void {
         const reg = /^[0-9]{16}$/;
-        // const reg: RegExp = /^[0-9]{16}$/;
+        const result = reg.test(String(this.value).toLowerCase());
 
-        return reg.test(String(val).toLowerCase());
+        toggleError(result, this);
       }
 
-      function validateDateCard(val: string) {
+      function validateDateCard(this: HTMLInputElement): void {
         const reg = /^[0-9]{4}$/;
-        // const reg: RegExp = /^[0-9]{4}$/;
-        return reg.test(String(val).toLowerCase());
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
+
+        if (+String(this.value).slice(0, 2) > 12 || String(this.value).slice(0, 2) === '00') {
+          inputAddError(this);
+        }
+      }
+
+      function validateCVV (this: HTMLInputElement): void {
+        const reg = /^[0-9]{3}$/;
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
+      }
+
+      function renderCardLogo(this: HTMLInputElement): void {
+        if (+this.value[0] === 3) {
+          cardNumberImage.style.backgroundImage = 'url("https://logodownload.org/wp-content/uploads/2014/04/amex-american-express-logo-4.png")';
+        } else if (+this.value[0] === 4) {
+          cardNumberImage.style.backgroundImage = 'url("https://w7.pngwing.com/pngs/618/512/png-transparent-visa-logo-mastercard-credit-card-payment-visa-blue-company-text.png")';
+        } else if (+this.value[0] === 5) {
+          cardNumberImage.style.backgroundImage = 'url("https://w7.pngwing.com/pngs/23/320/png-transparent-mastercard-credit-card-visa-payment-service-mastercard-company-orange-logo.png")';
+        } else {
+          cardNumberImage.style.backgroundImage = 'url(../assets/no-logo.png)';
+        }
       }
     }
-
     modalButton.addEventListener('click', modalWindow);
   }
 }
