@@ -33,7 +33,8 @@ export function showListOfFilter(
     labelElement.append(textElement);
 
     const valueElement: HTMLSpanElement = document.createElement('span');
-    valueElement.className = `${className}__value`;
+    valueElement.className = `${className}__value display_${nameFilter}`;
+    valueElement.setAttribute(`data-${className}`, `${prop}`);
     valueElement.textContent = `(${valueEachItemList[prop]})`;
     li.append(valueElement);
   });

@@ -79,6 +79,12 @@
                         cursor: pointer;
                         transition: all .1s ease-out;
                     }
+
+                    &:active {
+                        // top: 50%;
+                        // transform: translateY(-50%);
+                        transform: scale(1.08);
+                    }
                 }
 
                 .prod__img-but_right {
@@ -91,13 +97,35 @@
                 }
 
                 .prod__img-display {
-                    border-radius: 10px;
-                    width: 300px;
+                    width: 420px;
                     height: 300px;
-                    @extend %background-img;
-                    background-size: cover;
+                    position: relative;
 
+                    .prod__img-item {
+                        display: inline-block;
+                        border-radius: 10px;
+                        width: 100%;
+                        height: 100%;
+                    }
 
+                    .prod__img-scale {
+                        position: absolute;
+                        display: none;
+                        top: 0;
+                        border-radius: 10px;
+                        width: 100%;
+                        height: 100%;
+                        background-position: center;
+                        background-image: url(../assets/zoom-in.svg);
+                        background-size: 50px 50px;
+                        background-repeat: no-repeat;
+                        background-color: rgba(157, 194, 255, 0.4);
+                    }
+
+                    &:hover>.prod__img-scale {
+                        cursor: pointer;
+                        display: block;
+                    }
                 }
 
                 .but_disabled {
@@ -208,10 +236,34 @@
                     }
                 }
 
+                .card__button_add {
+                    &:active {
+                        transform: scale(1.05);
+                    }
+                }
+
                 .card__button-add_active {
                     background-color: $orange-color;
                 }
             }
         }
+    }
+}
+
+.popup_img {
+    display: none;
+
+    .prod__img-scale_inc {
+        position: absolute;
+        z-index: 6;
+        width: 650px;
+        height: 520px;
+        // width: calc(fit-content + 20%);
+        // height: calc(fit-content + 20%);
+        display: inline-block;
+        border-radius: 10px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
 }

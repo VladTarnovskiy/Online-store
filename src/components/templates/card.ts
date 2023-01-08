@@ -219,6 +219,11 @@ class Card {
     const card = <HTMLElement>document.createElement('div');
     card.className = 'card card_basket';
 
+    const numberProd = <HTMLElement>document.createElement('div');
+    numberProd.className = 'card__number';
+    numberProd.textContent = '0';
+    card.appendChild(numberProd);
+
     const wrapperImg = <HTMLElement>document.createElement('div');
     wrapperImg.className = 'wrapper__img';
     card.appendChild(wrapperImg);
@@ -325,7 +330,7 @@ class Card {
 
     const totlalPrice = <HTMLElement>document.createElement('div');
     totlalPrice.className = 'card__item-total-price';
-    totlalPrice.textContent = `${data.totalPrice! * data.amount!} $`;
+    totlalPrice.textContent = `${(data.price! * data.amount!).toFixed(2)} $`;
     itemController.appendChild(totlalPrice);
 
     descriptWrapper.appendChild(cardBasketDec);
@@ -387,9 +392,36 @@ class Card {
     prodDescriptContainer.appendChild(prodimgContainer);
 
     let count = 1;
+    const prodImgScale = <HTMLElement>document.createElement('div');
+    prodImgScale.className = 'prod__img-scale';
+
+    //popup
+    const popup = <HTMLElement>document.createElement('div');
+    popup.className = 'popup popup_img';
+    popup.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+
+    const prodImgScaleInc = <HTMLElement>document.createElement('img');
+    prodImgScaleInc.className = 'prod__img-scale_inc';
+    popup.appendChild(prodImgScaleInc);
+    container.appendChild(popup);
+
     const prodImgDispaly = <HTMLElement>document.createElement('div');
     prodImgDispaly.className = 'prod__img-display';
-    prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+    prodImgDispaly.addEventListener('click', () => {
+      const prodImg = <HTMLImageElement>prodImgDispaly.querySelector('.prod__img-item');
+      const imgLink = prodImg.src;
+      prodImgScaleInc.setAttribute('src', `${imgLink}`);
+      popup.style.display = 'block';
+      console.log(imgLink);
+    });
+
+    const prodImgItem = <HTMLElement>document.createElement('img');
+    prodImgItem.className = 'prod__img-item';
+    prodImgItem.setAttribute('src', `${card.images[count]}`);
+    prodImgDispaly.appendChild(prodImgItem);
+    prodImgDispaly.appendChild(prodImgScale);
 
     const prodImgButRight = <HTMLElement>document.createElement('button');
     prodImgButRight.className = 'prod__img-but prod__img-but_right';
@@ -399,11 +431,11 @@ class Card {
         count += 1;
         // prodImgButRight.classList.remove('but_disabled');
         // prodImgButLeft.classList.remove('but_disabled');
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
       } else {
         // prodImgButRight.classList.add('but_disabled');
         count = 0;
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
       }
     });
 
@@ -415,10 +447,10 @@ class Card {
         count -= 1;
         // prodImgButLeft.classList.remove('but_disabled');
         // prodImgButRight.classList.remove('but_disabled');
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
       } else {
         count = card.images.length - 1;
-        prodImgDispaly.style.backgroundImage = `url('${card.images[count]}')`;
+        prodImgItem.setAttribute('src', `${card.images[count]}`);
         // prodImgButLeft.classList.add('but_disabled');
       }
     });

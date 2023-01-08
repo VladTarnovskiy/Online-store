@@ -15,11 +15,9 @@ export class Model extends AppView {
   arrRange: CardItem[] = [];
   arrSearch: CardItem[] = [];
   arrCategory: CardItem[] = [];
-  // filters: Filters;
 
   constructor() {
     super();
-    // this.filters = new Filters();
   }
 
   getProducts(e: MouseEvent) {
@@ -34,6 +32,13 @@ export class Model extends AppView {
       this.viewCardList(this.filterDataProduct);
       localStorage.setItem('view', 'list');
     }
+    if (this.filterDataProduct.length === 0) {
+      const noneProductInfo = <HTMLElement>document.createElement('div');
+      noneProductInfo.className = 'product-none-info';
+      noneProductInfo.textContent = 'No products found.';
+      productsContainer.appendChild(noneProductInfo);
+    }
+    this.localStorage();
   }
 
   sortProducts(e: Event) {
@@ -41,9 +46,9 @@ export class Model extends AppView {
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
     this.sortWays(target.value);
-    this.localStorage();
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
-    console.log('sort');
+
+    this.localStorage();
   }
 
   sortWays(data: string | null) {
@@ -91,7 +96,6 @@ export class Model extends AppView {
     } else if (target.name === 'brand') {
       if (target.checked) {
         this.arrWaysBrand.push(target.value);
-        // console.log(this.arrWaysBrand);
       } else {
         this.arrWaysBrand.splice(this.arrWaysBrand.indexOf(target.value), 1);
       }
@@ -113,12 +117,10 @@ export class Model extends AppView {
           }
         });
       });
-      // this.filterDataProduct = arrCategory.slice();
       this.arrCategory = arrCategory.slice();
     } else {
       if (this.arrFiltCategory.length === 0) {
         this.initDataProduct.forEach((item) => arrCategory.push(item));
-        // console.log34(arrCategory);
       } else {
         this.initDataProduct.forEach((item) => {
           this.arrFiltCategory.forEach((itemWays) => {
@@ -135,7 +137,6 @@ export class Model extends AppView {
           }
         });
       });
-      // this.filterDataProduct = arrCategory.slice();
       this.arrCategory = arrCategory.slice();
     }
     //Get data from brand
@@ -163,7 +164,6 @@ export class Model extends AppView {
             }
           });
         });
-        // this.filterDataProduct = arrWithBrand.slice();
         this.arrCategory = arrWithBrand.slice();
       } else {
         if (this.arrWaysBrand.length === 0) {
@@ -184,7 +184,6 @@ export class Model extends AppView {
             }
           });
         });
-        // this.filterDataProduct = arrWithBrand.slice();
         this.arrCategory = arrWithBrand.slice();
       }
     }
@@ -200,7 +199,6 @@ export class Model extends AppView {
   }
 
   filterByRange() {
-    // const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const productsContainer = <HTMLElement>document.querySelector('.product-items');
     const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
     const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
@@ -233,21 +231,20 @@ export class Model extends AppView {
       });
     });
     this.arrRange = arrItems.slice();
-    // this.filterDataProduct = arrItems.slice();
-    // productsCounter.textContent = `${this.filterDataProduct.length}`;
+
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     this.commonFiltersData();
     this.localStorage();
   }
 
   searchProducts(e: Event) {
-    // console.log(this.arrProductsBasket);
     const productsContainer = <HTMLElement>document.querySelector('.product-items');
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
     // console.log(this.initDataProduct);
     const data = Array.from(this.initDataProduct);
+    // const data = Object.freeze(Object.assign({}, this.initDataProduct));
     // console.log(data);
     // ASK MENTOR!!!!!!!!!!! WHY ARE BOTH ARRAYS CHANGING IF I CHANGE ONLY COPY'S ARRAY
     data.forEach((item) => {
@@ -264,35 +261,76 @@ export class Model extends AppView {
         });
         arrSearch.push(item);
       });
-    } else {
+    } else if (target.value !== '') {
       data.forEach((item) => {
         const itemTitle = item.title.toLowerCase().split(' ');
         const itemDescr = item.description.toLowerCase().split(' ');
+        const categDescr = item.category.toLowerCase().split(' ');
         const brandDescr = item.brand.toLowerCase().split(' ');
         const categoryDescr = item.brand.toLowerCase().split(' ');
-        const arrSearchData = itemTitle.concat(itemDescr, brandDescr, categoryDescr);
-        arrSearchData.forEach((it) => {
-          if (it === target.value.toLowerCase() && !arrSearch.includes(item)) {
-            this.arrProductsBasket.forEach((itemArr) => {
-              if (item.id === itemArr.id) {
-                item.inBasket = true;
-              }
-            });
-            arrSearch.push(item);
-          }
-        });
+        const arrSearchData = itemTitle.concat(itemDescr, categDescr, brandDescr, categoryDescr);
+        const regex = new RegExp(`${target.value.toLowerCase()}`, 'gi');
+        if (arrSearchData.join('').match(regex) && !arrSearch.includes(item)) {
+          this.arrProductsBasket.forEach((itemArr) => {
+            if (item.id === itemArr.id) {
+              item.inBasket = true;
+            }
+          });
+          arrSearch.push(item);
+        }
       });
     }
     productsCounter.textContent = `${this.arrSearch.length}`;
-    // this.filterDataProduct = arrSearch.slice();
     this.arrSearch = arrSearch.slice();
     //Why dont work with root array data?
-
-    this.commonFiltersData();
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('searchValue', `${target.value}`);
+    this.commonFiltersData();
+
     this.localStorage();
+  }
+
+  changeAmountOfFilter() {
+    const amountCatDisplays = document.querySelectorAll<HTMLElement>('.display_category');
+    const amountBrandDisplays = document.querySelectorAll<HTMLElement>('.display_brand');
+
+    // const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
+    // const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
+    // const minStock = <HTMLInputElement>document.querySelector('.slider__range_left-stock');
+    // const maxStock = <HTMLInputElement>document.querySelector('.slider__range_right-stock');
+
+    // const arrPrice: number[] = [];
+    // const arrStock: number[] = [];
+    // this.filterDataProduct.forEach((item) => {
+    //   arrPrice.push(item.price);
+    //   arrStock.push(item.stock);
+    // });
+    // minPrice.value = String(Math.min.apply(null, arrPrice));
+    // maxPrice.value = String(Math.max.apply(null, arrPrice));
+    // minStock.value = String(Math.min.apply(null, arrPrice));
+    // maxStock.value = String(Math.max.apply(null, arrPrice));
+
+    amountCatDisplays.forEach((itemDisp) => {
+      let count = 0;
+      this.filterDataProduct.forEach((itemData) => {
+        if (itemDisp.dataset.filterBlock === itemData.category) {
+          count++;
+        }
+        itemDisp.textContent = `(${count})`;
+      });
+    });
+
+    amountBrandDisplays.forEach((itemDisp) => {
+      let count = 0;
+      this.filterDataProduct.forEach((itemData) => {
+        if (itemDisp.dataset.filterBlock === itemData.brand) {
+          count++;
+        }
+
+        itemDisp.textContent = `(${count})`;
+      });
+    });
   }
 
   commonFiltersData() {
@@ -300,7 +338,7 @@ export class Model extends AppView {
     localStorage.setItem('arrSearch', `${JSON.stringify(this.arrSearch)}`);
     localStorage.setItem('arrCategory', `${JSON.stringify(this.arrCategory)}`);
 
-    if (this.arrCategory.length === 0) {
+    if (this.arrCategory.length === 0 && this.arrFiltCategory.length === 0 && this.arrWaysBrand.length === 0) {
       this.initDataProduct.forEach((item) => this.arrCategory.push(item));
       this.arrCategory.forEach((item) => {
         this.arrProductsBasket.forEach((itemBasket) => {
@@ -311,7 +349,9 @@ export class Model extends AppView {
       });
     }
 
-    if (this.arrRange.length === 0) {
+    const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
+    const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
+    if (this.arrRange.length === 0 && minPrice.value === '0' && maxPrice.value === '2000') {
       this.initDataProduct.forEach((item) => this.arrRange.push(item));
       this.arrRange.forEach((item) => {
         this.arrProductsBasket.forEach((itemBasket) => {
@@ -322,7 +362,8 @@ export class Model extends AppView {
       });
     }
 
-    if (this.arrSearch.length === 0) {
+    const searchInput = <HTMLInputElement>document.querySelector('.products__search');
+    if (this.arrSearch.length === 0 && searchInput.value === '') {
       this.initDataProduct.forEach((item) => this.arrSearch.push(item));
       this.arrSearch.forEach((item) => {
         this.arrProductsBasket.forEach((itemBasket) => {
@@ -333,9 +374,16 @@ export class Model extends AppView {
       });
     }
 
+    this.arrCategory.forEach((item) => {
+      this.arrProductsBasket.forEach((itemBasket) => {
+        if (item.id === itemBasket.id) {
+          item.inBasket = true;
+        }
+      });
+    });
+
     const arrCategRange: CardItem[] = [];
     const result: CardItem[] = [];
-    // if (this.arrCategory.length > 0 && this.arrRange.length > 0 && this.arrSearch.length > 0) {
     this.arrCategory.forEach((itemC) => {
       this.arrRange.forEach((itemR) => {
         if (itemC.id === itemR.id) {
@@ -351,18 +399,9 @@ export class Model extends AppView {
         }
       });
     });
-    // arrCategRange = this.arrRange.filter((x) => this.arrCategory.indexOf(x) !== -1);
-    // result = arrCategRange.filter((x) => this.arrSearch.indexOf(x) !== -1);
-    // console.log('yes');
     this.filterDataProduct = result.slice();
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
-    // }
-
-    // console.log(this.arrRange);
-    // console.log(this.arrSearch);
-    // console.log(this.arrCategory);
-    // console.log(result);
-    // this.localStorage;
+    this.changeAmountOfFilter();
   }
 
   addProduct(e: Event) {
@@ -376,12 +415,11 @@ export class Model extends AppView {
           item.totalPrice = Number(
             ((item.price - (item.price * item.discountPercentage) / 100) * item.amount).toFixed(2)
           );
-          // if (!this.arrProductsBasket.includes(item)) {
           this.arrProductsBasket.push(item);
-          // }
         } else {
           this.arrProductsBasket.forEach((itemBasket, index) => {
             if (itemBasket.id === item.id) {
+              // target.classList.remove('card__button-add_active');
               item.inBasket = false;
               this.arrProductsBasket.splice(index, 1);
             }
@@ -389,10 +427,17 @@ export class Model extends AppView {
         }
       }
 
+      // const resultPrice = localStorage.getItem('resultPrice');
+      // if (resultPrice) {
+      this.addTotalPrice();
+      // }
+
       basketChecker.textContent = `${this.arrProductsBasket.length}`;
       localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+      // this.basketCardChangeInfo();
     });
+    // this.localStorage();
   }
 
   addDetailPage(data: number) {
@@ -404,6 +449,17 @@ export class Model extends AppView {
         this.modalWindow.draw('.prod__but-buy');
       }
     });
+    this.addTotalPrice();
+  }
+
+  addTotalPrice() {
+    let count = 0;
+    this.arrProductsBasket.forEach((item) => {
+      count += item.price * item.amount!;
+    });
+    const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
+    totalPriceHeader.textContent = `Total: ${count} $`;
+    localStorage.setItem('resultPrice', `${count}`);
   }
 
   showResultBasket() {
@@ -412,17 +468,33 @@ export class Model extends AppView {
     const resultPriceCounter = <HTMLElement>document.querySelector('.result__price-counter');
     const resultPromo = <HTMLInputElement>document.querySelector('.result__promo');
     const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
+    const numberProduct = document.querySelectorAll<HTMLElement>('.card__number');
     basketChecker.textContent = `${this.arrProductsBasket.length}`;
+
     let countAmount = 0;
     let countTotalPrice = 0;
+
     this.arrProductsBasket.forEach((item) => {
       countAmount = countAmount + item.amount!;
     });
     this.arrProductsBasket.forEach((item) => {
-      countTotalPrice = countTotalPrice + item.totalPrice! * item.amount!;
+      countTotalPrice = countTotalPrice + item.price! * item.amount!;
     });
     resultCounter.textContent = String(countAmount);
     resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
+
+    const productsContainer = <HTMLElement>document.querySelector('.main');
+    if (this.arrProductsBasket.length === 0) {
+      productsContainer.replaceChildren();
+      const noneProductInfo = <HTMLElement>document.createElement('div');
+      noneProductInfo.className = 'product-none-info';
+      noneProductInfo.textContent = 'Cart is empty.';
+      productsContainer.appendChild(noneProductInfo);
+    }
+
+    numberProduct.forEach((item, index) => {
+      item.textContent = `${index + 1}.`;
+    });
 
     if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
       resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
@@ -435,6 +507,9 @@ export class Model extends AppView {
     } else {
       resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
     }
+    localStorage.setItem('resultPrice', `${countTotalPrice}`);
+
+    this.addTotalPrice();
 
     this.showPromoCodeBasket(countTotalPrice);
   }
@@ -446,30 +521,33 @@ export class Model extends AppView {
     const resultPricePromo = <HTMLElement>document.querySelector('.result__price_promo');
     const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
     const resulPromoPercentr = <HTMLElement>document.querySelector('.result__percent_promo');
-    resultPromo.addEventListener('input', () => {
-      if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
-        resultPrice.classList.add('promo_disabled');
-        resultPricePromo.classList.add('promo_active');
-        resulPromoPercentr.classList.add('promo_active');
-        resulPromoPercentr.textContent = '-10%';
-        resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
-      } else if (
-        resultPromo.value === 'RS, RSSchool' ||
-        resultPromo.value === 'RS,RSSchool' ||
-        resultPromo.value === 'RS RSSchool'
-      ) {
-        resultPrice.classList.add('promo_disabled');
-        resultPricePromo.classList.add('promo_active');
-        resulPromoPercentr.classList.add('promo_active');
-        resulPromoPercentr.textContent = '-20%';
-        resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.8).toFixed(2)} $`;
-      } else {
-        resultPrice.classList.remove('promo_disabled');
-        resultPricePromo.classList.remove('promo_active');
-        resulPromoPercentr.classList.remove('promo_active');
-        resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
-      }
-    });
+
+    if (resultPromo) {
+      resultPromo.addEventListener('input', () => {
+        if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
+          resultPrice.classList.add('promo_disabled');
+          resultPricePromo.classList.add('promo_active');
+          resulPromoPercentr.classList.add('promo_active');
+          resulPromoPercentr.textContent = '-10%';
+          resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
+        } else if (
+          resultPromo.value === 'RS, RSSchool' ||
+          resultPromo.value === 'RS,RSSchool' ||
+          resultPromo.value === 'RS RSSchool'
+        ) {
+          resultPrice.classList.add('promo_disabled');
+          resultPricePromo.classList.add('promo_active');
+          resulPromoPercentr.classList.add('promo_active');
+          resulPromoPercentr.textContent = '-20%';
+          resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.8).toFixed(2)} $`;
+        } else {
+          resultPrice.classList.remove('promo_disabled');
+          resultPricePromo.classList.remove('promo_active');
+          resulPromoPercentr.classList.remove('promo_active');
+          resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
+        }
+      });
+    }
   }
 
   basketCardChangeInfo() {
@@ -485,10 +563,9 @@ export class Model extends AppView {
           if (Number(basketItemCounter.textContent) < arrItem.stock) {
             arrItem.amount = arrItem.amount! + 1;
             basketItemCounter.textContent = `${arrItem.amount}`;
-            basketItemTotalPrice.textContent = `${(
-              (arrItem.price - (arrItem.price * arrItem.discountPercentage) / 100) *
-              Number(basketItemCounter.textContent)
-            ).toFixed(2)} $`;
+            basketItemTotalPrice.textContent = `${(arrItem.price * Number(basketItemCounter.textContent)).toFixed(
+              2
+            )} $`;
           } else {
             target.classList.add('card__btn-control_disabled');
           }
@@ -499,10 +576,9 @@ export class Model extends AppView {
             basketItemPlusButton.classList.remove('card__btn-control_disabled');
             arrItem.amount = arrItem.amount! - 1;
             basketItemCounter.textContent = `${arrItem.amount}`;
-            basketItemTotalPrice.textContent = `${(
-              (arrItem.price - (arrItem.price * arrItem.discountPercentage) / 100) *
-              Number(basketItemCounter.textContent)
-            ).toFixed(2)} $`;
+            basketItemTotalPrice.textContent = `${(arrItem.price * Number(basketItemCounter.textContent)).toFixed(
+              2
+            )} $`;
             localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
           } else {
             const cardButPlus = <HTMLElement>item.querySelector('.card__item-minus');
@@ -562,6 +638,15 @@ export class Model extends AppView {
       this.filterDataProduct = filtData;
     }
 
+    this.filterDataProduct.forEach((item) => {
+      item.inBasket = false;
+      this.arrProductsBasket.forEach((itemBasket) => {
+        if (item.id === itemBasket.id) {
+          item.inBasket = true;
+        }
+      });
+    });
+
     //products sort
     const sortProd = localStorage.getItem('sort');
     const sortSelect = document.querySelectorAll<HTMLInputElement>('.select__item');
@@ -569,8 +654,6 @@ export class Model extends AppView {
       if (item.value === `${sortProd}`) {
         item.setAttribute('selected', '');
         this.sortWays(sortProd);
-        console.log(sortProd);
-        // localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
       }
     });
 
@@ -578,11 +661,6 @@ export class Model extends AppView {
     const arrRange = JSON.parse(localStorage.getItem('arrRange')!);
     const arrSearch = JSON.parse(localStorage.getItem('arrSearch')!);
     const arrCategory = JSON.parse(localStorage.getItem('arrCategory')!);
-    // const filtDataProd = JSON.parse(localStorage.getItem('filtData')!);
-
-    // if (filtDataProd) {
-    //   this.filterDataProduct = filtDataProd;
-    // }
 
     if (arrRange) {
       this.arrRange = arrRange;
@@ -675,18 +753,34 @@ export class Model extends AppView {
     const prodContainer = <HTMLElement>document.querySelector('.product-items');
     const blockBut = <HTMLElement>document.querySelector('.view__block');
     const listBut = <HTMLElement>document.querySelector('.view__list');
+    prodContainer.replaceChildren();
 
-    if (viewStorage! === 'list') {
-      listBut.classList.add('view__item_active');
-      blockBut.classList.remove('view__item_active');
-      prodContainer.classList.add('product-items_list');
-      this.viewCardList(this.filterDataProduct);
+    if (this.filterDataProduct.length > 0) {
+      if (viewStorage! === 'list') {
+        listBut.classList.add('view__item_active');
+        blockBut.classList.remove('view__item_active');
+        prodContainer.classList.add('product-items_list');
+        this.viewCardList(this.filterDataProduct);
+      } else {
+        blockBut.classList.add('view__item_active');
+        listBut.classList.remove('view__item_active');
+        prodContainer.classList.remove('product-items_list');
+        this.viewCardBlock(this.filterDataProduct);
+      }
     } else {
-      blockBut.classList.add('view__item_active');
-      listBut.classList.remove('view__item_active');
-      prodContainer.classList.remove('product-items_list');
-      this.viewCardBlock(this.filterDataProduct);
+      const noneProductInfo = <HTMLElement>document.createElement('div');
+      noneProductInfo.className = 'product-none-info';
+      noneProductInfo.textContent = 'No products found.';
+      prodContainer.appendChild(noneProductInfo);
     }
+
+    const resultPrice = localStorage.getItem('resultPrice');
+    if (resultPrice) {
+      const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
+      totalPriceHeader.textContent = `Total: ${resultPrice} $`;
+    }
+    // const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
+    // totalPriceHeader.textContent = '0 $';
 
     productsCount.textContent = `${this.filterDataProduct.length}`;
     this.commonFiltersData();

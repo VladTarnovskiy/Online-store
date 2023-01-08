@@ -43,9 +43,10 @@
     .sort__counter {
         font-size: 1rem;
 
-        // .sort__counter-display {
-        //     width: 100px;
-        // }
+        .sort__counter-display {
+            display: inline-block;
+            width: 40px;
+        }
     }
 
     .products__search {
