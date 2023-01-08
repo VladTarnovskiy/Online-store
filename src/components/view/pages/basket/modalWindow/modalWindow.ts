@@ -31,32 +31,44 @@ class ModalWindow {
       popupData.className = 'popup__data';
       popupForm.append(popupData);
 
+      const nameCustomerBlock: HTMLDivElement = document.createElement('div');
+      nameCustomerBlock.className = 'popup__input-block';
       const nameCustomer: HTMLInputElement = document.createElement('input');
       nameCustomer.className = 'popup__input';
       nameCustomer.setAttribute('placeholder', 'Name, Surname');
       nameCustomer.setAttribute('type', 'text');
-      popupData.append(nameCustomer);
+      popupData.append(nameCustomerBlock);
+      nameCustomerBlock.append(nameCustomer);
       nameCustomer.addEventListener('blur', validateName);
 
+      const phoneNumberCustomerBlock: HTMLDivElement = document.createElement('div');
+      phoneNumberCustomerBlock.className = 'popup__input-block';
       const phoneNumberCustomer: HTMLInputElement = document.createElement('input');
       phoneNumberCustomer.className = 'popup__input';
       phoneNumberCustomer.setAttribute('placeholder', 'Phone number');
       phoneNumberCustomer.setAttribute('type', 'tel');
-      popupData.append(phoneNumberCustomer);
+      popupData.append(phoneNumberCustomerBlock);
+      phoneNumberCustomerBlock.append(phoneNumberCustomer);
       phoneNumberCustomer.addEventListener('blur', validatePhone);
 
+      const addressCustomerBlock: HTMLDivElement = document.createElement('div');
+      addressCustomerBlock.className = 'popup__input-block';
       const addressCustomer: HTMLInputElement = document.createElement('input');
       addressCustomer.className = 'popup__input';
       addressCustomer.setAttribute('placeholder', 'Delivery address');
       addressCustomer.setAttribute('type', 'text');
-      popupData.append(addressCustomer);
+      popupData.append(addressCustomerBlock);
+      addressCustomerBlock.append(addressCustomer);
       addressCustomer.addEventListener('blur', validateAddress);
 
+      const emailCustomerBlock: HTMLDivElement = document.createElement('div');
+      emailCustomerBlock.className = 'popup__input-block';
       const emailCustomer: HTMLInputElement = document.createElement('input');
       emailCustomer.className = 'popup__input';
       emailCustomer.setAttribute('placeholder', 'E-mail');
       emailCustomer.setAttribute('type', 'email');
-      popupData.append(emailCustomer);
+      popupData.append(emailCustomerBlock);
+      emailCustomerBlock.append(emailCustomer);
       emailCustomer.addEventListener('blur', validateEmail);
 
       const creditCardTitle: HTMLHeadingElement = document.createElement('h3');
@@ -68,19 +80,22 @@ class ModalWindow {
       creditCardWrapper.className = 'popup__credit-card credit-card';
       popupForm.append(creditCardWrapper);
 
-      const cardNumberBlock: HTMLDivElement = document.createElement('div');
-      cardNumberBlock.className = 'credit-card__number-block';
-      creditCardWrapper.append(cardNumberBlock);
+      const cardNumberWrapper: HTMLDivElement = document.createElement('div');
+      cardNumberWrapper.className = 'credit-card__number-block';
+      creditCardWrapper.append(cardNumberWrapper);
 
       const cardNumberImage: HTMLDivElement = document.createElement('div');
       cardNumberImage.className = 'credit-card__image';
-      cardNumberBlock.append(cardNumberImage);
+      cardNumberWrapper.append(cardNumberImage);
 
+      const cardNumberBlock: HTMLDivElement = document.createElement('div');
+      cardNumberBlock.className = 'popup__input-block';
       const cardNumber: HTMLInputElement = document.createElement('input');
       cardNumber.className = 'popup__input credit-card__number';
       cardNumber.setAttribute('placeholder', 'Card number');
       cardNumber.setAttribute('type', 'text');
       cardNumber.setAttribute('maxlength', '19');
+      cardNumberWrapper.append(cardNumberBlock);
       cardNumberBlock.append(cardNumber);
       cardNumber.addEventListener('blur', validateCard);
       cardNumber.addEventListener('keyup', handleCardChange);
@@ -94,12 +109,15 @@ class ModalWindow {
       validDateLabel.textContent = 'Valid thru:';
       cardValidBlock.append(validDateLabel);
 
+      const validDateInputBlock: HTMLDivElement = document.createElement('div');
+      validDateInputBlock.className = 'popup__input-block popup__input-block_valid';
       const validDateInput: HTMLInputElement = document.createElement('input');
       validDateInput.className = 'popup__input credit-card__valid';
       validDateInput.setAttribute('placeholder', 'Date');
       validDateInput.setAttribute('type', 'text');
       validDateInput.setAttribute('maxlength', '5');
-      validDateLabel.append(validDateInput);
+      validDateLabel.append(validDateInputBlock);
+      validDateInputBlock.append(validDateInput);
       validDateInput.addEventListener('blur', validateDateCard);
       validDateInput.addEventListener('keyup', handleDateCard);
 
@@ -108,12 +126,15 @@ class ModalWindow {
       validCodeLabel.textContent = 'CVV:';
       cardValidBlock.append(validCodeLabel);
 
+      const validCodeInputBlock: HTMLDivElement = document.createElement('div');
+      validCodeInputBlock.className = 'popup__input-block popup__input-block_valid';
       const validCodeInput: HTMLInputElement = document.createElement('input');
       validCodeInput.className = 'popup__input credit-card__valid';
       validCodeInput.setAttribute('placeholder', 'Code');
       validCodeInput.setAttribute('type', 'text');
       validCodeInput.setAttribute('maxlength', '3');
-      validCodeLabel.append(validCodeInput);
+      validCodeLabel.append(validCodeInputBlock);
+      validCodeInputBlock.append(validCodeInput);
       validCodeInput.addEventListener('blur', validateCVV);
 
       const popupButton: HTMLButtonElement = document.createElement('button');
@@ -142,8 +163,23 @@ class ModalWindow {
 
       function validation() {
         inputList.forEach((input: HTMLInputElement): void => {
+          const parentChildNodes = input.parentElement?.childNodes;
+          const errorElement = parentChildNodes ? parentChildNodes[1] : null;
+
           if (input.value === '') {
+            const elError: HTMLParagraphElement = document.createElement('p');
+            elError.className = 'error-message';
+            elError.textContent = 'Error! Invalid field value';
+
+            if (!errorElement) {
+              input.after(elError);
+            }
+
             inputAddError(input);
+          } else {
+            if (errorElement) {
+              errorElement.remove();
+            }
           }
         });
       }
@@ -156,11 +192,32 @@ class ModalWindow {
         el.classList.remove('error');
       }
 
-      function toggleError (value: boolean, el: HTMLInputElement): void {
-        if (!value) {
+      function toggleError(isValid: boolean, el: HTMLInputElement): void {
+        if (!isValid) {
           inputAddError(el);
         } else {
           inputRemoveError(el);
+        }
+
+        addErrorMessage(isValid, el);
+      }
+
+      function addErrorMessage(booleanValue: boolean, item: HTMLInputElement): void {
+        const parentChildNodes = item.parentElement?.childNodes;
+        const errorElement = parentChildNodes ? parentChildNodes[1] : null;
+
+        if (!booleanValue) {
+          const elError: HTMLParagraphElement = document.createElement('p');
+          elError.className = 'error-message';
+          elError.textContent = 'Error! Invalid field value';
+
+          if (!errorElement) {
+            item.after(elError);
+          }
+        } else {
+          if (errorElement) {
+            errorElement.remove();
+          }
         }
       }
 
