@@ -14,6 +14,7 @@
         width: 180px;
         height: 50px;
         font-size: 0.9rem;
+        font-family: $roboto-light-font;
 
         .sort__title {
             position: absolute;
@@ -41,7 +42,7 @@
     }
 
     .sort__counter {
-        font-size: 1rem;
+        font-size: 1.1rem;
 
         .sort__counter-display {
             display: inline-block;
@@ -57,6 +58,7 @@
         padding: 5px;
         outline: none;
         border: 2px $black-color solid;
+        font-family: $roboto-light-font;
     }
 
     .view__container {

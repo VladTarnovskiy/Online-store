@@ -52,7 +52,7 @@ class Result {
     promoHint.textContent = "Promo (-10%): 'RS', 'RSSchool'";
 
     const resultButton = <HTMLElement>document.createElement('button');
-    resultButton.className = 'result__button';
+    resultButton.className = 'button_buy';
     resultButton.textContent = 'Place order';
 
     basketResult.appendChild(basketTitle);

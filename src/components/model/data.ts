@@ -49,7 +49,7 @@ export const productData = {
       brand: 'Samsung',
       category: 'smartphones',
       thumbnail: 'https://i.dummyjson.com/data/products/3/thumbnail.jpg',
-      images: ['https://i.dummyjson.com/data/products/3/1.jpg', 'https://i.dummyjson.com/data/products/3/1.jpg'],
+      images: ['https://i.dummyjson.com/data/products/3/1.jpg', 'https://i.dummyjson.com/data/products/4/4.jpg'],
     },
     {
       id: 4,

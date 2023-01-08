@@ -16,9 +16,14 @@
         gap: 10px;
 
         .product-none-info {
-            font-size: 2rem;
+            font-size: 3rem;
+            height: 100%;
+            width: 100%;
+            padding-top: 200px;
+            padding-bottom: 200px;
             text-align: center;
             font-family: $roboto-light-font;
+            box-sizing: border-box;
         }
     }
 

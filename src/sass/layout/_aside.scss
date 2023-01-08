@@ -120,6 +120,8 @@
     .filter-block__text {
         display: inline-flex;
         align-items: center;
+        font-family: $roboto-light-font;
+
 
         &::before {
             content: '✓';
@@ -136,6 +138,7 @@
     }
 
     .filter-block__value {
+        font-family: $roboto-light-font;
         margin-left: auto;
         padding-right: 10px;
     }
@@ -175,6 +178,8 @@
         display: flex;
         justify-content: space-between;
         font-size: 18px;
+        font-family: $roboto-light-font;
+        font-weight: 300;
     }
 
     .slider-text__min-price::after,

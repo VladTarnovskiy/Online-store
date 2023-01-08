@@ -17,7 +17,7 @@ class ProductDetail {
   }
 
   draw(): void {
-    this.PageGrid.drawGrid();
+    this.PageGrid.draw();
     this.header.draw();
     this.footer.draw();
   }

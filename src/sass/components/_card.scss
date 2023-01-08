@@ -38,6 +38,8 @@
         padding: 5px;
         border: 1px $white-color solid;
         font-size: 0.8rem;
+        font-family: $roboto-light-font;
+
 
         .card__property {
             list-style: none;
@@ -165,6 +167,7 @@
             text-align: center;
             color: $black-color;
             margin-bottom: 2px;
+            font-family: $roboto-light-font;
         }
 
         .card__value_price {
@@ -324,6 +327,7 @@
             text-align: center;
             color: $black-color;
             margin-bottom: 2px;
+            font-family: $roboto-light-font;
         }
 
         .card__value_price {
@@ -367,6 +371,7 @@
             align-items: center;
             height: 40px;
             width: 100%;
+
 
             .card__rate {
                 font-size: 1rem;
