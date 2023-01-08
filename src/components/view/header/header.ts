@@ -1,5 +1,3 @@
-// import Logo from '../../../assets/logo-x.png'
-
 class Header {
   draw(): void {
     const header = <HTMLElement>document.querySelector('.header');

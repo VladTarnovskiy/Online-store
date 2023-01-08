@@ -34,20 +34,13 @@ export interface Data {
   limit: number;
 }
 
-export interface DataObject {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-  images: string[];
-}
-
 export interface DataValueEachOfCategory {
   [key: string]: number;
+}
+
+export const enum PageIds {
+  MainPage = 'main-page',
+  BasketPage = 'basket-page',
+  Product = 'product',
+  ErrorPage = 'erorr-page',
 }

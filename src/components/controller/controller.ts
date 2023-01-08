@@ -1,12 +1,6 @@
 import AppView from '../view/appView';
 import { Model } from '../model/model';
-
-export const enum PageIds {
-  MainPage = 'main-page',
-  BasketPage = 'basket-page',
-  Product = 'product',
-  ErrorPage = 'erorr-page',
-}
+import { PageIds } from '../types/types';
 
 class AppController extends Model {
   private static container: HTMLElement = document.body;
@@ -33,7 +27,6 @@ class AppController extends Model {
       this.getDetailPage();
       this.getfilterCategoryrData();
       this.resetFilters();
-      // this.buyProducts();
     } else if (idPage === PageIds.BasketPage) {
       this.view.drawBasket();
       this.viewCardBasket(this.arrProductsBasket);
@@ -44,11 +37,9 @@ class AppController extends Model {
       this.view.drawProdDetail();
       this.addDetailPage(Number(localStorage.getItem('prodId')) || 1);
       this.addProductsCart();
+    } else {
+      this.view.drawError();
     }
-    // else {
-    //   // this.drawError();
-    //   alert('Error, basket dont realize yet');
-    // }
   }
 
   private enableRouteChange() {
@@ -101,7 +92,6 @@ class AppController extends Model {
         this.addProduct(event);
       });
     });
-    // this.productsSearch();
   }
 
   private getfilterCategoryrData() {
@@ -117,7 +107,7 @@ class AppController extends Model {
     });
 
     sliders.forEach((item) => {
-      item.addEventListener('input', (event) => {
+      item.addEventListener('input', () => {
         this.filterByRange();
         this.addProductsCart();
         this.getDetailPage();
@@ -147,14 +137,6 @@ class AppController extends Model {
       });
     });
   }
-
-  // private buyProducts() {
-  //   const buyButton = <HTMLElement>document.querySelector('.button_popup');
-  //   buyButton.addEventListener('click', () => {
-  //     console.log('dddddd');
-  //     this.renderNewPage('main-page');
-  //   });
-  // }
 
   run() {
     this.enableRouteChange();

@@ -3,7 +3,6 @@ class Result {
     const container = <HTMLElement>document.querySelector('.main');
     container.id = 'basket';
 
-    //result
     const basketResult = <HTMLElement>document.querySelector('.basket__result');
 
     const basketTitle = <HTMLElement>document.createElement('div');
