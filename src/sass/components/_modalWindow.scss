@@ -45,6 +45,7 @@
     border: 1px solid $blue-color;
     border-radius: 10px;
     padding: 5px;
+    width: 100%;
   }
 
   .popup__input.error {
@@ -96,6 +97,8 @@
   }
 
   .credit-card__valid-label {
+    display: flex;
+    align-items: baseline;
     font-size: 14px;
     color: $white-color;
   }
@@ -105,5 +108,11 @@
     max-width: 50px;
     padding: 3px;
     margin-left: 3px;
+  }
+
+  .error-message {
+    font-size: 14px;
+    color: $bright-red-color;
+    margin: 0;
   }
 }

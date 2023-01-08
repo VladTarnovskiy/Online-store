@@ -31,29 +31,45 @@ class ModalWindow {
       popupData.className = 'popup__data';
       popupForm.append(popupData);
 
+      const nameCustomerBlock: HTMLDivElement = document.createElement('div');
+      nameCustomerBlock.className = 'popup__input-block';
       const nameCustomer: HTMLInputElement = document.createElement('input');
       nameCustomer.className = 'popup__input';
       nameCustomer.setAttribute('placeholder', 'Name, Surname');
       nameCustomer.setAttribute('type', 'text');
-      popupData.append(nameCustomer);
+      popupData.append(nameCustomerBlock);
+      nameCustomerBlock.append(nameCustomer);
+      nameCustomer.addEventListener('blur', validateName);
 
+      const phoneNumberCustomerBlock: HTMLDivElement = document.createElement('div');
+      phoneNumberCustomerBlock.className = 'popup__input-block';
       const phoneNumberCustomer: HTMLInputElement = document.createElement('input');
       phoneNumberCustomer.className = 'popup__input';
       phoneNumberCustomer.setAttribute('placeholder', 'Phone number');
       phoneNumberCustomer.setAttribute('type', 'tel');
-      popupData.append(phoneNumberCustomer);
+      popupData.append(phoneNumberCustomerBlock);
+      phoneNumberCustomerBlock.append(phoneNumberCustomer);
+      phoneNumberCustomer.addEventListener('blur', validatePhone);
 
+      const addressCustomerBlock: HTMLDivElement = document.createElement('div');
+      addressCustomerBlock.className = 'popup__input-block';
       const addressCustomer: HTMLInputElement = document.createElement('input');
       addressCustomer.className = 'popup__input';
       addressCustomer.setAttribute('placeholder', 'Delivery address');
       addressCustomer.setAttribute('type', 'text');
-      popupData.append(addressCustomer);
+      popupData.append(addressCustomerBlock);
+      addressCustomerBlock.append(addressCustomer);
+      addressCustomer.addEventListener('blur', validateAddress);
 
+      const emailCustomerBlock: HTMLDivElement = document.createElement('div');
+      emailCustomerBlock.className = 'popup__input-block';
       const emailCustomer: HTMLInputElement = document.createElement('input');
       emailCustomer.className = 'popup__input';
       emailCustomer.setAttribute('placeholder', 'E-mail');
       emailCustomer.setAttribute('type', 'email');
-      popupData.append(emailCustomer);
+      popupData.append(emailCustomerBlock);
+      emailCustomerBlock.append(emailCustomer);
+      emailCustomer.addEventListener('blur', validateEmail);
 
       const creditCardTitle: HTMLHeadingElement = document.createElement('h3');
       creditCardTitle.className = 'popup__title';
@@ -64,20 +80,25 @@ class ModalWindow {
       creditCardWrapper.className = 'popup__credit-card credit-card';
       popupForm.append(creditCardWrapper);
 
-      const cardNumberBlock: HTMLDivElement = document.createElement('div');
-      cardNumberBlock.className = 'credit-card__number-block';
-      creditCardWrapper.append(cardNumberBlock);
+      const cardNumberWrapper: HTMLDivElement = document.createElement('div');
+      cardNumberWrapper.className = 'credit-card__number-block';
+      creditCardWrapper.append(cardNumberWrapper);
 
       const cardNumberImage: HTMLDivElement = document.createElement('div');
       cardNumberImage.className = 'credit-card__image';
-      cardNumberBlock.append(cardNumberImage);
+      cardNumberWrapper.append(cardNumberImage);
 
+      const cardNumberBlock: HTMLDivElement = document.createElement('div');
+      cardNumberBlock.className = 'popup__input-block';
       const cardNumber: HTMLInputElement = document.createElement('input');
       cardNumber.className = 'popup__input credit-card__number';
       cardNumber.setAttribute('placeholder', 'Card number');
       cardNumber.setAttribute('type', 'text');
-      cardNumber.setAttribute('maxlength', '16');
+      cardNumber.setAttribute('maxlength', '19');
+      cardNumberWrapper.append(cardNumberBlock);
       cardNumberBlock.append(cardNumber);
+      cardNumber.addEventListener('blur', validateCard);
+      cardNumber.addEventListener('keyup', handleCardChange);
 
       const cardValidBlock: HTMLDivElement = document.createElement('div');
       cardValidBlock.className = 'credit-card__valid-block';
@@ -88,24 +109,33 @@ class ModalWindow {
       validDateLabel.textContent = 'Valid thru:';
       cardValidBlock.append(validDateLabel);
 
+      const validDateInputBlock: HTMLDivElement = document.createElement('div');
+      validDateInputBlock.className = 'popup__input-block popup__input-block_valid';
       const validDateInput: HTMLInputElement = document.createElement('input');
       validDateInput.className = 'popup__input credit-card__valid';
       validDateInput.setAttribute('placeholder', 'Date');
       validDateInput.setAttribute('type', 'text');
-      validDateInput.setAttribute('maxlength', '4');
-      validDateLabel.append(validDateInput);
+      validDateInput.setAttribute('maxlength', '5');
+      validDateLabel.append(validDateInputBlock);
+      validDateInputBlock.append(validDateInput);
+      validDateInput.addEventListener('blur', validateDateCard);
+      validDateInput.addEventListener('keyup', handleDateCard);
 
       const validCodeLabel: HTMLLabelElement = document.createElement('label');
       validCodeLabel.className = 'credit-card__valid-label';
       validCodeLabel.textContent = 'CVV:';
       cardValidBlock.append(validCodeLabel);
 
+      const validCodeInputBlock: HTMLDivElement = document.createElement('div');
+      validCodeInputBlock.className = 'popup__input-block popup__input-block_valid';
       const validCodeInput: HTMLInputElement = document.createElement('input');
       validCodeInput.className = 'popup__input credit-card__valid';
       validCodeInput.setAttribute('placeholder', 'Code');
       validCodeInput.setAttribute('type', 'text');
       validCodeInput.setAttribute('maxlength', '3');
-      validCodeLabel.append(validCodeInput);
+      validCodeLabel.append(validCodeInputBlock);
+      validCodeInputBlock.append(validCodeInput);
+      validCodeInput.addEventListener('blur', validateCVV);
 
       const popupButton: HTMLButtonElement = document.createElement('button');
       popupButton.className = 'button button_popup';
@@ -122,6 +152,7 @@ class ModalWindow {
         validDateInput,
         validCodeInput,
       ];
+      
       popupForm.onsubmit = formSent;
 
       async function formSent(e: Event) {
@@ -132,44 +163,22 @@ class ModalWindow {
 
       function validation() {
         inputList.forEach((input: HTMLInputElement): void => {
-          inputRemoveError(input);
-          if (input === phoneNumberCustomer) {
-            if (!validatePhone(input.value)) {
-              inputAddError(input);
+          const parentChildNodes = input.parentElement?.childNodes;
+          const errorElement = parentChildNodes ? parentChildNodes[1] : null;
+
+          if (input.value === '') {
+            const elError: HTMLParagraphElement = document.createElement('p');
+            elError.className = 'error-message';
+            elError.textContent = 'Error! Invalid field value';
+
+            if (!errorElement) {
+              input.after(elError);
             }
-          } else if (input === addressCustomer) {
-            if (!validateAddress(input.value)) {
-              inputAddError(input);
-            }
-          } else if (input === nameCustomer) {
-            if (!validateName(input.value)) {
-              inputAddError(input);
-            }
-          } else if (input === emailCustomer) {
-            if (!validateEmail(input.value)) {
-              inputAddError(input);
-            }
-          } else if (input === cardNumber) {
-            if (!validateCard(input.value)) {
-              inputAddError(input);
-            } else if (+input.value[0] === 4) {
-              cardNumberImage.style.backgroundImage = 'url("assets/visa.png")';
-            } else if (+input.value[0] === 5) {
-              cardNumberImage.style.backgroundImage = 'url("assets/master-card.png")';
-            }
-          } else if (input === validDateInput) {
-            if (!validateDateCard(input.value)) {
-              inputAddError(input);
-            } else if (+String(input.value).slice(0, 2) > 12 || String(input.value).slice(0, 2) === '00') {
-              inputAddError(input);
-            }
-          } else if (input === validCodeInput) {
-            if (!/^[0-9]{3}$/.test(String(input.value).toLowerCase())) {
-              inputAddError(input);
-            }
+
+            inputAddError(input);
           } else {
-            if (input.value === '') {
-              inputAddError(input);
+            if (errorElement) {
+              errorElement.remove();
             }
           }
         });
@@ -183,46 +192,124 @@ class ModalWindow {
         el.classList.remove('error');
       }
 
-      function validateName(val: string) {
+      function toggleError(isValid: boolean, el: HTMLInputElement): void {
+        if (!isValid) {
+          inputAddError(el);
+        } else {
+          inputRemoveError(el);
+        }
+
+        addErrorMessage(isValid, el);
+      }
+
+      function addErrorMessage(booleanValue: boolean, item: HTMLInputElement): void {
+        const parentChildNodes = item.parentElement?.childNodes;
+        const errorElement = parentChildNodes ? parentChildNodes[1] : null;
+
+        if (!booleanValue) {
+          const elError: HTMLParagraphElement = document.createElement('p');
+          elError.className = 'error-message';
+          elError.textContent = 'Error! Invalid field value';
+
+          if (!errorElement) {
+            item.after(elError);
+          }
+        } else {
+          if (errorElement) {
+            errorElement.remove();
+          }
+        }
+      }
+
+      function validateName(this: HTMLInputElement): void {
         const reg = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
-        // const reg: RegExp = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
-        return reg.test(String(val).toLowerCase());
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
       }
 
-      function validatePhone(val: string) {
+      function validatePhone(this: HTMLInputElement): void {
         const reg = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
-        // const reg: RegExp = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
-        return reg.test(String(val).toLowerCase());
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
       }
 
-      function validateAddress(val: string) {
-        const reg = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
-        // const reg: RegExp = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
+      function validateAddress(this: HTMLInputElement): void {
+        const reg = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z0-9]{5,}( [а-яА-ЯёЁa-zA-Z0-9]{5,})?$/;
+        const result = reg.test(String(this.value).toLowerCase());
 
-        return reg.test(String(val).toLowerCase());
+        toggleError(result, this);
       }
 
-      function validateEmail(val: string) {
+      function validateEmail(this: HTMLInputElement): void {
         const reg = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
-        // const reg: RegExp = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
+        const result = reg.test(String(this.value).toLowerCase());
 
-        return reg.test(String(val).toLowerCase());
+        toggleError(result, this);
       }
 
-      function validateCard(val: string) {
-        const reg = /^[0-9]{16}$/;
-        // const reg: RegExp = /^[0-9]{16}$/;
+      function validateCard(this: HTMLInputElement): void {
+        const reg = /^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$/;
+        const result = reg.test(String(this.value).toLowerCase());
 
-        return reg.test(String(val).toLowerCase());
+        toggleError(result, this);
       }
 
-      function validateDateCard(val: string) {
-        const reg = /^[0-9]{4}$/;
-        // const reg: RegExp = /^[0-9]{4}$/;
-        return reg.test(String(val).toLowerCase());
+      function validateDateCard(this: HTMLInputElement): void {
+        const reg = /^[0-9]{2}\/[0-9]{2}$/;
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
+
+        if (+this.value.slice(0, 2) > 12 || this.value.slice(0, 2) === '00') {
+          inputAddError(this);
+        }
+      }
+
+      function validateCVV (this: HTMLInputElement): void {
+        const reg = /^[0-9]{3}$/;
+        const result = reg.test(String(this.value).toLowerCase());
+
+        toggleError(result, this);
+      }
+
+      function handleCardChange(this: HTMLInputElement): void {
+        renderCardLogo(this);
+
+        if (this.value.length > 0) {
+          const clearString = this.value.split(' ').join('');
+          const res = clearString.match(new RegExp('.{1,4}', 'g'))?.join(' ');
+
+          if (res) {
+            this.value = res;
+          }
+        }
+      }
+
+      function renderCardLogo(el: HTMLInputElement): void {
+        if (+el.value[0] === 3) {
+          cardNumberImage.style.backgroundImage = 'url("https://logodownload.org/wp-content/uploads/2014/04/amex-american-express-logo-4.png")';
+        } else if (+el.value[0] === 4) {
+          cardNumberImage.style.backgroundImage = 'url("https://w7.pngwing.com/pngs/618/512/png-transparent-visa-logo-mastercard-credit-card-payment-visa-blue-company-text.png")';
+        } else if (+el.value[0] === 5) {
+          cardNumberImage.style.backgroundImage = 'url("https://w7.pngwing.com/pngs/23/320/png-transparent-mastercard-credit-card-visa-payment-service-mastercard-company-orange-logo.png")';
+        } else {
+          cardNumberImage.style.backgroundImage = 'url(../assets/no-logo.png)';
+        }
+      }
+
+      function handleDateCard(this: HTMLInputElement): void {
+        if (this.value.length > 0) {
+          const clearString = this.value.split('/').join('');
+          const res = clearString.match(new RegExp('.{1,2}', 'g'))?.join('/');
+
+          if (res) {
+            this.value = res;
+          }
+        }
       }
     }
-
     modalButton.addEventListener('click', modalWindow);
   }
 }
