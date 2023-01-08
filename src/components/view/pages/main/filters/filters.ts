@@ -15,8 +15,17 @@ class Filters {
     buttonsBlock.append(resetButton);
 
     const copyButton: HTMLButtonElement = document.createElement('button');
-    copyButton.className = 'button button_filters';
+    copyButton.className = 'button button_filters button_copy-url';
     copyButton.textContent = 'Copy settings';
+
+    copyButton.addEventListener('click', () => {
+      copyButton.textContent = 'Copied!';
+      copyButton.classList.add('active');
+      setTimeout(() => {
+        copyButton.textContent = 'Copy settings';
+        copyButton.classList.remove('active');
+      }, 1500);
+    });
     buttonsBlock.append(copyButton);
 
     const categoryWrapper: HTMLDivElement = document.createElement('div');

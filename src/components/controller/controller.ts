@@ -25,11 +25,11 @@ class AppController extends Model {
 
     if (idPage === PageIds.MainPage || idPage === '') {
       this.view.drawMain();
-      this.productsSearch();
-      this.productsSort();
-      this.productsView();
       this.localStorage();
       this.addProductsCart();
+      this.productsView();
+      this.productsSearch();
+      this.productsSort();
       this.getDetailPage();
       this.getfilterCategoryrData();
       this.resetFilters();
@@ -88,9 +88,9 @@ class AppController extends Model {
   private productsSearch() {
     const searchInput = <HTMLElement>document.querySelector('.products__search');
     searchInput.addEventListener('input', (event) => {
-      this.getDetailPage();
       this.searchProducts(event);
       this.addProductsCart();
+      this.getDetailPage();
     });
   }
 

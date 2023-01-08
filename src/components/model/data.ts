@@ -49,7 +49,7 @@ export const productData = {
       brand: 'Samsung',
       category: 'smartphones',
       thumbnail: 'https://i.dummyjson.com/data/products/3/thumbnail.jpg',
-      images: ['https://i.dummyjson.com/data/products/3/1.jpg'],
+      images: ['https://i.dummyjson.com/data/products/3/1.jpg', 'https://i.dummyjson.com/data/products/3/1.jpg'],
     },
     {
       id: 4,
@@ -534,13 +534,11 @@ export const productData = {
       stock: 7,
       brand: 'luxury palace',
       category: 'home-decoration',
-      thumbnail: 'https://i.dummyjson.com/data/products/29/thumbnail.webp',
+      thumbnail: 'https://i.dummyjson.com/data/products/29/1.jpg',
       images: [
         'https://i.dummyjson.com/data/products/29/1.jpg',
         'https://i.dummyjson.com/data/products/29/2.jpg',
         'https://i.dummyjson.com/data/products/29/3.webp',
-        'https://i.dummyjson.com/data/products/29/4.webp',
-        'https://i.dummyjson.com/data/products/29/thumbnail.webp',
       ],
     },
     {
@@ -1694,7 +1692,7 @@ export const productData = {
     },
     {
       id: 92,
-      title: 'Hot sale in europe electric racing motorcycle',
+      title: 'Hot sale in europe motorcycle',
       description:
         'Hot sale in europe electric racing motorcycle electric motorcycle for sale adult electric motorcycles',
       price: 920,
