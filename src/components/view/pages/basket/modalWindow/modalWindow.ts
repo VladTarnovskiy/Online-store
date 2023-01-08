@@ -80,10 +80,10 @@ class ModalWindow {
       cardNumber.className = 'popup__input credit-card__number';
       cardNumber.setAttribute('placeholder', 'Card number');
       cardNumber.setAttribute('type', 'text');
-      cardNumber.setAttribute('maxlength', '16');
+      cardNumber.setAttribute('maxlength', '19');
       cardNumberBlock.append(cardNumber);
       cardNumber.addEventListener('blur', validateCard);
-      cardNumber.addEventListener('keyup', renderCardLogo);
+      cardNumber.addEventListener('keyup', handleCardChange);
 
       const cardValidBlock: HTMLDivElement = document.createElement('div');
       cardValidBlock.className = 'credit-card__valid-block';
@@ -101,6 +101,7 @@ class ModalWindow {
       validDateInput.setAttribute('maxlength', '5');
       validDateLabel.append(validDateInput);
       validDateInput.addEventListener('blur', validateDateCard);
+      validDateInput.addEventListener('keyup', handleDateCard);
 
       const validCodeLabel: HTMLLabelElement = document.createElement('label');
       validCodeLabel.className = 'credit-card__valid-label';
@@ -192,19 +193,19 @@ class ModalWindow {
       }
 
       function validateCard(this: HTMLInputElement): void {
-        const reg = /^[0-9]{16}$/;
+        const reg = /^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$/;
         const result = reg.test(String(this.value).toLowerCase());
 
         toggleError(result, this);
       }
 
       function validateDateCard(this: HTMLInputElement): void {
-        const reg = /^[0-9]{4}$/;
+        const reg = /^[0-9]{2}\/[0-9]{2}$/;
         const result = reg.test(String(this.value).toLowerCase());
 
         toggleError(result, this);
 
-        if (+String(this.value).slice(0, 2) > 12 || String(this.value).slice(0, 2) === '00') {
+        if (+this.value.slice(0, 2) > 12 || this.value.slice(0, 2) === '00') {
           inputAddError(this);
         }
       }
@@ -216,15 +217,39 @@ class ModalWindow {
         toggleError(result, this);
       }
 
-      function renderCardLogo(this: HTMLInputElement): void {
-        if (+this.value[0] === 3) {
+      function handleCardChange(this: HTMLInputElement): void {
+        renderCardLogo(this);
+
+        if (this.value.length > 0) {
+          const clearString = this.value.split(' ').join('');
+          const res = clearString.match(new RegExp('.{1,4}', 'g'))?.join(' ');
+
+          if (res) {
+            this.value = res;
+          }
+        }
+      }
+
+      function renderCardLogo(el: HTMLInputElement): void {
+        if (+el.value[0] === 3) {
           cardNumberImage.style.backgroundImage = 'url("https://logodownload.org/wp-content/uploads/2014/04/amex-american-express-logo-4.png")';
-        } else if (+this.value[0] === 4) {
+        } else if (+el.value[0] === 4) {
           cardNumberImage.style.backgroundImage = 'url("https://w7.pngwing.com/pngs/618/512/png-transparent-visa-logo-mastercard-credit-card-payment-visa-blue-company-text.png")';
-        } else if (+this.value[0] === 5) {
+        } else if (+el.value[0] === 5) {
           cardNumberImage.style.backgroundImage = 'url("https://w7.pngwing.com/pngs/23/320/png-transparent-mastercard-credit-card-visa-payment-service-mastercard-company-orange-logo.png")';
         } else {
           cardNumberImage.style.backgroundImage = 'url(../assets/no-logo.png)';
+        }
+      }
+
+      function handleDateCard(this: HTMLInputElement): void {
+        if (this.value.length > 0) {
+          const clearString = this.value.split('/').join('');
+          const res = clearString.match(new RegExp('.{1,2}', 'g'))?.join('/');
+
+          if (res) {
+            this.value = res;
+          }
         }
       }
     }
