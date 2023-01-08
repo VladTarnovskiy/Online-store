@@ -32,7 +32,7 @@ class Header {
 
     const totalPriceHeader = <HTMLElement>document.createElement('a');
     totalPriceHeader.className = 'total-price_header';
-    totalPriceHeader.textContent = '0 $';
+    totalPriceHeader.textContent = 'Total: 0 $';
 
     headerLogo.appendChild(imgLogo);
     headerTitlewrap.appendChild(headerLogo);

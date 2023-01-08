@@ -219,6 +219,11 @@ class Card {
     const card = <HTMLElement>document.createElement('div');
     card.className = 'card card_basket';
 
+    const numberProd = <HTMLElement>document.createElement('div');
+    numberProd.className = 'card__number';
+    numberProd.textContent = '0';
+    card.appendChild(numberProd);
+
     const wrapperImg = <HTMLElement>document.createElement('div');
     wrapperImg.className = 'wrapper__img';
     card.appendChild(wrapperImg);

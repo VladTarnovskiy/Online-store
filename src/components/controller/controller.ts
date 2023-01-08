@@ -129,6 +129,7 @@ class AppController extends Model {
     const buttonReset = <HTMLElement>document.querySelector('.button_filters-reset');
     buttonReset.addEventListener('click', () => {
       this.getResetFilters();
+      this.getDetailPage();
     });
   }
 

@@ -272,6 +272,17 @@
     border: 1px solid $light-black-color;
     max-width: none;
 
+    .card__number {
+        font-size: 1.5rem;
+        color: $black-color;
+        margin-right: 10px;
+        background-color: $white-color;
+        box-shadow: $box-shadow;
+        border-radius: 3px;
+        padding: 2px;
+        font-family: $roboto-light-font;
+    }
+
     .wrapper__img {
         // width: 400px;
         // height: 100%;

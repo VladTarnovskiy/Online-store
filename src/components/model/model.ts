@@ -38,6 +38,7 @@ export class Model extends AppView {
       noneProductInfo.textContent = 'No products found.';
       productsContainer.appendChild(noneProductInfo);
     }
+    this.localStorage();
   }
 
   sortProducts(e: Event) {
@@ -45,8 +46,9 @@ export class Model extends AppView {
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
     this.sortWays(target.value);
-    this.localStorage();
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+
+    this.localStorage();
   }
 
   sortWays(data: string | null) {
@@ -293,6 +295,22 @@ export class Model extends AppView {
     const amountCatDisplays = document.querySelectorAll<HTMLElement>('.display_category');
     const amountBrandDisplays = document.querySelectorAll<HTMLElement>('.display_brand');
 
+    // const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
+    // const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
+    // const minStock = <HTMLInputElement>document.querySelector('.slider__range_left-stock');
+    // const maxStock = <HTMLInputElement>document.querySelector('.slider__range_right-stock');
+
+    // const arrPrice: number[] = [];
+    // const arrStock: number[] = [];
+    // this.filterDataProduct.forEach((item) => {
+    //   arrPrice.push(item.price);
+    //   arrStock.push(item.stock);
+    // });
+    // minPrice.value = String(Math.min.apply(null, arrPrice));
+    // maxPrice.value = String(Math.max.apply(null, arrPrice));
+    // minStock.value = String(Math.min.apply(null, arrPrice));
+    // maxStock.value = String(Math.max.apply(null, arrPrice));
+
     amountCatDisplays.forEach((itemDisp) => {
       let count = 0;
       this.filterDataProduct.forEach((itemData) => {
@@ -356,6 +374,14 @@ export class Model extends AppView {
       });
     }
 
+    this.arrCategory.forEach((item) => {
+      this.arrProductsBasket.forEach((itemBasket) => {
+        if (item.id === itemBasket.id) {
+          item.inBasket = true;
+        }
+      });
+    });
+
     const arrCategRange: CardItem[] = [];
     const result: CardItem[] = [];
     this.arrCategory.forEach((itemC) => {
@@ -403,13 +429,7 @@ export class Model extends AppView {
 
       // const resultPrice = localStorage.getItem('resultPrice');
       // if (resultPrice) {
-      let count = 0;
-      this.arrProductsBasket.forEach((item) => {
-        count += item.price * item.amount!;
-      });
-      const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
-      console.log(totalPriceHeader);
-      totalPriceHeader.textContent = `${count} $`;
+      this.addTotalPrice();
       // }
 
       basketChecker.textContent = `${this.arrProductsBasket.length}`;
@@ -417,6 +437,7 @@ export class Model extends AppView {
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
       // this.basketCardChangeInfo();
     });
+    // this.localStorage();
   }
 
   addDetailPage(data: number) {
@@ -428,6 +449,17 @@ export class Model extends AppView {
         this.modalWindow.draw('.prod__but-buy');
       }
     });
+    this.addTotalPrice();
+  }
+
+  addTotalPrice() {
+    let count = 0;
+    this.arrProductsBasket.forEach((item) => {
+      count += item.price * item.amount!;
+    });
+    const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
+    totalPriceHeader.textContent = `Total: ${count} $`;
+    localStorage.setItem('resultPrice', `${count}`);
   }
 
   showResultBasket() {
@@ -436,9 +468,12 @@ export class Model extends AppView {
     const resultPriceCounter = <HTMLElement>document.querySelector('.result__price-counter');
     const resultPromo = <HTMLInputElement>document.querySelector('.result__promo');
     const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
+    const numberProduct = document.querySelectorAll<HTMLElement>('.card__number');
     basketChecker.textContent = `${this.arrProductsBasket.length}`;
+
     let countAmount = 0;
     let countTotalPrice = 0;
+
     this.arrProductsBasket.forEach((item) => {
       countAmount = countAmount + item.amount!;
     });
@@ -447,6 +482,19 @@ export class Model extends AppView {
     });
     resultCounter.textContent = String(countAmount);
     resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
+
+    const productsContainer = <HTMLElement>document.querySelector('.main');
+    if (this.arrProductsBasket.length === 0) {
+      productsContainer.replaceChildren();
+      const noneProductInfo = <HTMLElement>document.createElement('div');
+      noneProductInfo.className = 'product-none-info';
+      noneProductInfo.textContent = 'Cart is empty.';
+      productsContainer.appendChild(noneProductInfo);
+    }
+
+    numberProduct.forEach((item, index) => {
+      item.textContent = `${index + 1}.`;
+    });
 
     if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
       resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
@@ -459,7 +507,10 @@ export class Model extends AppView {
     } else {
       resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
     }
-    localStorage.setItem('resultPrice', `${countTotalPrice.toFixed(2)} $`);
+    localStorage.setItem('resultPrice', `${countTotalPrice}`);
+
+    this.addTotalPrice();
+
     this.showPromoCodeBasket(countTotalPrice);
   }
 
@@ -470,30 +521,33 @@ export class Model extends AppView {
     const resultPricePromo = <HTMLElement>document.querySelector('.result__price_promo');
     const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
     const resulPromoPercentr = <HTMLElement>document.querySelector('.result__percent_promo');
-    resultPromo.addEventListener('input', () => {
-      if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
-        resultPrice.classList.add('promo_disabled');
-        resultPricePromo.classList.add('promo_active');
-        resulPromoPercentr.classList.add('promo_active');
-        resulPromoPercentr.textContent = '-10%';
-        resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
-      } else if (
-        resultPromo.value === 'RS, RSSchool' ||
-        resultPromo.value === 'RS,RSSchool' ||
-        resultPromo.value === 'RS RSSchool'
-      ) {
-        resultPrice.classList.add('promo_disabled');
-        resultPricePromo.classList.add('promo_active');
-        resulPromoPercentr.classList.add('promo_active');
-        resulPromoPercentr.textContent = '-20%';
-        resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.8).toFixed(2)} $`;
-      } else {
-        resultPrice.classList.remove('promo_disabled');
-        resultPricePromo.classList.remove('promo_active');
-        resulPromoPercentr.classList.remove('promo_active');
-        resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
-      }
-    });
+
+    if (resultPromo) {
+      resultPromo.addEventListener('input', () => {
+        if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
+          resultPrice.classList.add('promo_disabled');
+          resultPricePromo.classList.add('promo_active');
+          resulPromoPercentr.classList.add('promo_active');
+          resulPromoPercentr.textContent = '-10%';
+          resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
+        } else if (
+          resultPromo.value === 'RS, RSSchool' ||
+          resultPromo.value === 'RS,RSSchool' ||
+          resultPromo.value === 'RS RSSchool'
+        ) {
+          resultPrice.classList.add('promo_disabled');
+          resultPricePromo.classList.add('promo_active');
+          resulPromoPercentr.classList.add('promo_active');
+          resulPromoPercentr.textContent = '-20%';
+          resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.8).toFixed(2)} $`;
+        } else {
+          resultPrice.classList.remove('promo_disabled');
+          resultPricePromo.classList.remove('promo_active');
+          resulPromoPercentr.classList.remove('promo_active');
+          resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
+        }
+      });
+    }
   }
 
   basketCardChangeInfo() {
@@ -584,6 +638,15 @@ export class Model extends AppView {
       this.filterDataProduct = filtData;
     }
 
+    this.filterDataProduct.forEach((item) => {
+      item.inBasket = false;
+      this.arrProductsBasket.forEach((itemBasket) => {
+        if (item.id === itemBasket.id) {
+          item.inBasket = true;
+        }
+      });
+    });
+
     //products sort
     const sortProd = localStorage.getItem('sort');
     const sortSelect = document.querySelectorAll<HTMLInputElement>('.select__item');
@@ -591,7 +654,6 @@ export class Model extends AppView {
       if (item.value === `${sortProd}`) {
         item.setAttribute('selected', '');
         this.sortWays(sortProd);
-        console.log(sortProd);
       }
     });
 
@@ -715,8 +777,7 @@ export class Model extends AppView {
     const resultPrice = localStorage.getItem('resultPrice');
     if (resultPrice) {
       const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
-      console.log(totalPriceHeader);
-      totalPriceHeader.textContent = `${resultPrice} $`;
+      totalPriceHeader.textContent = `Total: ${resultPrice} $`;
     }
     // const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
     // totalPriceHeader.textContent = '0 $';

@@ -41,6 +41,13 @@
         }
     }
 
+    .total-price_header {
+        font-size: 1rem;
+        width: 120px;
+        display: inline-block;
+        font-family: $roboto-light-font;
+    }
+
     .basket {
         display: flex;
         justify-content: center;
