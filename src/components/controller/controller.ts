@@ -33,17 +33,17 @@ class AppController extends Model {
       this.getDetailPage();
       this.getfilterCategoryrData();
       this.resetFilters();
+      // this.buyProducts();
     } else if (idPage === PageIds.BasketPage) {
       this.view.drawBasket();
       this.viewCardBasket(this.arrProductsBasket);
       this.showResultBasket();
       this.basketCardChangeInfo();
+      this.getPageAfterPay('.button_buy');
     } else if (idPage === PageIds.Product) {
       this.view.drawProdDetail();
-
-      this.addDetailPage(Number(localStorage.getItem('prodId')));
+      this.addDetailPage(Number(localStorage.getItem('prodId')) || 1);
       this.addProductsCart();
-      // this.showResultBasket();
     }
     // else {
     //   // this.drawError();
@@ -130,6 +130,7 @@ class AppController extends Model {
     buttonReset.addEventListener('click', () => {
       this.getResetFilters();
       this.getDetailPage();
+      this.addProductsCart();
     });
   }
 
@@ -141,10 +142,19 @@ class AppController extends Model {
         const hash = window.location.hash.slice(1);
         const target = <HTMLElement>e.target;
         this.renderNewPage(hash);
+
         localStorage.setItem('prodId', `${target.dataset.id}`);
       });
     });
   }
+
+  // private buyProducts() {
+  //   const buyButton = <HTMLElement>document.querySelector('.button_popup');
+  //   buyButton.addEventListener('click', () => {
+  //     console.log('dddddd');
+  //     this.renderNewPage('main-page');
+  //   });
+  // }
 
   run() {
     this.enableRouteChange();

@@ -11,7 +11,6 @@ export class Model extends AppView {
   arrProductsBasket: CardItem[] = [];
   arrFiltCategory: string[] = [];
   arrWaysBrand: string[] = [];
-
   arrRange: CardItem[] = [];
   arrSearch: CardItem[] = [];
   arrCategory: CardItem[] = [];
@@ -47,7 +46,6 @@ export class Model extends AppView {
     productsContainer.replaceChildren();
     this.sortWays(target.value);
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
-
     this.localStorage();
   }
 
@@ -242,11 +240,7 @@ export class Model extends AppView {
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
     const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    // console.log(this.initDataProduct);
     const data = Array.from(this.initDataProduct);
-    // const data = Object.freeze(Object.assign({}, this.initDataProduct));
-    // console.log(data);
-    // ASK MENTOR!!!!!!!!!!! WHY ARE BOTH ARRAYS CHANGING IF I CHANGE ONLY COPY'S ARRAY
     data.forEach((item) => {
       item.inBasket = false;
     });
@@ -419,25 +413,18 @@ export class Model extends AppView {
         } else {
           this.arrProductsBasket.forEach((itemBasket, index) => {
             if (itemBasket.id === item.id) {
-              // target.classList.remove('card__button-add_active');
               item.inBasket = false;
               this.arrProductsBasket.splice(index, 1);
             }
           });
         }
       }
-
-      // const resultPrice = localStorage.getItem('resultPrice');
-      // if (resultPrice) {
       this.addTotalPrice();
-      // }
 
       basketChecker.textContent = `${this.arrProductsBasket.length}`;
       localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
-      // this.basketCardChangeInfo();
     });
-    // this.localStorage();
   }
 
   addDetailPage(data: number) {
@@ -446,10 +433,23 @@ export class Model extends AppView {
     this.filterDataProduct.forEach((item) => {
       if (item.id === data) {
         this.card.darwCardDetailPage(item);
-        this.modalWindow.draw('.prod__but-buy');
       }
     });
     this.addTotalPrice();
+    this.getPageAfterPay('.prod__but-buy');
+  }
+
+  getPageAfterPay(data: string) {
+    this.modalWindow.draw(data);
+    const prodButBuy = <HTMLElement>document.querySelector(data);
+    prodButBuy.addEventListener('click', () => {
+      const buyButton = <HTMLElement>document.querySelector('.button_popup');
+      buyButton.addEventListener('click', () => {
+        window.location.href = '#main-page';
+        this.arrProductsBasket = [];
+        localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
+      });
+    });
   }
 
   addTotalPrice() {
@@ -493,7 +493,7 @@ export class Model extends AppView {
     }
 
     numberProduct.forEach((item, index) => {
-      item.textContent = `${index + 1}.`;
+      item.textContent = `${index + 1}`;
     });
 
     if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {

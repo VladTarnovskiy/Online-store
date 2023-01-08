@@ -185,40 +185,31 @@ class ModalWindow {
 
       function validateName(val: string) {
         const reg = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
-        // const reg: RegExp = /^[а-яА-ЯёЁa-zA-Z]{3,} [а-яА-ЯёЁa-zA-Z]{3,}( [а-яА-ЯёЁa-zA-Z]{3,})?$/;
         return reg.test(String(val).toLowerCase());
       }
 
       function validatePhone(val: string) {
         const reg = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
-        // const reg: RegExp = /^(\+)+((\d{2,3}) ?\d|\d)(([ -]?\d)|( ?(\d{2,3}) ?)){7,12}\d$/;
         return reg.test(String(val).toLowerCase());
       }
 
       function validateAddress(val: string) {
         const reg = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
-        // const reg: RegExp = /^[a-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,} [а-яА-ЯёЁa-zA-Z]{5,}( [а-яА-ЯёЁa-zA-Z]{5,})?$/;
-
         return reg.test(String(val).toLowerCase());
       }
 
       function validateEmail(val: string) {
         const reg = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
-        // const reg: RegExp = /^[-\w.]+@([A-z0-9][-A-z0-9]+\.)+[A-z]{2,4}$/;
-
         return reg.test(String(val).toLowerCase());
       }
 
       function validateCard(val: string) {
         const reg = /^[0-9]{16}$/;
-        // const reg: RegExp = /^[0-9]{16}$/;
-
         return reg.test(String(val).toLowerCase());
       }
 
       function validateDateCard(val: string) {
         const reg = /^[0-9]{4}$/;
-        // const reg: RegExp = /^[0-9]{4}$/;
         return reg.test(String(val).toLowerCase());
       }
     }

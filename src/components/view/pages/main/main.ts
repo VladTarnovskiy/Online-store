@@ -39,7 +39,7 @@ export class Main {
   }
 
   draw(): void {
-    this.PageGrid.drawGrid();
+    this.PageGrid.draw();
     this.mainGridContainer();
     this.header.draw();
     this.footer.draw();

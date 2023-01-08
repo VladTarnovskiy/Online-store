@@ -1,5 +1,5 @@
 class PageGrid {
-  drawGrid(): void {
+  draw(): void {
     const body = <HTMLElement>document.querySelector('body');
 
     const wrapper = <HTMLElement>document.createElement('div');
