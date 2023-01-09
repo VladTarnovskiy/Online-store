@@ -440,11 +440,23 @@ export class Model extends AppView {
     this.modalWindow.draw(data);
     const prodButBuy = <HTMLElement>document.querySelector(data);
     prodButBuy.addEventListener('click', () => {
+      const popup = <HTMLElement>document.querySelector('.popup__form');
+
       const buyButton = <HTMLElement>document.querySelector('.button_popup');
       buyButton.addEventListener('click', () => {
-        window.location.href = '#main-page';
-        this.arrProductsBasket = [];
-        localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
+        setTimeout(() => {
+          const errorMessages = document.querySelectorAll<HTMLElement>('.error-message');
+          if (errorMessages.length === 0) {
+            popup.replaceChildren();
+            popup.classList.add('valid_message');
+            popup.textContent = 'The order has been successfully placed!';
+            setTimeout(() => {
+              window.location.href = '#main-page';
+              this.arrProductsBasket = [];
+              localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
+            }, 4000);
+          }
+        }, 300);
       });
     });
   }
