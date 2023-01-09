@@ -18,6 +18,8 @@ class Filters {
     copyButton.textContent = 'Copy settings';
 
     copyButton.addEventListener('click', () => {
+      const url: string = window.location.href;
+      navigator.clipboard.writeText(url);
       copyButton.textContent = 'Copied!';
       copyButton.classList.add('active');
       setTimeout(() => {

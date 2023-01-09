@@ -574,7 +574,11 @@ class Card {
 
     const prodButBuy = <HTMLElement>document.createElement('button');
     prodButBuy.className = 'prod__but prod__but-buy';
+    prodButBuy.setAttribute('data-id', `${card.id}`);
     prodButBuy.textContent = 'Buy now';
+    // prodButBuy.addEventListener('click', () => {
+    //   window.location.hash = '#basket-page';
+    // });
 
     prodButtonsContainer.appendChild(prodPrice);
     prodButtonsContainer.appendChild(cardButtonAdd);

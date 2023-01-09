@@ -12,6 +12,11 @@ export class Model extends AppView {
   arrRange: CardItem[] = [];
   arrSearch: CardItem[] = [];
   arrCategory: CardItem[] = [];
+  minPrice = '';
+  maxPrice = '';
+  minStock = '';
+  maxStock = '';
+  pageView = '';
 
   constructor() {
     super();
@@ -24,10 +29,12 @@ export class Model extends AppView {
       productsContainer.replaceChildren();
       this.viewCardBlock(this.filterDataProduct);
       localStorage.setItem('view', 'block');
+      this.pageView = 'block';
     } else if (target.classList.contains('view__list')) {
       productsContainer.replaceChildren();
       this.viewCardList(this.filterDataProduct);
       localStorage.setItem('view', 'list');
+      this.pageView = 'list';
     }
     if (this.filterDataProduct.length === 0) {
       const noneProductInfo = <HTMLElement>document.createElement('div');
@@ -36,6 +43,7 @@ export class Model extends AppView {
       productsContainer.appendChild(noneProductInfo);
     }
     this.localStorage();
+    this.urlHashChange();
   }
 
   sortProducts(e: Event) {
@@ -44,6 +52,7 @@ export class Model extends AppView {
     productsContainer.replaceChildren();
     this.sortWays(target.value);
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    this.urlHashChange();
     this.localStorage();
   }
 
@@ -184,7 +193,9 @@ export class Model extends AppView {
       }
     }
 
+    this.urlHashChange();
     this.commonFiltersData();
+    this.autoFilterRangeChange();
     productsCounter.textContent = `${this.filterDataProduct.length}`;
 
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
@@ -207,6 +218,10 @@ export class Model extends AppView {
     localStorage.setItem('range__right-price', `${maxPrice.value}`);
     localStorage.setItem('range__left-stock', `${minStock.value}`);
     localStorage.setItem('range__right-stock', `${maxStock.value}`);
+    this.minPrice = minPrice.value;
+    this.maxPrice = maxPrice.value;
+    this.minStock = minStock.value;
+    this.maxStock = maxStock.value;
 
     this.initDataProduct.forEach((item) => {
       if (
@@ -229,8 +244,32 @@ export class Model extends AppView {
     this.arrRange = arrItems.slice();
 
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
-    this.commonFiltersData();
+    this.urlHashChange();
+
     this.localStorage();
+    this.commonFiltersData();
+  }
+
+  autoFilterRangeChange() {
+    const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
+    const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
+    const minStock = <HTMLInputElement>document.querySelector('.slider__range_left-stock');
+    const maxStock = <HTMLInputElement>document.querySelector('.slider__range_right-stock');
+    const arrPrice: number[] = [];
+    const arrStock: number[] = [];
+    this.filterDataProduct.forEach((item) => {
+      arrPrice.push(item.price);
+      arrStock.push(item.stock);
+    });
+    minPrice.value = String(Math.min.apply(null, arrPrice));
+    maxPrice.value = String(Math.max.apply(null, arrPrice));
+    minStock.value = String(Math.min.apply(null, arrStock));
+    maxStock.value = String(Math.max.apply(null, arrStock));
+    localStorage.setItem('range__left-price', `${minPrice.value}`);
+    localStorage.setItem('range__right-price', `${maxPrice.value}`);
+    localStorage.setItem('range__left-stock', `${minStock.value}`);
+    localStorage.setItem('range__right-stock', `${maxStock.value}`);
+    // this.urlHashChange();
   }
 
   searchProducts(e: Event) {
@@ -273,34 +312,72 @@ export class Model extends AppView {
     }
     productsCounter.textContent = `${this.arrSearch.length}`;
     this.arrSearch = arrSearch.slice();
-    //Why dont work with root array data?
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('searchValue', `${target.value}`);
     this.commonFiltersData();
-
+    this.autoFilterRangeChange();
+    this.urlHashChange();
     this.localStorage();
+  }
+
+  urlHashChange() {
+    //categ and brand
+    let filtByBrand = '';
+    let filtByCategory = '';
+    if (this.arrFiltCategory.length > 0) {
+      filtByCategory = 'category=' + this.arrFiltCategory.join('%') + '&';
+    } else {
+      filtByCategory = '';
+    }
+    if (this.arrWaysBrand.length > 0) {
+      filtByBrand = 'brand=' + this.arrWaysBrand.join('%') + '&';
+    } else {
+      filtByBrand = '';
+    }
+
+    //price and stock
+    let filterByRange = '';
+    if (this.minPrice.length > 0) {
+      filterByRange =
+        'price=' + this.minPrice + '|' + this.maxPrice + '&' + 'stock=' + this.minStock + '|' + this.maxStock + '&';
+    } else {
+      filterByRange = '';
+    }
+
+    //sort
+    const sortStorage = localStorage.getItem('sort');
+    let sortValue = '';
+    if (sortStorage) {
+      sortValue = 'sort=' + sortStorage + '&';
+    } else {
+      sortValue = '';
+    }
+
+    //search
+    const searchStorage = localStorage.getItem('searchValue');
+    let searchValue = '';
+    if (searchStorage) {
+      searchValue = 'search=' + searchStorage + '&';
+    } else {
+      searchValue = '';
+    }
+
+    //view
+    let viewValue = '';
+    if (this.pageView.length > 0) {
+      viewValue = 'view=' + this.pageView + '&';
+    } else {
+      viewValue = '';
+    }
+
+    const href = '#?' + filtByCategory + filtByBrand + filterByRange + sortValue + searchValue + viewValue;
+    window.location.href = href;
   }
 
   changeAmountOfFilter() {
     const amountCatDisplays = document.querySelectorAll<HTMLElement>('.display_category');
     const amountBrandDisplays = document.querySelectorAll<HTMLElement>('.display_brand');
-
-    // const minPrice = <HTMLInputElement>document.querySelector('.slider__range_left-price');
-    // const maxPrice = <HTMLInputElement>document.querySelector('.slider__range_right-price');
-    // const minStock = <HTMLInputElement>document.querySelector('.slider__range_left-stock');
-    // const maxStock = <HTMLInputElement>document.querySelector('.slider__range_right-stock');
-
-    // const arrPrice: number[] = [];
-    // const arrStock: number[] = [];
-    // this.filterDataProduct.forEach((item) => {
-    //   arrPrice.push(item.price);
-    //   arrStock.push(item.stock);
-    // });
-    // minPrice.value = String(Math.min.apply(null, arrPrice));
-    // maxPrice.value = String(Math.max.apply(null, arrPrice));
-    // minStock.value = String(Math.min.apply(null, arrPrice));
-    // maxStock.value = String(Math.max.apply(null, arrPrice));
 
     amountCatDisplays.forEach((itemDisp) => {
       let count = 0;
@@ -424,6 +501,34 @@ export class Model extends AppView {
     });
   }
 
+  addProductDetailPage(e: Event) {
+    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
+    const addButDetailPage = <HTMLElement>document.querySelector('.card__button_add');
+    const target = <HTMLElement>e.target;
+    this.filterDataProduct.forEach((item: CardItem): void => {
+      if (String(item.id) === target.dataset.id) {
+        if (
+          target.classList.contains('prod__but-buy') &&
+          !addButDetailPage.classList.contains('card__button-add_active')
+        ) {
+          addButDetailPage.classList.add('card__button-add_active');
+          addButDetailPage.textContent = 'In cart';
+          item.amount = 1;
+          item.inBasket = true;
+          item.totalPrice = Number(
+            ((item.price - (item.price * item.discountPercentage) / 100) * item.amount).toFixed(2)
+          );
+          this.arrProductsBasket.push(item);
+        }
+      }
+      this.addTotalPrice();
+
+      basketChecker.textContent = `${this.arrProductsBasket.length}`;
+      localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
+      localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
+    });
+  }
+
   addDetailPage(data: number) {
     const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     basketChecker.textContent = `${this.arrProductsBasket.length}`;
@@ -433,31 +538,26 @@ export class Model extends AppView {
       }
     });
     this.addTotalPrice();
-    this.getPageAfterPay('.prod__but-buy');
   }
 
-  getPageAfterPay(data: string) {
-    this.modalWindow.draw(data);
-    const prodButBuy = <HTMLElement>document.querySelector(data);
-    prodButBuy.addEventListener('click', () => {
-      const popup = <HTMLElement>document.querySelector('.popup__form');
-
-      const buyButton = <HTMLElement>document.querySelector('.button_popup');
-      buyButton.addEventListener('click', () => {
-        setTimeout(() => {
-          const errorMessages = document.querySelectorAll<HTMLElement>('.error-message');
-          if (errorMessages.length === 0) {
-            popup.replaceChildren();
-            popup.classList.add('valid_message');
-            popup.textContent = 'The order has been successfully placed!';
-            setTimeout(() => {
-              window.location.href = '#main-page';
-              this.arrProductsBasket = [];
-              localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
-            }, 4000);
-          }
-        }, 300);
-      });
+  getPageAfterPay() {
+    this.modalWindow.draw();
+    const popup = <HTMLElement>document.querySelector('.popup__form');
+    const buyButton = <HTMLElement>document.querySelector('.button_popup');
+    buyButton.addEventListener('click', () => {
+      setTimeout(() => {
+        const errorMessages = document.querySelectorAll<HTMLElement>('.error-message');
+        if (errorMessages.length === 0) {
+          popup.replaceChildren();
+          popup.classList.add('valid_message');
+          popup.textContent = 'The order has been successfully placed!';
+          setTimeout(() => {
+            window.location.href = '#?';
+            this.arrProductsBasket = [];
+            localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
+          }, 4000);
+        }
+      }, 300);
     });
   }
 
@@ -630,6 +730,8 @@ export class Model extends AppView {
     filterItems.forEach((item) => {
       item.checked = false;
     });
+
+    window.location.href = '#?';
 
     this.localStorage();
   }

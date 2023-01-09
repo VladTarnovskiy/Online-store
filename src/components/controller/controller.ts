@@ -3,8 +3,10 @@ import { Model } from '../model/model';
 import { PageIds } from '../types/types';
 
 class AppController extends Model {
-  private static container: HTMLElement = document.body;
-  private static defaultPageId = 'main-page';
+  // private static container: HTMLElement = document.body;
+  // private static defaultPageId = 'main-page';
+  private static currentPageHash = '#';
+
   view: AppView;
 
   constructor() {
@@ -32,11 +34,14 @@ class AppController extends Model {
       this.viewCardBasket(this.arrProductsBasket);
       this.showResultBasket();
       this.basketCardChangeInfo();
-      this.getPageAfterPay('.button_buy');
+      // this.getPageAfterPay();
+      this.addModalPageFromBasket();
     } else if (idPage === PageIds.Product) {
       this.view.drawProdDetail();
       this.addDetailPage(Number(localStorage.getItem('prodId')) || 1);
       this.addProductsCart();
+      this.buyProductDetailPage();
+      this.addModalPageFromDetail();
     } else {
       this.view.drawError();
     }
@@ -44,13 +49,15 @@ class AppController extends Model {
 
   private enableRouteChange() {
     window.addEventListener('hashchange', () => {
-      // localStorage.setItem('hashPage', `${window.location.hash.slice(1)}`);
-      const hash = window.location.hash.slice(1);
-      this.renderNewPage(hash);
+      const hash = window.location.hash.split('?')[0];
+      if (AppController.currentPageHash != hash) {
+        AppController.currentPageHash = hash;
+        this.renderNewPage(hash);
+      }
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      const hash = window.location.hash.slice(1);
+      const hash = window.location.hash.split('?')[0];
       this.renderNewPage(hash);
     });
   }
@@ -76,6 +83,25 @@ class AppController extends Model {
     });
   }
 
+  private addModalPageFromDetail() {
+    const prodButBuy = <HTMLElement>document.querySelector('.prod__but-buy');
+    prodButBuy.addEventListener('click', () => {
+      window.location.hash = '#basket-page';
+      setTimeout(() => {
+        this.getPageAfterPay();
+      }, 200);
+    });
+  }
+
+  private addModalPageFromBasket() {
+    const prodButBuy = <HTMLElement>document.querySelector('.button_buy');
+    if (prodButBuy) {
+      prodButBuy.addEventListener('click', () => {
+        this.getPageAfterPay();
+      });
+    }
+  }
+
   private productsSearch() {
     const searchInput = <HTMLElement>document.querySelector('.products__search');
     searchInput.addEventListener('input', (event) => {
@@ -91,6 +117,13 @@ class AppController extends Model {
       item.addEventListener('click', (event) => {
         this.addProduct(event);
       });
+    });
+  }
+
+  private buyProductDetailPage() {
+    const butBuy = <HTMLElement>document.querySelector('.prod__but-buy');
+    butBuy.addEventListener('click', (event) => {
+      this.addProductDetailPage(event);
     });
   }
 
@@ -128,7 +161,7 @@ class AppController extends Model {
     const addButtons = document.querySelectorAll<HTMLElement>('.card__button_detail');
     addButtons.forEach((item) => {
       item.addEventListener('click', (e) => {
-        window.location.href = '#product';
+        window.location.href = `#product-details?/${item.dataset.id}`;
         const hash = window.location.hash.slice(1);
         const target = <HTMLElement>e.target;
         this.renderNewPage(hash);
@@ -140,7 +173,7 @@ class AppController extends Model {
 
   run() {
     this.enableRouteChange();
-    this.renderNewPage('main-page');
+    this.renderNewPage('#?');
   }
 }
 

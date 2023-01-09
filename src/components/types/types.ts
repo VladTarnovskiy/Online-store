@@ -39,8 +39,8 @@ export interface DataValueEachOfCategory {
 }
 
 export const enum PageIds {
-  MainPage = 'main-page',
-  BasketPage = 'basket-page',
-  Product = 'product',
-  ErrorPage = 'erorr-page',
+  MainPage = '#',
+  BasketPage = '#basket-page',
+  Product = '#product-details',
+  ErrorPage = '#erorr-page',
 }

@@ -60,6 +60,10 @@ export class AppView {
   drawError(): void {
     this.error.draw();
   }
+
+  drawModal(): void {
+    this.modalWindow.draw();
+  }
 }
 
 export default AppView;
