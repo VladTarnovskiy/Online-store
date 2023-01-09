@@ -48,7 +48,7 @@ class Result {
 
     const promoHint = <HTMLElement>document.createElement('div');
     promoHint.className = 'result__promo-hint';
-    promoHint.textContent = "Promo (-10%): 'RS', 'RSSchool'";
+    promoHint.textContent = "Promo (-10% every): 'RS', 'RSSchool'";
 
     const resultButton = <HTMLElement>document.createElement('button');
     resultButton.className = 'button_buy';
