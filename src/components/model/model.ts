@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import AppView from '../view/appView';
 import { productData } from './data';
-// import { Filters } from './datafilters';
 import { CardItem } from '../types/types';
-import { Data } from '../types/types';
 
 export class Model extends AppView {
   initDataProduct: CardItem[] = productData.products;
@@ -244,7 +242,6 @@ export class Model extends AppView {
     data.forEach((item) => {
       item.inBasket = false;
     });
-    // console.log(data);
     const arrSearch: CardItem[] = [];
     if (target.value === '') {
       data.forEach((item) => {
@@ -779,8 +776,6 @@ export class Model extends AppView {
       const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
       totalPriceHeader.textContent = `Total: ${resultPrice} $`;
     }
-    // const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
-    // totalPriceHeader.textContent = '0 $';
 
     productsCount.textContent = `${this.filterDataProduct.length}`;
     this.commonFiltersData();

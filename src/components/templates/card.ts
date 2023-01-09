@@ -397,7 +397,6 @@ class Card {
       const imgLink = prodImg.src;
       prodImgScaleInc.setAttribute('src', `${imgLink}`);
       popup.style.display = 'block';
-      console.log(imgLink);
     });
 
     const prodImgItem = <HTMLElement>document.createElement('img');

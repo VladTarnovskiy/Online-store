@@ -57,8 +57,12 @@
         font-size: 1rem;
         padding: 5px;
         outline: none;
-        border: 2px $black-color solid;
+        border: 1px $black-color solid;
         font-family: $roboto-light-font;
+
+        &:focus {
+            box-shadow: 0 0 0 0.25rem rgba(157, 194, 255, 0.5);
+        }
     }
 
     .view__container {

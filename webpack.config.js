@@ -5,8 +5,12 @@ const EslintPlugin = require('eslint-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const baseConfig = {
-    devtool: 'eval-source-map',
+module.exports = {
+    mode: 'development',
+    devtool: 'inline-source-map',
+    devServer: {
+        contentBase: path.resolve(__dirname, '../dist'),
+    },
     entry: path.resolve(__dirname, './src/index.ts'),
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -53,11 +57,4 @@ const baseConfig = {
     resolve: {
         extensions: ['.ts', '.js'],
     }
-};
-
-module.exports = ({ mode }) => {
-    const isProductionMode = mode === 'prod';
-    const envConfig = isProductionMode ? require('./webpack.prod.config') : require('./webpack.dev.config');
-
-    return merge(baseConfig, envConfig);
 };
