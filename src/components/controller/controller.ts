@@ -3,8 +3,6 @@ import { Model } from '../model/model';
 import { PageIds } from '../types/types';
 
 class AppController extends Model {
-  // private static container: HTMLElement = document.body;
-  // private static defaultPageId = 'main-page';
   private static currentPageHash = '#';
 
   view: AppView;
@@ -18,8 +16,16 @@ class AppController extends Model {
   renderNewPage(idPage: string) {
     const currentPageHTML = <HTMLElement>document.querySelector('body');
     currentPageHTML.replaceChildren();
+    const arrBasket = JSON.parse(localStorage.getItem('arrBasket')!);
+    if (arrBasket) {
+      this.arrProductsBasket = arrBasket;
+    }
 
     if (idPage === PageIds.MainPage || idPage === '') {
+      const hash = localStorage.getItem('url');
+      if (hash) {
+        window.location.hash = hash;
+      }
       this.view.drawMain();
       this.localStorage();
       this.addProductsCart();
@@ -34,7 +40,6 @@ class AppController extends Model {
       this.viewCardBasket(this.arrProductsBasket);
       this.showResultBasket();
       this.basketCardChangeInfo();
-      // this.getPageAfterPay();
       this.addModalPageFromBasket();
     } else if (idPage === PageIds.Product) {
       this.view.drawProdDetail();
@@ -42,6 +47,7 @@ class AppController extends Model {
       this.addProductsCart();
       this.buyProductDetailPage();
       this.addModalPageFromDetail();
+      this.checkDetailProdInBasket();
     } else {
       this.view.drawError();
     }
@@ -58,6 +64,7 @@ class AppController extends Model {
 
     window.addEventListener('DOMContentLoaded', () => {
       const hash = window.location.hash.split('?')[0];
+      AppController.currentPageHash = hash;
       this.renderNewPage(hash);
     });
   }
@@ -86,10 +93,19 @@ class AppController extends Model {
   private addModalPageFromDetail() {
     const prodButBuy = <HTMLElement>document.querySelector('.prod__but-buy');
     prodButBuy.addEventListener('click', () => {
-      window.location.hash = '#basket-page';
       setTimeout(() => {
         this.getPageAfterPay();
       }, 200);
+    });
+  }
+
+  private buyProductDetailPage() {
+    const butBuy = <HTMLElement>document.querySelector('.prod__but-buy');
+    butBuy.addEventListener('click', (event) => {
+      setTimeout(() => {
+        window.location.hash = '#basket-page';
+        this.addProductDetailPage(event);
+      }, 30);
     });
   }
 
@@ -120,13 +136,6 @@ class AppController extends Model {
     });
   }
 
-  private buyProductDetailPage() {
-    const butBuy = <HTMLElement>document.querySelector('.prod__but-buy');
-    butBuy.addEventListener('click', (event) => {
-      this.addProductDetailPage(event);
-    });
-  }
-
   private getfilterCategoryrData() {
     const category = <HTMLElement>document.querySelector('.filters');
     const checkboxesCategry = category.querySelectorAll<HTMLElement>('.filter-block__input');
@@ -154,6 +163,18 @@ class AppController extends Model {
       this.getResetFilters();
       this.getDetailPage();
       this.addProductsCart();
+    });
+  }
+
+  private checkDetailProdInBasket() {
+    const buttonProdForId = <HTMLElement>document.querySelector('.card__button_add');
+    const target = Number(buttonProdForId.dataset.id);
+
+    this.arrProductsBasket.forEach((itemBasket) => {
+      if (itemBasket.id === target) {
+        buttonProdForId.classList.add('card__button-add_active');
+        buttonProdForId.textContent = 'In cart';
+      }
     });
   }
 

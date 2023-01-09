@@ -242,12 +242,11 @@ export class Model extends AppView {
       });
     });
     this.arrRange = arrItems.slice();
-
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     this.urlHashChange();
+    this.commonFiltersData();
 
     this.localStorage();
-    this.commonFiltersData();
   }
 
   autoFilterRangeChange() {
@@ -372,6 +371,8 @@ export class Model extends AppView {
     }
 
     const href = '#?' + filtByCategory + filtByBrand + filterByRange + sortValue + searchValue + viewValue;
+    localStorage.setItem('url', href);
+
     window.location.href = href;
   }
 
@@ -732,6 +733,7 @@ export class Model extends AppView {
     });
 
     window.location.href = '#?';
+    localStorage.setItem('url', '#?');
 
     this.localStorage();
   }

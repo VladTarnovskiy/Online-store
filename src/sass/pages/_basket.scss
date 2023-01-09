@@ -39,7 +39,7 @@
 
     .basket__result {
         width: 30%;
-        min-height: 300px;
+        height: 330px;
         box-shadow: $box-shadow;
         background-color: $light-grey-color;
         @extend %blocksettings;
@@ -95,6 +95,7 @@
         .result__price.promo_disabled {
             text-decoration: line-through;
             color: $red-color;
+            width: 165px;
         }
 
         .result__price_promo {
@@ -112,6 +113,7 @@
 
         .result__price_promo.promo_active {
             display: block;
+            width: 165px;
         }
 
         .result__promo {
