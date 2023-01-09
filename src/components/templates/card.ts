@@ -97,10 +97,7 @@ class Card {
       cardButtonAdd.className = 'card__button card__button_add';
       cardButtonAdd.textContent = 'Add to cart';
     }
-    // cardButtonAdd.className = 'card__button card__button_add';
-    // cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.setAttribute('data-id', `${data.id}`);
-    // cardButtonAdd.textContent = 'Add to cart';
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
       if (cardButtonAdd.classList.contains('card__button-add_active')) {
@@ -182,7 +179,6 @@ class Card {
     cardButtons.className = 'card__buttons';
 
     const cardButtonAdd = <HTMLElement>document.createElement('div');
-    // cardButtonAdd.className = 'card__button card__button_add';
     cardButtonAdd.setAttribute('data-id', `${data.id}`);
     if (data.inBasket === true) {
       cardButtonAdd.className = 'card__button card__button_add card__button-add_active';
@@ -300,15 +296,6 @@ class Card {
     const cardButtonPlus = <HTMLElement>document.createElement('div');
     cardButtonPlus.className = 'card__btn-control card__item-plus';
     cardButtonPlus.setAttribute('data-id', `${data.id}`);
-    // cardButtonPlus.addEventListener('click', () => {
-    //   if (Number(itemCounter.textContent) < data.stock) {
-    //     itemCounter.textContent = String(Number(itemCounter.textContent) + 1);
-    //     totlalPrice.textContent = `${(
-    //       (data.price - (data.price * data.discountPercentage) / 100) *
-    //       Number(itemCounter.textContent)
-    //     ).toFixed(2)} $`;
-    //   }
-    // });
 
     const itemCounter = <HTMLElement>document.createElement('div');
     itemCounter.className = 'card__item-counter';
@@ -317,11 +304,6 @@ class Card {
     const cardButtonMinus = <HTMLElement>document.createElement('div');
     cardButtonMinus.className = 'card__btn-control card__item-minus';
     cardButtonMinus.setAttribute('data-id', `${data.id}`);
-    // cardButtonMinus.addEventListener('click', () => {
-    //   if (Number(itemCounter.textContent) > 1) {
-    //     itemCounter.textContent = String(Number(itemCounter.textContent) - 1);
-    //   }
-    // });
 
     itemControl.appendChild(cardButtonPlus);
     itemControl.appendChild(itemCounter);
@@ -343,6 +325,7 @@ class Card {
     const prodWrapper = <HTMLElement>document.createElement('div');
     prodWrapper.className = 'product__wrapper';
     container.appendChild(prodWrapper);
+
     //product path
     const pathProd = <HTMLElement>document.createElement('div');
     pathProd.className = 'path__prod';
@@ -414,7 +397,6 @@ class Card {
       const imgLink = prodImg.src;
       prodImgScaleInc.setAttribute('src', `${imgLink}`);
       popup.style.display = 'block';
-      console.log(imgLink);
     });
 
     const prodImgItem = <HTMLElement>document.createElement('img');
@@ -429,11 +411,8 @@ class Card {
     prodImgButRight.addEventListener('click', () => {
       if (count < card.images.length - 1) {
         count += 1;
-        // prodImgButRight.classList.remove('but_disabled');
-        // prodImgButLeft.classList.remove('but_disabled');
         prodImgItem.setAttribute('src', `${card.images[count]}`);
       } else {
-        // prodImgButRight.classList.add('but_disabled');
         count = 0;
         prodImgItem.setAttribute('src', `${card.images[count]}`);
       }
@@ -445,13 +424,10 @@ class Card {
     prodImgButLeft.addEventListener('click', () => {
       if (count > 0) {
         count -= 1;
-        // prodImgButLeft.classList.remove('but_disabled');
-        // prodImgButRight.classList.remove('but_disabled');
         prodImgItem.setAttribute('src', `${card.images[count]}`);
       } else {
         count = card.images.length - 1;
         prodImgItem.setAttribute('src', `${card.images[count]}`);
-        // prodImgButLeft.classList.add('but_disabled');
       }
     });
 
@@ -586,10 +562,7 @@ class Card {
       cardButtonAdd.className = 'prod__but card__button_add';
       cardButtonAdd.textContent = 'Add to cart';
     }
-    // cardButtonAdd.className = 'card__button card__button_add';
-    // cardButtonAdd.textContent = 'Add to cart';
-    // cardButtonAdd.setAttribute('data-id', `${data.id}`);
-    // cardButtonAdd.textContent = 'Add to cart';
+
     cardButtonAdd.addEventListener('click', () => {
       cardButtonAdd.classList.toggle('card__button-add_active');
       if (cardButtonAdd.classList.contains('card__button-add_active')) {
@@ -601,7 +574,11 @@ class Card {
 
     const prodButBuy = <HTMLElement>document.createElement('button');
     prodButBuy.className = 'prod__but prod__but-buy';
+    prodButBuy.setAttribute('data-id', `${card.id}`);
     prodButBuy.textContent = 'Buy now';
+    // prodButBuy.addEventListener('click', () => {
+    //   window.location.hash = '#basket-page';
+    // });
 
     prodButtonsContainer.appendChild(prodPrice);
     prodButtonsContainer.appendChild(cardButtonAdd);

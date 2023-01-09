@@ -1,5 +1,3 @@
-// import Logo from '../../../assets/logo-x.png'
-
 class Header {
   draw(): void {
     const header = <HTMLElement>document.querySelector('.header');
@@ -8,11 +6,11 @@ class Header {
     headerTitlewrap.className = 'header__title-wrap';
 
     const basket = <HTMLElement>document.createElement('a');
-    basket.setAttribute('href', '#basket-page');
+    basket.setAttribute('href', '#basket-page?');
     basket.className = 'basket';
 
     const headerLogo = <HTMLElement>document.createElement('a');
-    headerLogo.setAttribute('href', '#main-page');
+    headerLogo.setAttribute('href', '#?');
     headerLogo.className = 'header__logo';
 
     const imgLogo = <HTMLElement>document.createElement('div');

@@ -9,7 +9,7 @@ class Footer {
 
     const listOne = <HTMLElement>document.createElement('li');
     const linkGit = <HTMLElement>document.createElement('a');
-    linkGit.setAttribute('href', '#');
+    linkGit.setAttribute('href', 'https://github.com/VladTarnovskiy');
     linkGit.className = 'footer__git-logo';
     listOne.appendChild(linkGit);
 

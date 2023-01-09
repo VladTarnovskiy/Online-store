@@ -1,11 +1,9 @@
 import PageGrid from '../../grid/page-grid';
-
 import Filters from './filters/filters';
 import Products from './products/products';
 import Sort from './sort/sort';
 import Header from '../../header/header';
 import Footer from '../../footer/footer';
-// import Error from './pages/error/error';
 
 export class Main {
   products: Products;
@@ -17,7 +15,6 @@ export class Main {
 
   constructor() {
     this.products = new Products();
-    // this.filters = new Filters('aside', 'filters');
     this.filters = new Filters();
     this.sort = new Sort();
     this.PageGrid = new PageGrid();
@@ -34,7 +31,6 @@ export class Main {
 
     const main = <HTMLElement>document.querySelector('main');
     main.appendChild(filtersSection);
-    // main.append(this.filters.render());
     main.appendChild(productsSection);
   }
 
@@ -47,8 +43,6 @@ export class Main {
     this.sort.draw();
     this.filters.draw();
   }
-
-  //else need create gride to this elements
 }
 
 export default Main;

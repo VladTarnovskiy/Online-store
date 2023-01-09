@@ -1,16 +1,12 @@
 import AppView from '../view/appView';
 import { Model } from '../model/model';
-
-export const enum PageIds {
-  MainPage = 'main-page',
-  BasketPage = 'basket-page',
-  Product = 'product',
-  ErrorPage = 'erorr-page',
-}
+import { PageIds } from '../types/types';
 
 class AppController extends Model {
-  private static container: HTMLElement = document.body;
-  private static defaultPageId = 'main-page';
+  // private static container: HTMLElement = document.body;
+  // private static defaultPageId = 'main-page';
+  private static currentPageHash = '#';
+
   view: AppView;
 
   constructor() {
@@ -33,33 +29,35 @@ class AppController extends Model {
       this.getDetailPage();
       this.getfilterCategoryrData();
       this.resetFilters();
-      // this.buyProducts();
     } else if (idPage === PageIds.BasketPage) {
       this.view.drawBasket();
       this.viewCardBasket(this.arrProductsBasket);
       this.showResultBasket();
       this.basketCardChangeInfo();
-      this.getPageAfterPay('.button_buy');
+      // this.getPageAfterPay();
+      this.addModalPageFromBasket();
     } else if (idPage === PageIds.Product) {
       this.view.drawProdDetail();
       this.addDetailPage(Number(localStorage.getItem('prodId')) || 1);
       this.addProductsCart();
+      this.buyProductDetailPage();
+      this.addModalPageFromDetail();
+    } else {
+      this.view.drawError();
     }
-    // else {
-    //   // this.drawError();
-    //   alert('Error, basket dont realize yet');
-    // }
   }
 
   private enableRouteChange() {
     window.addEventListener('hashchange', () => {
-      // localStorage.setItem('hashPage', `${window.location.hash.slice(1)}`);
-      const hash = window.location.hash.slice(1);
-      this.renderNewPage(hash);
+      const hash = window.location.hash.split('?')[0];
+      if (AppController.currentPageHash != hash) {
+        AppController.currentPageHash = hash;
+        this.renderNewPage(hash);
+      }
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      const hash = window.location.hash.slice(1);
+      const hash = window.location.hash.split('?')[0];
       this.renderNewPage(hash);
     });
   }
@@ -85,6 +83,25 @@ class AppController extends Model {
     });
   }
 
+  private addModalPageFromDetail() {
+    const prodButBuy = <HTMLElement>document.querySelector('.prod__but-buy');
+    prodButBuy.addEventListener('click', () => {
+      window.location.hash = '#basket-page';
+      setTimeout(() => {
+        this.getPageAfterPay();
+      }, 200);
+    });
+  }
+
+  private addModalPageFromBasket() {
+    const prodButBuy = <HTMLElement>document.querySelector('.button_buy');
+    if (prodButBuy) {
+      prodButBuy.addEventListener('click', () => {
+        this.getPageAfterPay();
+      });
+    }
+  }
+
   private productsSearch() {
     const searchInput = <HTMLElement>document.querySelector('.products__search');
     searchInput.addEventListener('input', (event) => {
@@ -101,7 +118,13 @@ class AppController extends Model {
         this.addProduct(event);
       });
     });
-    // this.productsSearch();
+  }
+
+  private buyProductDetailPage() {
+    const butBuy = <HTMLElement>document.querySelector('.prod__but-buy');
+    butBuy.addEventListener('click', (event) => {
+      this.addProductDetailPage(event);
+    });
   }
 
   private getfilterCategoryrData() {
@@ -117,7 +140,7 @@ class AppController extends Model {
     });
 
     sliders.forEach((item) => {
-      item.addEventListener('input', (event) => {
+      item.addEventListener('input', () => {
         this.filterByRange();
         this.addProductsCart();
         this.getDetailPage();
@@ -138,7 +161,7 @@ class AppController extends Model {
     const addButtons = document.querySelectorAll<HTMLElement>('.card__button_detail');
     addButtons.forEach((item) => {
       item.addEventListener('click', (e) => {
-        window.location.href = '#product';
+        window.location.href = `#product-details?/${item.dataset.id}`;
         const hash = window.location.hash.slice(1);
         const target = <HTMLElement>e.target;
         this.renderNewPage(hash);
@@ -148,17 +171,9 @@ class AppController extends Model {
     });
   }
 
-  // private buyProducts() {
-  //   const buyButton = <HTMLElement>document.querySelector('.button_popup');
-  //   buyButton.addEventListener('click', () => {
-  //     console.log('dddddd');
-  //     this.renderNewPage('main-page');
-  //   });
-  // }
-
   run() {
     this.enableRouteChange();
-    this.renderNewPage('main-page');
+    this.renderNewPage('#?');
   }
 }
 

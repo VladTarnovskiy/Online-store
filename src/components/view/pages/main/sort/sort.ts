@@ -1,8 +1,6 @@
-// import type Data from '../../../../types/types';
-
 class Sort {
   draw(): void {
-    //способы сортировки
+    //sort ways
     const container = <HTMLElement>document.querySelector('.sort');
 
     const sortContainer = <HTMLElement>document.createElement('div');
@@ -55,7 +53,7 @@ class Sort {
 
     container.appendChild(sortContainer);
 
-    //количество найденных товаров
+    //amount found products
 
     const productsCounter = <HTMLElement>document.createElement('div');
     productsCounter.className = 'sort__counter';
@@ -69,15 +67,14 @@ class Sort {
 
     container.appendChild(productsCounter);
 
-    //элемент поиска
+    //search element
     const productsSearch = <HTMLElement>document.createElement('input');
     productsSearch.className = 'products__search';
     productsSearch.setAttribute('type', 'search');
     productsSearch.setAttribute('placeholder', 'Product search');
     container.appendChild(productsSearch);
 
-    //переключение вида отображения продуктов
-
+    //view change
     const viewContainer = <HTMLElement>document.createElement('div');
     viewContainer.className = 'view__container';
 
@@ -97,7 +94,6 @@ class Sort {
 
     viewContainer.appendChild(viewList);
     viewContainer.appendChild(viewBlocks);
-
     container.appendChild(viewContainer);
 
     document.querySelectorAll<HTMLElement>('.view__item').forEach((item) => {

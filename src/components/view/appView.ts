@@ -1,6 +1,7 @@
 import Main from './pages/main/main';
 import Basket from './pages/basket/basket';
 import ProductDetail from './pages/prod-detail/prod-detail';
+import Error from './pages/error/error';
 import Card from '../templates/card';
 import { CardItem } from '../types/types';
 import ModalWindow from '../view/pages/basket/modalWindow/modalWindow';
@@ -11,8 +12,7 @@ export class AppView {
   basket: Basket;
   prodDetail: ProductDetail;
   modalWindow: ModalWindow;
-
-  // error: Error;
+  error: Error;
 
   constructor() {
     this.main = new Main();
@@ -20,8 +20,7 @@ export class AppView {
     this.basket = new Basket();
     this.prodDetail = new ProductDetail();
     this.modalWindow = new ModalWindow();
-
-    // this.error = new Error();
+    this.error = new Error();
   }
 
   viewCardBlock(data: CardItem[]) {
@@ -58,9 +57,13 @@ export class AppView {
     this.prodDetail.draw();
   }
 
-  // drawError(data: Data): void{
-  //     this.error.draw();
-  // }
+  drawError(): void {
+    this.error.draw();
+  }
+
+  drawModal(): void {
+    this.modalWindow.draw();
+  }
 }
 
 export default AppView;
