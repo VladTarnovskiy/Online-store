@@ -64,6 +64,20 @@ export class AppView {
   drawModal(): void {
     this.modalWindow.draw();
   }
+
+  getMessageEmptyProducts(container: HTMLElement) {
+    const noneProductInfo = <HTMLElement>document.createElement('div');
+    noneProductInfo.className = 'product-none-info';
+    noneProductInfo.textContent = 'No products found.';
+    container.appendChild(noneProductInfo);
+  }
+
+  getMessageEmptyBasket(container: HTMLElement) {
+    const noneProductInfo = <HTMLElement>document.createElement('div');
+    noneProductInfo.className = 'product-none-info';
+    noneProductInfo.textContent = 'Cart is empty.';
+    container.appendChild(noneProductInfo);
+  }
 }
 
 export default AppView;

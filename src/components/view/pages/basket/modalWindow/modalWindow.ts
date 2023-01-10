@@ -286,17 +286,22 @@ class ModalWindow {
     }
 
     function renderCardLogo(el: HTMLInputElement): void {
-      if (+el.value[0] === 3) {
-        cardNumberImage.style.backgroundImage =
-          'url("https://logodownload.org/wp-content/uploads/2014/04/amex-american-express-logo-4.png")';
-      } else if (+el.value[0] === 4) {
-        cardNumberImage.style.backgroundImage =
-          'url("https://w7.pngwing.com/pngs/618/512/png-transparent-visa-logo-mastercard-credit-card-payment-visa-blue-company-text.png")';
-      } else if (+el.value[0] === 5) {
-        cardNumberImage.style.backgroundImage =
-          'url("https://w7.pngwing.com/pngs/23/320/png-transparent-mastercard-credit-card-visa-payment-service-mastercard-company-orange-logo.png")';
-      } else {
-        cardNumberImage.style.backgroundImage = 'url(../assets/no-logo.png)';
+      switch (Number(el.value[0])) {
+        case 3:
+          cardNumberImage.style.backgroundImage =
+            'url("https://logodownload.org/wp-content/uploads/2014/04/amex-american-express-logo-4.png")';
+          break;
+        case 4:
+          cardNumberImage.style.backgroundImage =
+            'url("https://w7.pngwing.com/pngs/618/512/png-transparent-visa-logo-mastercard-credit-card-payment-visa-blue-company-text.png")';
+          break;
+        case 5:
+          cardNumberImage.style.backgroundImage =
+            'url("https://w7.pngwing.com/pngs/23/320/png-transparent-mastercard-credit-card-visa-payment-service-mastercard-company-orange-logo.png")';
+          break;
+        default:
+          cardNumberImage.style.backgroundImage = 'url(../assets/no-logo.png)';
+          break;
       }
     }
 

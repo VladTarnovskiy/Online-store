@@ -312,7 +312,9 @@ class Card {
 
     const totlalPrice = <HTMLElement>document.createElement('div');
     totlalPrice.className = 'card__item-total-price';
-    totlalPrice.textContent = `${(data.price! * data.amount!).toFixed(2)} $`;
+    if (data.price && data.amount) {
+      totlalPrice.textContent = `${(data.price * data.amount).toFixed(2)} $`;
+    }
     itemController.appendChild(totlalPrice);
 
     descriptWrapper.appendChild(cardBasketDec);

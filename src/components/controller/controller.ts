@@ -13,10 +13,10 @@ class AppController extends Model {
   }
 
   // start routing
-  renderNewPage(idPage: string) {
+  renderNewPage(idPage: string): void {
     const currentPageHTML = <HTMLElement>document.querySelector('body');
     currentPageHTML.replaceChildren();
-    const arrBasket = JSON.parse(localStorage.getItem('arrBasket')!);
+    const arrBasket = JSON.parse(localStorage.getItem('arrBasket') as string);
     if (arrBasket) {
       this.arrProductsBasket = arrBasket;
     }
@@ -27,7 +27,7 @@ class AppController extends Model {
         window.location.hash = hash;
       }
       this.view.drawMain();
-      this.localStorage();
+      this.getDataFromStorage();
       this.addProductsCart();
       this.productsView();
       this.productsSearch();
@@ -53,10 +53,10 @@ class AppController extends Model {
     }
   }
 
-  private enableRouteChange() {
+  private enableRouteChange(): void {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.split('?')[0];
-      if (AppController.currentPageHash != hash) {
+      if (AppController.currentPageHash !== hash) {
         AppController.currentPageHash = hash;
         this.renderNewPage(hash);
       }
@@ -70,7 +70,7 @@ class AppController extends Model {
   }
   //endrouting
 
-  private productsView() {
+  private productsView(): void {
     this.addTotalAmountBasket();
     const viewContainer = <HTMLElement>document.querySelector('.view__container');
     viewContainer.addEventListener('click', (event) => {
@@ -80,16 +80,17 @@ class AppController extends Model {
     });
   }
 
-  private productsSort() {
+  private productsSort(): void {
     const sortInput = <HTMLElement>document.querySelector('.sort__select');
     sortInput.addEventListener('change', (event) => {
-      this.sortProducts(event);
+      const target = <HTMLInputElement>event.target;
+      this.sortProducts(target.value);
       this.addProductsCart();
       this.getDetailPage();
     });
   }
 
-  private addModalPageFromDetail() {
+  private addModalPageFromDetail(): void {
     const prodButBuy = <HTMLElement>document.querySelector('.prod__but-buy');
     prodButBuy.addEventListener('click', () => {
       setTimeout(() => {
@@ -98,7 +99,7 @@ class AppController extends Model {
     });
   }
 
-  private buyProductDetailPage() {
+  private buyProductDetailPage(): void {
     const butBuy = <HTMLElement>document.querySelector('.prod__but-buy');
     butBuy.addEventListener('click', (event) => {
       setTimeout(() => {
@@ -108,7 +109,7 @@ class AppController extends Model {
     });
   }
 
-  private addModalPageFromBasket() {
+  private addModalPageFromBasket(): void {
     const prodButBuy = <HTMLElement>document.querySelector('.button_buy');
     if (prodButBuy) {
       prodButBuy.addEventListener('click', () => {
@@ -117,7 +118,7 @@ class AppController extends Model {
     }
   }
 
-  private productsSearch() {
+  private productsSearch(): void {
     const searchInput = <HTMLElement>document.querySelector('.products__search');
     searchInput.addEventListener('input', (event) => {
       this.searchProducts(event);
@@ -126,7 +127,7 @@ class AppController extends Model {
     });
   }
 
-  private addProductsCart() {
+  private addProductsCart(): void {
     const addButtons = document.querySelectorAll<HTMLElement>('.card__button_add');
     addButtons.forEach((item) => {
       item.addEventListener('click', (event) => {
@@ -135,7 +136,7 @@ class AppController extends Model {
     });
   }
 
-  private getfilterCategoryrData() {
+  private getfilterCategoryrData(): void {
     const category = <HTMLElement>document.querySelector('.filters');
     const checkboxesCategry = category.querySelectorAll<HTMLElement>('.filter-block__input');
     const sliders = category.querySelectorAll<HTMLElement>('.slider__range');
@@ -156,7 +157,7 @@ class AppController extends Model {
     });
   }
 
-  private resetFilters() {
+  private resetFilters(): void {
     const buttonReset = <HTMLElement>document.querySelector('.button_filters-reset');
     buttonReset.addEventListener('click', () => {
       this.getResetFilters();
@@ -165,7 +166,7 @@ class AppController extends Model {
     });
   }
 
-  private checkDetailProdInBasket() {
+  private checkDetailProdInBasket(): void {
     const buttonProdForId = <HTMLElement>document.querySelector('.card__button_add');
     const target = Number(buttonProdForId.dataset.id);
 
@@ -177,7 +178,7 @@ class AppController extends Model {
     });
   }
 
-  private getDetailPage() {
+  private getDetailPage(): void {
     const addButtons = document.querySelectorAll<HTMLElement>('.card__button_detail');
     addButtons.forEach((item) => {
       item.addEventListener('click', (e) => {
@@ -191,7 +192,7 @@ class AppController extends Model {
     });
   }
 
-  run() {
+  run(): void {
     this.enableRouteChange();
     this.renderNewPage('#?');
   }
