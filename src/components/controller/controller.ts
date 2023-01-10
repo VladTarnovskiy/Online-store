@@ -71,8 +71,7 @@ class AppController extends Model {
   //endrouting
 
   private productsView() {
-    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
-    basketChecker.textContent = `${this.arrProductsBasket.length}`;
+    this.addTotalAmountBasket();
     const viewContainer = <HTMLElement>document.querySelector('.view__container');
     viewContainer.addEventListener('click', (event) => {
       this.getProducts(event);

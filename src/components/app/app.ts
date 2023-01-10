@@ -1,18 +1,14 @@
 import AppController from '../controller/controller';
-// import { AppView } from '../view/appView';
 
 class App {
-    controller: AppController;
-    // view: AppView;
-    constructor() {
-        this.controller = new AppController();
-        // this.view = new AppView();
-    }
+  controller: AppController;
+  constructor() {
+    this.controller = new AppController();
+  }
 
-    run():void {
-        this.controller.run();
-        //прописать что запускается первым по цепочке
-    }
+  run(): void {
+    this.controller.run();
+  }
 }
 
 export default App;

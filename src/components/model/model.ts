@@ -268,7 +268,6 @@ export class Model extends AppView {
     localStorage.setItem('range__right-price', `${maxPrice.value}`);
     localStorage.setItem('range__left-stock', `${minStock.value}`);
     localStorage.setItem('range__right-stock', `${maxStock.value}`);
-    // this.urlHashChange();
   }
 
   searchProducts(e: Event) {
@@ -474,7 +473,6 @@ export class Model extends AppView {
   }
 
   addProduct(e: Event) {
-    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const target = <HTMLElement>e.target;
     this.filterDataProduct.forEach((item: CardItem): void => {
       if (String(item.id) === target.dataset.id) {
@@ -496,14 +494,13 @@ export class Model extends AppView {
       }
       this.addTotalPrice();
 
-      basketChecker.textContent = `${this.arrProductsBasket.length}`;
+      this.addTotalAmountBasket();
       localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     });
   }
 
   addProductDetailPage(e: Event) {
-    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const addButDetailPage = <HTMLElement>document.querySelector('.card__button_add');
     const target = <HTMLElement>e.target;
     this.filterDataProduct.forEach((item: CardItem): void => {
@@ -524,15 +521,14 @@ export class Model extends AppView {
       }
       this.addTotalPrice();
 
-      basketChecker.textContent = `${this.arrProductsBasket.length}`;
+      this.addTotalAmountBasket();
       localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     });
   }
 
   addDetailPage(data: number) {
-    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
-    basketChecker.textContent = `${this.arrProductsBasket.length}`;
+    this.addTotalAmountBasket();
     this.filterDataProduct.forEach((item) => {
       if (item.id === data) {
         this.card.darwCardDetailPage(item);
@@ -572,14 +568,23 @@ export class Model extends AppView {
     localStorage.setItem('resultPrice', `${count}`);
   }
 
+  addTotalAmountBasket() {
+    let count = 0;
+    this.arrProductsBasket.forEach((item) => {
+      count += item.amount!;
+    });
+    const totalCountProd = <HTMLElement>document.querySelector('.basket__checker');
+    totalCountProd.textContent = `${count}`;
+    localStorage.setItem('totalProdCount', `${count}`);
+  }
+
   showResultBasket() {
-    const basketChecker = <HTMLElement>document.querySelector('.basket__checker');
     const resultCounter = <HTMLElement>document.querySelector('.result__counter');
     const resultPriceCounter = <HTMLElement>document.querySelector('.result__price-counter');
     const resultPromo = <HTMLInputElement>document.querySelector('.result__promo');
     const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
     const numberProduct = document.querySelectorAll<HTMLElement>('.card__number');
-    basketChecker.textContent = `${this.arrProductsBasket.length}`;
+    this.addTotalAmountBasket();
 
     let countAmount = 0;
     let countTotalPrice = 0;
@@ -891,6 +896,12 @@ export class Model extends AppView {
     if (resultPrice) {
       const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
       totalPriceHeader.textContent = `Total: ${resultPrice} $`;
+    }
+
+    const amountProdBasket = localStorage.getItem('totalProdCount');
+    if (amountProdBasket) {
+      const totalCountProd = <HTMLElement>document.querySelector('.basket__checker');
+      totalCountProd.textContent = amountProdBasket;
     }
 
     productsCount.textContent = `${this.filterDataProduct.length}`;
