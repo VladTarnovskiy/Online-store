@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import AppView from '../view/appView';
 import { productData } from './data';
 import { CardItem } from '../types/types';
@@ -12,10 +11,10 @@ export class Model extends AppView {
   arrRange: CardItem[] = [];
   arrSearch: CardItem[] = [];
   arrCategory: CardItem[] = [];
-  minPrice = '';
-  maxPrice = '';
-  minStock = '';
-  maxStock = '';
+  minPriceData = '';
+  maxPriceData = '';
+  minStockData = '';
+  maxStockData = '';
   pageView = '';
 
   constructor() {
@@ -37,23 +36,19 @@ export class Model extends AppView {
       this.pageView = 'list';
     }
     if (this.filterDataProduct.length === 0) {
-      const noneProductInfo = <HTMLElement>document.createElement('div');
-      noneProductInfo.className = 'product-none-info';
-      noneProductInfo.textContent = 'No products found.';
-      productsContainer.appendChild(noneProductInfo);
+      this.getMessageEmptyProducts(productsContainer);
     }
-    this.localStorage();
+    this.getDataFromStorage();
     this.urlHashChange();
   }
 
-  sortProducts(e: Event) {
+  sortProducts(value: string) {
     const productsContainer = <HTMLElement>document.querySelector('.product-items');
-    const target = <HTMLInputElement>e.target;
     productsContainer.replaceChildren();
-    this.sortWays(target.value);
+    this.sortWays(value);
     localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
     this.urlHashChange();
-    this.localStorage();
+    this.getDataFromStorage();
   }
 
   sortWays(data: string | null) {
@@ -202,7 +197,7 @@ export class Model extends AppView {
     localStorage.setItem('countProd', `${productsCounter.textContent}`);
     localStorage.setItem('arrFiltCategory', `${JSON.stringify(this.arrFiltCategory)}`);
     localStorage.setItem('arrFiltBrand', `${JSON.stringify(this.arrWaysBrand)}`);
-    this.localStorage();
+    this.getDataFromStorage();
   }
 
   filterByRange() {
@@ -218,10 +213,10 @@ export class Model extends AppView {
     localStorage.setItem('range__right-price', `${maxPrice.value}`);
     localStorage.setItem('range__left-stock', `${minStock.value}`);
     localStorage.setItem('range__right-stock', `${maxStock.value}`);
-    this.minPrice = minPrice.value;
-    this.maxPrice = maxPrice.value;
-    this.minStock = minStock.value;
-    this.maxStock = maxStock.value;
+    this.minPriceData = minPrice.value;
+    this.maxPriceData = maxPrice.value;
+    this.minStockData = minStock.value;
+    this.maxStockData = maxStock.value;
 
     this.initDataProduct.forEach((item) => {
       if (
@@ -246,7 +241,7 @@ export class Model extends AppView {
     this.urlHashChange();
     this.commonFiltersData();
 
-    this.localStorage();
+    this.getDataFromStorage();
   }
 
   autoFilterRangeChange() {
@@ -316,7 +311,7 @@ export class Model extends AppView {
     this.commonFiltersData();
     this.autoFilterRangeChange();
     this.urlHashChange();
-    this.localStorage();
+    this.getDataFromStorage();
   }
 
   urlHashChange() {
@@ -336,9 +331,18 @@ export class Model extends AppView {
 
     //price and stock
     let filterByRange = '';
-    if (this.minPrice.length > 0) {
+    if (this.minPriceData.length > 0) {
       filterByRange =
-        'price=' + this.minPrice + '|' + this.maxPrice + '&' + 'stock=' + this.minStock + '|' + this.maxStock + '&';
+        'price=' +
+        this.minPriceData +
+        '|' +
+        this.maxPriceData +
+        '&' +
+        'stock=' +
+        this.minStockData +
+        '|' +
+        this.maxStockData +
+        '&';
     } else {
       filterByRange = '';
     }
@@ -561,7 +565,9 @@ export class Model extends AppView {
   addTotalPrice() {
     let count = 0;
     this.arrProductsBasket.forEach((item) => {
-      count += item.price * item.amount!;
+      if (item.amount) {
+        count += item.price * item.amount;
+      }
     });
     const totalPriceHeader = <HTMLElement>document.querySelector('.total-price_header');
     totalPriceHeader.textContent = `Total: ${count} $`;
@@ -571,7 +577,9 @@ export class Model extends AppView {
   addTotalAmountBasket() {
     let count = 0;
     this.arrProductsBasket.forEach((item) => {
-      count += item.amount!;
+      if (item.amount) {
+        count += item.amount;
+      }
     });
     const totalCountProd = <HTMLElement>document.querySelector('.basket__checker');
     totalCountProd.textContent = `${count}`;
@@ -590,10 +598,14 @@ export class Model extends AppView {
     let countTotalPrice = 0;
 
     this.arrProductsBasket.forEach((item) => {
-      countAmount = countAmount + item.amount!;
+      if (item.amount) {
+        countAmount = countAmount + item.amount;
+      }
     });
     this.arrProductsBasket.forEach((item) => {
-      countTotalPrice = countTotalPrice + item.price! * item.amount!;
+      if (item.amount && item.price) {
+        countTotalPrice = countTotalPrice + item.price * item.amount;
+      }
     });
     resultCounter.textContent = String(countAmount);
     resultPriceCounter.textContent = `${countTotalPrice.toFixed(2)} $`;
@@ -601,10 +613,7 @@ export class Model extends AppView {
     const productsContainer = <HTMLElement>document.querySelector('.main');
     if (this.arrProductsBasket.length === 0) {
       productsContainer.replaceChildren();
-      const noneProductInfo = <HTMLElement>document.createElement('div');
-      noneProductInfo.className = 'product-none-info';
-      noneProductInfo.textContent = 'Cart is empty.';
-      productsContainer.appendChild(noneProductInfo);
+      this.getMessageEmptyBasket(productsContainer);
     }
 
     numberProduct.forEach((item, index) => {
@@ -676,7 +685,9 @@ export class Model extends AppView {
         const arrItem = this.arrProductsBasket[index];
         if (target.classList.contains('card__item-plus')) {
           if (Number(basketItemCounter.textContent) < arrItem.stock) {
-            arrItem.amount = arrItem.amount! + 1;
+            if (arrItem.amount) {
+              arrItem.amount = arrItem.amount + 1;
+            }
             basketItemCounter.textContent = `${arrItem.amount}`;
             basketItemTotalPrice.textContent = `${(arrItem.price * Number(basketItemCounter.textContent)).toFixed(
               2
@@ -689,7 +700,9 @@ export class Model extends AppView {
         } else if (target.classList.contains('card__item-minus')) {
           if (Number(basketItemCounter.textContent) > 1) {
             basketItemPlusButton.classList.remove('card__btn-control_disabled');
-            arrItem.amount = arrItem.amount! - 1;
+            if (arrItem.amount) {
+              arrItem.amount = arrItem.amount - 1;
+            }
             basketItemCounter.textContent = `${arrItem.amount}`;
             basketItemTotalPrice.textContent = `${(arrItem.price * Number(basketItemCounter.textContent)).toFixed(
               2
@@ -740,12 +753,12 @@ export class Model extends AppView {
     window.location.href = '#?';
     localStorage.setItem('url', '#?');
 
-    this.localStorage();
+    this.getDataFromStorage();
   }
 
-  localStorage() {
-    const arrBasket = JSON.parse(localStorage.getItem('arrBasket')!);
-    const filtData = JSON.parse(localStorage.getItem('filtData')!);
+  getDataFromStorage() {
+    const arrBasket = JSON.parse(localStorage.getItem('arrBasket') as string);
+    const filtData = JSON.parse(localStorage.getItem('filtData') as string);
     const productsCount = <HTMLElement>document.querySelector('.sort__counter-display');
 
     //get data
@@ -776,9 +789,9 @@ export class Model extends AppView {
     });
 
     //filers common
-    const arrRange = JSON.parse(localStorage.getItem('arrRange')!);
-    const arrSearch = JSON.parse(localStorage.getItem('arrSearch')!);
-    const arrCategory = JSON.parse(localStorage.getItem('arrCategory')!);
+    const arrRange = JSON.parse(localStorage.getItem('arrRange') as string);
+    const arrSearch = JSON.parse(localStorage.getItem('arrSearch') as string);
+    const arrCategory = JSON.parse(localStorage.getItem('arrCategory') as string);
 
     if (arrRange) {
       this.arrRange = arrRange;
@@ -794,13 +807,13 @@ export class Model extends AppView {
     //search
     const prodSearch = <HTMLInputElement>document.querySelector('.products__search');
     const productsCounter = <HTMLElement>document.querySelector('.sort__counter-display');
-    prodSearch.value = localStorage.getItem('searchValue')!;
-    productsCounter.textContent = localStorage.getItem('countProd')!;
+    prodSearch.value = localStorage.getItem('searchValue') as string;
+    productsCounter.textContent = localStorage.getItem('countProd') as string;
 
     //filters
     const filterItems = document.querySelectorAll<HTMLInputElement>('.filter-block__input');
-    const arrFiltCategory = JSON.parse(localStorage.getItem('arrFiltCategory')!);
-    const arrFiltBrand = JSON.parse(localStorage.getItem('arrFiltBrand')!);
+    const arrFiltCategory = JSON.parse(localStorage.getItem('arrFiltCategory') as string);
+    const arrFiltBrand = JSON.parse(localStorage.getItem('arrFiltBrand') as string);
     if (arrFiltCategory) {
       this.arrFiltCategory = arrFiltCategory;
     }
@@ -874,7 +887,7 @@ export class Model extends AppView {
     prodContainer.replaceChildren();
 
     if (this.filterDataProduct.length > 0) {
-      if (viewStorage! === 'list') {
+      if (viewStorage === 'list') {
         listBut.classList.add('view__item_active');
         blockBut.classList.remove('view__item_active');
         prodContainer.classList.add('product-items_list');
