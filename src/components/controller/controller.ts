@@ -42,8 +42,9 @@ class AppController extends Model {
       this.basketCardChangeInfo();
       this.addModalPageFromBasket();
     } else if (idPage === PageIds.Product) {
+      const pageId = Number(localStorage.getItem('prodId')) || 1;
       this.view.drawProdDetail();
-      this.addDetailPage(Number(localStorage.getItem('prodId')) || 1);
+      this.addDetailPage(pageId);
       this.addProductsCart();
       this.buyProductDetailPage();
       this.addModalPageFromDetail();
@@ -56,6 +57,12 @@ class AppController extends Model {
   private enableRouteChange(): void {
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.split('?')[0];
+      if (hash === PageIds.Product) {
+        AppController.currentPageHash = hash;
+        this.productGetIdFromUrl();
+        this.renderNewPage(PageIds.Product);
+        return;
+      }
       if (AppController.currentPageHash !== hash) {
         AppController.currentPageHash = hash;
         this.renderNewPage(hash);
@@ -67,6 +74,11 @@ class AppController extends Model {
       AppController.currentPageHash = hash;
       this.renderNewPage(hash);
     });
+  }
+
+  private productGetIdFromUrl(): void {
+    const productId = window.location.hash.split('?/')[1];
+    localStorage.setItem('prodId', `${productId}`);
   }
   //endrouting
 

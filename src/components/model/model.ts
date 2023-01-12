@@ -524,7 +524,6 @@ export class Model extends AppView {
         }
       }
       this.addTotalPrice();
-
       this.addTotalAmountBasket();
       localStorage.setItem('arrBasket', `${JSON.stringify(this.arrProductsBasket)}`);
       localStorage.setItem('filtData', `${JSON.stringify(this.filterDataProduct)}`);
@@ -533,7 +532,7 @@ export class Model extends AppView {
 
   addDetailPage(data: number) {
     this.addTotalAmountBasket();
-    this.filterDataProduct.forEach((item) => {
+    this.initDataProduct.forEach((item) => {
       if (item.id === data) {
         this.card.darwCardDetailPage(item);
       }
