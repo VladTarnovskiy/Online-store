@@ -36,8 +36,8 @@ export class AppView {
   }
 
   viewCardBasket(data: CardItem[]) {
-    data.forEach((item: CardItem) => {
-      this.card.drawCardBasket(item);
+    data.forEach((item: CardItem, index: number) => {
+      this.card.drawCardBasket(item, index);
     });
   }
 

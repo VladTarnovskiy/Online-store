@@ -3,9 +3,11 @@ import { Model } from '../model/model';
 import { PageIds } from '../types/types';
 
 class AppController extends Model {
+  view: AppView;
   private static currentPageHash = '#';
 
-  view: AppView;
+  arrLimit = 1;
+  arrPage = 1;
 
   constructor() {
     super();
@@ -41,6 +43,8 @@ class AppController extends Model {
       this.showResultBasket();
       this.basketCardChangeInfo();
       this.addModalPageFromBasket();
+      this.getLimitBasketProducts();
+      this.changePageBasketProducts();
     } else if (idPage === PageIds.Product) {
       const pageId = Number(localStorage.getItem('prodId')) || 1;
       this.view.drawProdDetail();
@@ -202,6 +206,60 @@ class AppController extends Model {
         localStorage.setItem('prodId', `${target.dataset.id}`);
       });
     });
+  }
+
+  private getLimitBasketProducts(): void {
+    if (this.arrProductsBasket.length > 0) {
+      const limitValue = <HTMLElement>document.querySelector('.pagination-limit__value');
+      const pageControlCounter = <HTMLElement>document.querySelector('.pagination-page__counter');
+      limitValue.setAttribute('max', `${this.arrProductsBasket.length}`);
+      if (localStorage.getItem('limit')) {
+        this.arrLimit = Number(localStorage.getItem('limit'));
+        limitValue.setAttribute('value', `${this.arrLimit}`);
+        this.changeProductWithPagination(this.arrLimit, this.arrPage);
+      } else {
+        this.arrLimit = this.arrProductsBasket.length;
+      }
+
+      limitValue.addEventListener('input', (e) => {
+        pageControlCounter.textContent = '1';
+        localStorage.setItem('pageNum', `1`);
+        this.arrPage = 1;
+
+        const target = <HTMLInputElement>e.target;
+        this.arrLimit = Number(target.value);
+        localStorage.setItem('limit', `${target.value}`);
+        this.changeProductWithPagination(this.arrLimit, this.arrPage);
+      });
+    }
+  }
+
+  private changePageBasketProducts(): void {
+    if (this.arrProductsBasket.length > 0) {
+      const pageControl = <HTMLElement>document.querySelector('.pagination-page__control');
+      const pageControlCounter = <HTMLElement>document.querySelector('.pagination-page__counter');
+      if (localStorage.getItem('pageNum')) {
+        this.arrPage = Number(localStorage.getItem('pageNum'));
+        pageControlCounter.textContent = String(this.arrPage);
+        this.changeProductWithPagination(this.arrLimit, this.arrPage);
+      }
+
+      pageControl.addEventListener('click', (e) => {
+        const target = <HTMLElement>e.target;
+        if (target.classList.contains('pagination-page__control-left') && this.arrPage > 1) {
+          this.arrPage -= 1;
+        } else if (
+          target.classList.contains('pagination-page__control-right') &&
+          this.arrPage < Math.ceil(this.arrProductsBasket.length / this.arrLimit)
+        ) {
+          this.arrPage += 1;
+        }
+        this.changeProductWithPagination(this.arrLimit, this.arrPage);
+
+        localStorage.setItem('pageNum', `${this.arrPage}`);
+        pageControlCounter.textContent = `${this.arrPage}`;
+      });
+    }
   }
 
   run(): void {
