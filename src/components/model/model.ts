@@ -655,6 +655,7 @@ export class Model extends AppView {
         }
       });
     });
+    this.basketCardChangeInfo();
   }
 
   showPromoCodeBasket(countTotalPrice: number) {
