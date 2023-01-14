@@ -701,8 +701,9 @@ export class Model extends AppView {
         const basketItemCounter = <HTMLElement>item.querySelector('.card__item-counter');
         const basketItemTotalPrice = <HTMLElement>item.querySelector('.card__item-total-price');
         const basketItemPlusButton = <HTMLElement>item.querySelector('.card__item-plus');
+        const cartNumber = <HTMLElement>item.querySelector('.card__number');
         const target = <HTMLElement>event.target;
-        const arrItem = this.arrProductsBasket[index];
+        const arrItem = this.arrProductsBasket[Number(cartNumber.textContent) - 1];
         if (target.classList.contains('card__item-plus')) {
           if (Number(basketItemCounter.textContent) < arrItem.stock) {
             if (arrItem.amount) {
