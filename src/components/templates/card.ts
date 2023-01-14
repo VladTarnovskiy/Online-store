@@ -209,7 +209,7 @@ class Card {
     productsContainer.appendChild(card);
   }
 
-  drawCardBasket(data: CardItem): void {
+  drawCardBasket(data: CardItem, index: number): void {
     const productsContainer = <HTMLElement>document.querySelector('.basket__prod-container');
 
     const card = <HTMLElement>document.createElement('div');
@@ -217,7 +217,8 @@ class Card {
 
     const numberProd = <HTMLElement>document.createElement('div');
     numberProd.className = 'card__number';
-    numberProd.textContent = '0';
+    numberProd.setAttribute('data-id', `${data.id}`);
+    numberProd.textContent = `${index + 1}`;
     card.appendChild(numberProd);
 
     const wrapperImg = <HTMLElement>document.createElement('div');

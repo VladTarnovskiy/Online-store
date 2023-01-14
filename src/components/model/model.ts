@@ -586,12 +586,14 @@ export class Model extends AppView {
   }
 
   showResultBasket() {
+    const limitValue = <HTMLElement>document.querySelector('.pagination-limit__value');
     const resultCounter = <HTMLElement>document.querySelector('.result__counter');
     const resultPriceCounter = <HTMLElement>document.querySelector('.result__price-counter');
     const resultPromo = <HTMLInputElement>document.querySelector('.result__promo');
     const resultPricePromoCounter = <HTMLElement>document.querySelector('.result__price-counter_promo');
-    const numberProduct = document.querySelectorAll<HTMLElement>('.card__number');
     this.addTotalAmountBasket();
+
+    limitValue.setAttribute('value', `${this.arrProductsBasket.length}`);
 
     let countAmount = 0;
     let countTotalPrice = 0;
@@ -615,10 +617,6 @@ export class Model extends AppView {
       this.getMessageEmptyBasket(productsContainer);
     }
 
-    numberProduct.forEach((item, index) => {
-      item.textContent = `${index + 1}`;
-    });
-
     if (resultPromo.value === 'RS' || resultPromo.value === 'RSSchool') {
       resultPricePromoCounter.textContent = `${(Number(countTotalPrice.toFixed(2)) * 0.9).toFixed(2)} $`;
     } else if (
@@ -635,6 +633,28 @@ export class Model extends AppView {
     this.addTotalPrice();
 
     this.showPromoCodeBasket(countTotalPrice);
+  }
+
+  changeProductWithPagination(value: number, numPage: number) {
+    const prodContainer = <HTMLElement>document.querySelector('.basket__prod-container');
+
+    const arrWithPagination: CardItem[] = [];
+    this.arrProductsBasket.forEach((item, index) => {
+      if (value * numPage > index && value * (numPage - 1) <= index) {
+        arrWithPagination.push(item);
+      }
+    });
+    prodContainer.replaceChildren();
+    this.viewCardBasket(arrWithPagination);
+    const prodNums = document.querySelectorAll<HTMLElement>('.card__number');
+
+    this.arrProductsBasket.forEach((item, index) => {
+      prodNums.forEach((numItem) => {
+        if (Number(numItem.dataset.id) == item.id) {
+          numItem.textContent = `${index + 1}`;
+        }
+      });
+    });
   }
 
   showPromoCodeBasket(countTotalPrice: number) {
