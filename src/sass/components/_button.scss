@@ -1,0 +1,24 @@
+.button {
+  font-family: $roboto-bold-font;
+  box-shadow: $box-shadow;
+  border-radius: 10px;
+  @extend %transition;
+
+  &:hover {
+    @extend %btn-hover;
+    transform: scale(1.04);
+  }
+
+  &_filters, &_popup {
+    padding: 10px 20px;
+    font-size: 14px;
+    color: $blue-color;
+    background-color: $white-color;
+    border: none;
+  }
+
+  &_popup {
+    padding: 10px 40px;
+    text-transform: uppercase;
+  }
+}
