@@ -11,6 +11,8 @@ export class Model extends AppView {
   arrRange: CardItem[] = [];
   arrSearch: CardItem[] = [];
   arrCategory: CardItem[] = [];
+  arrLimit = 1;
+  arrPage = 1;
   minPriceData = '';
   maxPriceData = '';
   minStockData = '';
